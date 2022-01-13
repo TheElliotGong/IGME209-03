@@ -4,15 +4,23 @@
 * Date: 1/12/2022
 * Purpose: Create and experiment with our own "Hello World" program.
 */
-
+#define _USE_MATH_DEFINES
 #include <iostream>
 #include <stdio.h>
+#include <cmath>
+#include <math.h>
+#include <string>
 
 using namespace std;
 
 int main()
 {
+   int secondsInDecember = 2678400;
+   double area = M_PI * pow(6.2, 2);
    cout << "Hello World!\n";
+   printf("Hey it's me!\n");
+   
+
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
