@@ -3,6 +3,7 @@
 /*Editor: Elliot Gong
 * Date: 1/12/2022
 * Purpose: Create and experiment with our own "Hello World" program.
+* Restrictions: Must include stdio.h file and set project as console app.
 */
 #define _USE_MATH_DEFINES
 #include <iostream>
@@ -15,15 +16,21 @@ using namespace std;
 
 int main()
 {
+   //Declare my variables.
    int secondsInDecember = 2678400;
+   int calculation = 8/3; // results in 2.
    double radius = 6.2;
    double area = M_PI * pow(radius, 2);
-
-   cout << "Hello World!\n";
+   //Print out the statements and calculations.
+   printf("Hello World!\n");
    printf("Hey it's me!\n");
    printf("There are %d seconds in December.\n", secondsInDecember);
-   printf("The area of a circle with a radius of %f.", area);
-
+   printf("The area of a circle with a radius of %f.\n", area);
+   /*If an integer quotient results in an improper/mixed fraction,
+   * The resulting value is the max number of denominators that can fit within
+   * the numerator without going over.
+   */
+   printf("8 divided by 3 is %d", calculation); 
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
