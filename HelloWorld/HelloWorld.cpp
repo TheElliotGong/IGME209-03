@@ -16,10 +16,13 @@ using namespace std;
 int main()
 {
    int secondsInDecember = 2678400;
-   double area = M_PI * pow(6.2, 2);
+   double radius = 6.2;
+   double area = M_PI * pow(radius, 2);
+
    cout << "Hello World!\n";
    printf("Hey it's me!\n");
-   
+   printf("There are %d seconds in December.\n", secondsInDecember);
+   printf("The area of a circle with a radius of %f.", area);
 
 }
 
