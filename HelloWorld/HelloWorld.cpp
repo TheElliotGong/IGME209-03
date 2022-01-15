@@ -5,6 +5,8 @@
 * Purpose: Create and experiment with our own "Hello World" program.
 * Restrictions: Must include stdio.h file and set project as console app.
 */
+
+//Add the necessary header files.
 #define _USE_MATH_DEFINES
 #include <iostream>
 #include <stdio.h>
@@ -23,7 +25,7 @@ int main()
    double area = M_PI * pow(radius, 2);
    //Print out the statements and calculations.
    printf("Hello World!\n");
-   printf("Hey it's me!\n");
+   printf("Hey it's me, Elliot Gong!\n");
    printf("There are %d seconds in December.\n", secondsInDecember);
    printf("The area of a circle with a radius of %f.\n", area);
    /*If an integer quotient results in an improper/mixed fraction,
