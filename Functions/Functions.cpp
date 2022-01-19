@@ -5,17 +5,23 @@
 using namespace std;
 #include "functions.h"
 
-void printName()
-{
-    cout << "I'm Elliot Gong";
-}
+/* Author: Elliot Gong
+   Date: 1/17/2022
+   Purpose: Test out the usage of functions and header files.
+   Restrictions: Must declare a function signature in a header file and 
+   include it in the main program.*/
 
 int main()
 {
     cout << "Hello World!\n";
+    //Call the defined function.
     printName();
 }
-
+//Define the function declared in the functions header file.
+void printName()
+{
+    cout << "I'm Elliot Gong";
+}
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
 // Debug program: F5 or Debug > Start Debugging menu
 
