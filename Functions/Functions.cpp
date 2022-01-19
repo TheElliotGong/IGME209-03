@@ -3,6 +3,7 @@
 
 #include <iostream>
 using namespace std;
+//Include the header file we made that contains the name function.
 #include "functions.h"
 
 /* Author: Elliot Gong
