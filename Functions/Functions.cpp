@@ -5,7 +5,10 @@
 using namespace std;
 #include "functions.h"
 
-
+void printName()
+{
+    cout << "I'm Elliot Gong";
+}
 
 int main()
 {
