@@ -21,7 +21,7 @@ int main()
 //Define the function declared in the functions header file.
 void PrintName()
 {
-    cout << "I'm Elliot Gong";
+    cout << "I'm Elliot Gong\n";
 }
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
 // Debug program: F5 or Debug > Start Debugging menu
