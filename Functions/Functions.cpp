@@ -15,10 +15,10 @@ int main()
 {
     cout << "Hello World!\n";
     //Call the defined function.
-    printName();
+    PrintName();
 }
 //Define the function declared in the functions header file.
-void printName()
+void PrintName()
 {
     cout << "I'm Elliot Gong";
 }
