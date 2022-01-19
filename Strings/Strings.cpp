@@ -7,9 +7,26 @@ using namespace std;
 int main()
 {
     char word[] = "supercalifraglistic";
+    char word2[] = " expialidocious";
+
     int stringLength = strlen(word);
+    int numberOfIs = 0;
     cout << "Hello World!\n";
     cout << "The word " << word << " has " << stringLength << " letters.\n";
+
+    strcat_s(word, word2);
+    cout << word << "\n";
+
+    for (int i = 0; i < strlen(word); i++)
+    {
+        if (strchr(word, 'i'))
+        {
+            numberOfIs++;
+        }
+    }
+
+    cout << "There are " << numberOfIs << "instances of the letter i in the phrase.";
+    
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
