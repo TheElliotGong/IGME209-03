@@ -4,25 +4,35 @@
 #include <iostream>
 #include <cstring>
 using namespace std;
-
+/* Author: Elliot Gong
+   Purpose: Practice using C style strings and some of the
+   string functions.
+   Date: 1/20/2022
+   Restrictions: Must include the string.h file and 
+   use the specified functions.*/
 int main()
 {
+    //Declare my Marry Poppins catchphrase.
     char word[80] = "supercalifraglistic";
     char word2[80] = " expialidocious";
-
+    //Declare the variables for tracking the string's length
+    //and the # of 'i's it contains.
     int stringLength = strlen(word);
     int numberOfIs = 0;
+    //Print out the results of my functions.
     cout << "Hello World!\n";
     cout << "The word " << word << " has " << stringLength << " letters.\n";
-    strcat_s(word, 50, word2);
+    strcat_s(word, 50, word2); //Add the rest of the phrase to the first string.
     cout << "The combined phrase is " << word <<"\n";
-    char * letter;
-    letter = strchr(word, 'i');
-    while (letter != NULL)
+    //Loop through the phrase and count how many 'i's are in the string.
+    for (char letter : word)
     {
-        numberOfIs++;
-        letter = strchr(letter + 1, 'i');
+        if (letter == 'i')
+        {
+            numberOfIs++;
+        }
     }
+    //Print out the # of 'i's in the phrase.
     cout << "There are " << numberOfIs << " instances of the letter i in the phrase.";
     
 }
