@@ -16,7 +16,14 @@ int main()
     cout << "The word " << word << " has " << stringLength << " letters.\n";
     strcat_s(word, 50, word2);
     cout << "The combined phrase is " << word <<"\n";
-    cout << "There are " << numberOfIs << "instances of the letter i in the phrase.";
+    char * letter;
+    letter = strchr(word, 'i');
+    while (letter != NULL)
+    {
+        numberOfIs++;
+        letter = strchr(letter + 1, 'i');
+    }
+    cout << "There are " << numberOfIs << " instances of the letter i in the phrase.";
     
 }
 
