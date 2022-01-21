@@ -2,29 +2,20 @@
 //
 
 #include <iostream>
+#include <cstring>
 using namespace std;
 
 int main()
 {
-    char word[] = "supercalifraglistic";
-    char word2[] = " expialidocious";
+    char word[80] = "supercalifraglistic";
+    char word2[80] = " expialidocious";
 
     int stringLength = strlen(word);
     int numberOfIs = 0;
     cout << "Hello World!\n";
     cout << "The word " << word << " has " << stringLength << " letters.\n";
-
-    strcat_s(word, word2);
-    cout << word << "\n";
-
-    for (int i = 0; i < strlen(word); i++)
-    {
-        if (strchr(word, 'i'))
-        {
-            numberOfIs++;
-        }
-    }
-
+    strcat_s(word, 50, word2);
+    cout << "The combined phrase is " << word <<"\n";
     cout << "There are " << numberOfIs << "instances of the letter i in the phrase.";
     
 }
