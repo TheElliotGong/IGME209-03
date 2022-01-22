@@ -3,10 +3,27 @@
 
 #include <iostream>
 
+#include <cstring>
+#include "hangman.h"
 using namespace std;
+
+char word[] = "hey";
 int main()
 {
-    cout << "Hello World!\n";
+
+    char word[100] = "activate";
+    char correctLetters[100];
+    char incorrectLetters[100];
+    int wordLength = 8;
+    char guesses[100];
+
+    cout << "Let's play Hangman!\nYour word has " 
+         << wordLength << " letters in it.\n";
+    
+    cout << "";
+    cout << "What letter do you guess next?\nGuess: ";
+    std::cin.getline(guesses, 2);
+
 }
 
 
