@@ -1,15 +1,17 @@
 // Strings.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
-
-#include <iostream>
-#include <cstring>
-using namespace std;
 /* Author: Elliot Gong
    Purpose: Practice using C style strings and some of the
    string functions.
    Date: 1/20/2022
    Restrictions: Must include the string.h file and 
    use the specified functions.*/
+
+//Include the iostrema and string files as well as the declaration of namespace.
+#include <iostream>
+#include <cstring>
+using namespace std;
+
 int main()
 {
     //Declare my Marry Poppins catchphrase.
@@ -34,7 +36,7 @@ int main()
         }
     }
     //Print out the # of 'i's in the phrase.
-    cout << "There are " << numberOfIs << " instances of the letter i in the phrase.";
+    cout << "There are " << numberOfIs << " instances of the letter 'i' in the phrase " << word;
     
 }
 
