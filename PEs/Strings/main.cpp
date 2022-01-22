@@ -19,10 +19,11 @@ int main()
     //and the # of 'i's it contains.
     int stringLength = strlen(word);
     int numberOfIs = 0;
-    //Print out the results of my functions.
+    //Print out the length of the first phrase.
     cout << "Hello World!\n";
     cout << "The word " << word << " has " << stringLength << " letters.\n";
-    strcat_s(word, 50, word2); //Add the rest of the phrase to the first string.
+    //Add the rest of the phrase to the first string and print out the result.
+    strcat_s(word, 50, word2); 
     cout << "The combined phrase is " << word <<"\n";
     //Loop through the phrase and count how many 'i's are in the string.
     for (char letter : word)
