@@ -1,5 +1,7 @@
 #pragma once
+#include <iostream>
+#include <cstring>
+using namespace std;
+void ShowGallows(int limit);
 
-void showGallows(int limit);
-
-void showSolved(char word[], char guesses[]);
+void ShowSolved(char word[], char guesses[]);

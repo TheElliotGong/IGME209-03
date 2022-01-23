@@ -1,28 +1,52 @@
 // Hangman.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-#include <iostream>
-
-#include <cstring>
 #include "hangman.h"
-using namespace std;
 
-char word[] = "hey";
 int main()
 {
-
-    char word[100] = "activate";
-    char correctLetters[100];
-    char incorrectLetters[100];
-    int wordLength = 8;
-    char guesses[100];
+    char guessedWord[70] = "_________";
+    char word[70] = "activate";
+    char correctLetters[70];
+    char incorrectLetters[70];
+    char guess;
+    int wordLength = strlen(word);
+    int limit = 0;
 
     cout << "Let's play Hangman!\nYour word has " 
          << wordLength << " letters in it.\n";
     
     cout << "";
     cout << "What letter do you guess next?\nGuess: ";
-    std::cin.getline(guesses, 2);
+    cin >> guess;
+    while (limit < 6)
+    {
+        if (strchr(word, guess))
+        {
+            ShowGallows(limit);
+            for (int i = 0; i < 9; i++)
+            {
+                if (word[i] == guess)
+                {
+                    guessedWord[i] = guess;
+                }
+            }
+        }
+        else
+        {
+            limit++;
+            ShowGallows(limit);
+            
+            cout << "Wrong guesses: " << incorrectLetters;
+        }
+    }
+    if (limit == 6)
+    {
+        cout << "You missed too many guesses. Sorry!";
+    }
+
+
+    
 
 }
 
