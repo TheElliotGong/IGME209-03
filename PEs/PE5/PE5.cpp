@@ -2,6 +2,9 @@
 //
 
 #include <iostream>
+#define SFML_STATIC
+#include <SFML\Window.hpp>
+//#include <SMFL\Graphics.hpp>
 
 int main()
 {
