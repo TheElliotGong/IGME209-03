@@ -4,7 +4,7 @@
 #include <iostream>
 #define SFML_STATIC
 #include <SFML\Window.hpp>
-//#include <SMFL\Graphics.hpp>
+#include <SFML\Graphics.hpp>
 
 int main()
 {
