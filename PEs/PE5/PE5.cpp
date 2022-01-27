@@ -5,9 +5,9 @@
 #define SFML_STATIC
 #include <SFML\Window.hpp>
 #include <SFML\Graphics.hpp>
-
 int main()
 {
+
     sf::RenderWindow window(sf::VideoMode(800, 600), "My window");
     window.setTitle("Testing");
     //Create a red circle
@@ -17,7 +17,7 @@ int main()
     //Create a green rectangle
     sf::RectangleShape rect(sf::Vector2f(60, 150));
     rect.setPosition(450, 100);
-    rect.setFillColor(sf::Color::Green); 
+    rect.setFillColor(sf::Color::Green);
     //Create a blue triangle
     sf::CircleShape triangle(40, 3);
     triangle.setPosition(50, 500);
@@ -37,15 +37,10 @@ int main()
         //Draw the green rectangle.
         window.draw(rect);
         //Draw a blue triangle
-        //window.draw(triangle);
+        window.draw(triangle);
         //End current frame.
         window.display();
     }
-    
-    
-
-    
-    
     return 0;
 }
 
