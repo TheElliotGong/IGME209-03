@@ -19,8 +19,8 @@ int main()
     rect.setPosition(450, 100);
     rect.setFillColor(sf::Color::Green);
     //Create a blue triangle
-    sf::CircleShape triangle(40, 3);
-    triangle.setPosition(50, 500);
+    sf::CircleShape triangle(60, 3);
+    triangle.setPosition(350, 300);
     triangle.setFillColor(sf::Color::Blue);
     while (window.isOpen())
     {
