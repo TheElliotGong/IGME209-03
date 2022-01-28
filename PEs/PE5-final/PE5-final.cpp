@@ -1,15 +1,20 @@
 // PE5-final.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
-
+/*Author: Elliot Gong
+* Purpose: Use the SFML library to draw shapes in a new separate window.
+* Restrictions: Download SFML, add include and lib folders to project, and add them in 
+* project property settings.
+* Date: 1/27/2022
+*/
 #include <iostream>
 #define SFML_STATIC
 #include <SFML\Window.hpp>
 #include <SFML\Graphics.hpp>
 int main()
 {
-
+    //Create a window that'll show the drawn shapes.
     sf::RenderWindow window(sf::VideoMode(800, 600), "My window");
-    window.setTitle("Testing");
+    window.setTitle("Shapes");
     //Create a red circle
     sf::CircleShape circle(50.f);
     circle.setPosition(200, 200);
@@ -26,6 +31,7 @@ int main()
     sf::CircleShape pentagon(80, 5);
     pentagon.setPosition(550, 400);
     pentagon.setFillColor(sf::Color::Yellow);
+    //Leave the window open until the user closes it.
     while (window.isOpen())
     {
         sf::Event event;
@@ -47,16 +53,8 @@ int main()
         //End current frame.
         window.display();
     }
+    //End the method by returning the default value.
     return 0;
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
 
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
