@@ -2,13 +2,12 @@
 #include <iostream>
 #include <cstring>
 #include <string.h>
-#include <vector>
 using namespace std;
 
 
 void ShowGallows(int limit)
 {
-	cout << "";
+	cout << "\n";
 	switch(limit)
 	{
 		//Draw the hangman gallows based on the # of incorrect guesses.
@@ -78,27 +77,26 @@ void ShowGallows(int limit)
 				"        |\n";
 			break;
 	}
-	cout << "";
+	cout << "\n";
 	
 }
 
-void ShowSolved(char word[10], char guessedWord[10], char guesses[], char incorrectGuesses[])
+void ShowSolved(char guess, char word[10], char guesses[], char incorrectGuesses[])
 {
-	int wordLength = 9;
-	//Gets the most recently guessed letter and see if the word contains said letter.
-	
-	char lastguess = guesses[strlen(guesses) - 1];
-	for (int i = 0; i < 9; i++)
+	int wordLength = 8;
+	char word[9] = "activate";
+	//If the word containes the guessed letter, .
+	if (strchr("activate", guess))
 	{
-		//Fill in the blank spot(s) with the letter that was correctly guessed.
-		if (word[i] == lastguess)
+		for (int i = 0; i < 8; i++)
 		{
-			guessedWord[i] = lastguess;
-			wordLength--;
+			if (word[i] == guess)
+				word[i] = guess;
 		}
 	}
-	cout << "Wrong Guesses: " << incorrectGuesses << "\n"
-		<< "Word to solve: " << guessedWord << "\n"
-		<< wordLength << " letters left to guess.";
+	else
+	{
+
+	}
 
 }

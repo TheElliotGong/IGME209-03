@@ -2,56 +2,80 @@
 //
 
 #include "hangman.h"
-#include <vector>
+#include <string.h>
 #include <iostream>
 #include <cstring>
 using namespace std;
 
 int main()
 {
+    //The "blank word" that'll be filled in with the correct letters.
     char guessedWord[10] = "_________";
+    //The word that the player is trying to guess.
     char word[10] = "activate";
+    //Array that stores all the incorrect letters.
     char incorrectLetters[7];
-    char guesses[70];
+    //Array that stores the correct letters.
+    char correctGuesses[50];
+    //Array that stores all the guessed letters.
+    char allGuesses[70];
+    char input[2];
+    //The character the user guesses in each round.
     char guess;
+    //Counter for the # of incorrect guesses.
     int limit = 0;
+    //Index of the arr
     int guessesIndex = 0;
     int incorrectGuessIndex = 0;
-    cout << "Let's play Hangman!\nYour word has 9 letters in it! \n \n";
+    //Intro to the game.
+    cout << "Let's play Hangman!\nYour word has 8 letters in it! \n \n";
     
-    while (limit < 6 && strcmp(guessedWord, word) == false)
+    while (limit < 6 && strcmp(guessedWord, word) != 0)
     {
         //Get the guessed letter from the user.
         cout << "What letter do you guess next? ";
+        //Save the inputted character in an array.
         cin >> guess;
-        cout << "Guess: " << guess;
-        //Add the inputted letters to the array of guessed letters.
-        //Checks if the word contains the guessed letter.
-        if (strchr(word, guess))
+        //Get the guessed character from the input array.
+        guess = input[0];
+        while (strchr(allGuesses, guess))
         {
-            guesses[guessesIndex] = guess;
-            guessesIndex++;
-            //Draw the gallows as appropriate.
+            cout << "You already guessed that letter. Pick another one: ";
+            cin >> guess;
+            guess = input[0];
+        }
+        //Display the guessed letter for the player.
+        cout << "Guess: " << guess << "\n";
+        //Add the correctly guessed letter to the appropriate arrays.
+        strcat_s(allGuesses, input);
+        strcat_s(correctGuesses, input);
+        if (strchr("activate", guess))
+        {
             ShowGallows(limit);
-            //Add the instances of the correctly guessed letters to the displayed word.
+            for (int i = 0; i < 8; i++)
+            {
+                if (word[i] == guess)
+                    word[i] = guess;
+            }
+
+            cout << "Wrong Guesses: " << incorrectLetters << "\n"
+                 <<"Word to solve: " << guessedWord;
         }
         else
         {
-            
-            incorrectLetters[incorrectGuessIndex] = guess;
-            incorrectGuessIndex++;
             limit++;
             ShowGallows(limit);
-            
-            cout << "Wrong guesses: " << incorrectLetters << "\n"
-                << "Word to solve: " << guessedWord << "\n \n";
+
         }
+
+
+        
     }
-    if (limit == 7)
+    if (limit == 6)
     {
         cout << "You missed too many guesses. Sorry!";
     }
-    if (strcmp(guessedWord, word))
+    if (strcmp(guessedWord, word) == 0)
     {
         cout << "You win!!";
     }
