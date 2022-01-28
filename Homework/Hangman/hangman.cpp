@@ -5,8 +5,9 @@ void ShowGallows(int limit)
 	cout << "";
 	switch(limit)
 	{
+		//Draw the hangman gallows based on the # of incorrect guesses.
 		case 0: 
-		cout << "       __________\n" 
+		cout << "        _________\n" 
 				"        |   |\n"
 			    "        |\n"
 			    "        |\n"
@@ -14,7 +15,7 @@ void ShowGallows(int limit)
 			    "        |\n"
 			    "        |\n";
 		case 1: 
-			cout << "       __________\n"
+			cout << "    _________\n"
 				"        |   |\n"
 				"        |   O\n"
 				"        |\n"
@@ -22,7 +23,7 @@ void ShowGallows(int limit)
 				"        |\n"
 				"        |\n";
 		case 2: 
-			cout << "       __________\n"
+			cout << "    _________\n"
 				"        |   |\n"
 				"        |   O\n"
 				"        |   |\n"
@@ -30,7 +31,7 @@ void ShowGallows(int limit)
 				"        |\n"
 				"        |\n";
 		case 3:
-			cout << "       __________\n"
+			cout << "    _________\n"
 				"        |   |\n"
 				"        |   O\n"
 				"        |  /|\n"
@@ -38,7 +39,7 @@ void ShowGallows(int limit)
 				"        |\n"
 				"        |\n";
 		case 4:
-			cout << "       __________\n"
+			cout << "    _________\n"
 				"        |   |\n"
 				"        |   O\n"
 				"        |  /|\\n"
@@ -46,7 +47,7 @@ void ShowGallows(int limit)
 				"        |\n"
 				"        |\n";
 		case 5:
-			cout << "       __________\n"
+			cout << "    _________\n"
 				"        |   |\n"
 				"        |   O\n"
 				"        |  /|\\n"
@@ -54,7 +55,7 @@ void ShowGallows(int limit)
 				"        |  /\n"
 				"        |\n";
 		case 6:
-			cout << "       __________\n"
+			cout << "    ________\n"
 				"        |   |\n"
 				"        |   O\n"
 				"        |  /|\\n"
