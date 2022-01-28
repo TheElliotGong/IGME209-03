@@ -9,17 +9,24 @@ int main()
     char word[10] = "activate";
     char correctLetters[70];
     char incorrectLetters[70];
+    char guesses[70];
     char guess;
     int limit = 0;
 
     cout << "Let's play Hangman!\nYour word has 9 letters in it!";
     cout << "";
-    cout << "What letter do you guess next? ";
-    cin >> guess;
     
-    cout << "Guess: " << guess;
-    while (limit < 7)
+    while (limit < 6)
     {
+        cout << "What letter do you guess next? ";
+        cin >> guess;
+        
+        while (strchr(guesses, guess))
+        {
+            cout << "You already guessed that letter. Pick another one: ";
+            cin >> guess;
+        }
+        cout << "Guess: " << guess;
         if (strchr(word, guess))
         {
             ShowGallows(limit);
