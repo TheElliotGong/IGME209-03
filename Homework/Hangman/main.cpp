@@ -5,21 +5,20 @@
 
 int main()
 {
-    char guessedWord[70] = "_________";
-    char word[70] = "activate";
+    char guessedWord[10] = "_________";
+    char word[10] = "activate";
     char correctLetters[70];
     char incorrectLetters[70];
     char guess;
-    int wordLength = strlen(word);
     int limit = 0;
 
-    cout << "Let's play Hangman!\nYour word has " 
-         << wordLength << " letters in it.\n";
-    
+    cout << "Let's play Hangman!\nYour word has 9 letters in it!";
     cout << "";
-    cout << "What letter do you guess next?\nGuess: ";
+    cout << "What letter do you guess next? ";
     cin >> guess;
-    while (limit < 6)
+    
+    cout << "Guess: " << guess;
+    while (limit < 7)
     {
         if (strchr(word, guess))
         {
@@ -31,6 +30,10 @@ int main()
                     guessedWord[i] = guess;
                 }
             }
+            cout << "Wrong Guesses: " << incorrectLetters << "\n"
+                << "Word to solve: " << guessedWord << "\n \n";
+
+            
         }
         else
         {
@@ -39,12 +42,13 @@ int main()
             
             cout << "Wrong guesses: " << incorrectLetters;
         }
+
     }
-    if (limit == 6)
+    if (limit == 7)
     {
         cout << "You missed too many guesses. Sorry!";
     }
-
+    return 0;
 
     
 
