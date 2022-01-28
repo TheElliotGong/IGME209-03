@@ -2,73 +2,60 @@
 //
 
 #include "hangman.h"
+#include <vector>
+#include <iostream>
+#include <cstring>
+using namespace std;
 
 int main()
 {
     char guessedWord[10] = "_________";
     char word[10] = "activate";
-    char correctLetters[70];
-    char incorrectLetters[70];
+    char incorrectLetters[7];
     char guesses[70];
     char guess;
     int limit = 0;
-
-    cout << "Let's play Hangman!\nYour word has 9 letters in it!";
-    cout << "";
+    int guessesIndex = 0;
+    int incorrectGuessIndex = 0;
+    cout << "Let's play Hangman!\nYour word has 9 letters in it! \n \n";
     
-    while (limit < 6)
+    while (limit < 6 && strcmp(guessedWord, word) == false)
     {
+        //Get the guessed letter from the user.
         cout << "What letter do you guess next? ";
         cin >> guess;
-        
-        while (strchr(guesses, guess))
-        {
-            cout << "You already guessed that letter. Pick another one: ";
-            cin >> guess;
-        }
         cout << "Guess: " << guess;
+        //Add the inputted letters to the array of guessed letters.
+        //Checks if the word contains the guessed letter.
         if (strchr(word, guess))
         {
+            guesses[guessesIndex] = guess;
+            guessesIndex++;
+            //Draw the gallows as appropriate.
             ShowGallows(limit);
-            for (int i = 0; i < 9; i++)
-            {
-                if (word[i] == guess)
-                {
-                    guessedWord[i] = guess;
-                }
-            }
-            cout << "Wrong Guesses: " << incorrectLetters << "\n"
-                << "Word to solve: " << guessedWord << "\n \n";
-
-            
+            //Add the instances of the correctly guessed letters to the displayed word.
         }
         else
         {
+            
+            incorrectLetters[incorrectGuessIndex] = guess;
+            incorrectGuessIndex++;
             limit++;
             ShowGallows(limit);
             
-            cout << "Wrong guesses: " << incorrectLetters;
+            cout << "Wrong guesses: " << incorrectLetters << "\n"
+                << "Word to solve: " << guessedWord << "\n \n";
         }
-
     }
     if (limit == 7)
     {
         cout << "You missed too many guesses. Sorry!";
     }
-    return 0;
+    if (strcmp(guessedWord, word))
+    {
+        cout << "You win!!";
+    }
 
     
 
 }
-
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
