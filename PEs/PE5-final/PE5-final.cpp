@@ -22,6 +22,10 @@ int main()
     sf::CircleShape triangle(60, 3);
     triangle.setPosition(350, 300);
     triangle.setFillColor(sf::Color::Blue);
+    //Create a yellow pentagon
+    sf::CircleShape pentagon(80, 5);
+    pentagon.setPosition(550, 400);
+    pentagon.setFillColor(sf::Color::Yellow);
     while (window.isOpen())
     {
         sf::Event event;
@@ -38,6 +42,8 @@ int main()
         window.draw(rect);
         //Draw a blue triangle
         window.draw(triangle);
+        //Draw a yellow pentagon
+        window.draw(pentagon);
         //End current frame.
         window.display();
     }
