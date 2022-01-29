@@ -14,7 +14,7 @@ int main()
     //The word that the player is trying to guess.
     char word[10] = "activate";
     //Array that stores all the incorrect letters.
-    char incorrectLetters[7];
+    char incorrectGuesses[7];
     //Array that stores the correct letters.
     char correctGuesses[50];
     //Array that stores all the guessed letters.
@@ -27,6 +27,7 @@ int main()
     int wordLength = 8;
     //Index of the arr
     int guessesIndex = 0;
+    int correctIndex = 0;
     int incorrectGuessIndex = 0;
     //Intro to the game.
     cout << "Let's play Hangman!\nYour word has 8 letters in it! \n \n";
@@ -53,6 +54,11 @@ int main()
 
         if (strchr("activate", guess))
         {
+            allGuesses[guessesIndex] = guess;
+            correctGuesses[correctIndex] = guess;
+            guessesIndex++;
+            correctIndex++;
+            //strcat_s(correctGuesses, input);
             ShowGallows(limit);
             for (int i = 0; i < 8; i++)
             {
@@ -62,17 +68,23 @@ int main()
                     wordLength--;
                 }     
             }
-
-            cout << "Wrong Guesses: " << incorrectLetters << "\n"
+            //The value of "incorrectLetters" is off.
+            cout << "Wrong Guesses: " << incorrectGuesses << "\n"
                  <<"Word to solve: " << guessedWord << "\n"
                  << wordLength << " letters left to guess\n";
         }
         else
         {
+            // strcat_s(allGuesses, input);
+            //strcat_s(incorrectGuesses, input);
+            allGuesses[guessesIndex] = guess;
+            incorrectGuesses[incorrectGuessIndex] = guess;
+            guessesIndex++;
+            incorrectGuessIndex++;
             limit++;
             ShowGallows(limit);
 
-            cout << "Wrong Guesses: " << incorrectLetters << "\n"
+            cout << "Wrong Guesses: " << incorrectGuesses << "\n"
                  << "Word to solve: " << guessedWord << "\n"
                  << wordLength << " letters left to guess\n";
         }
