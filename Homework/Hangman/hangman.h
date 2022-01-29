@@ -5,3 +5,4 @@
 void ShowGallows(int limit);
 
 void ShowSolved(char word[], char guesses[]);
+
