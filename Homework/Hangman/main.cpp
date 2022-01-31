@@ -51,15 +51,18 @@ int main()
         cout << "Guess: " << guess << "\n";
         //Add the correctly guessed letter to the appropriate arrays.
        
-
+        //Do this if the word contains the guessed letter.
         if (strchr("activate", guess))
         {
+            //Add the correctly guessed letter to the proper arrays and increment
+            //the appropriate indexes for said arrays.
             allGuesses[guessesIndex] = guess;
             correctGuesses[correctIndex] = guess;
             guessesIndex++;
             correctIndex++;
-            //strcat_s(correctGuesses, input);
+            //Draw the gallows again
             ShowGallows(limit);
+            //Fill out the blank word with the correctly guessed letters.
             for (int i = 0; i < 8; i++)
             {
                 if (word[i] == guess)
@@ -68,37 +71,35 @@ int main()
                     wordLength--;
                 }     
             }
-            //The value of "incorrectLetters" is off.
-            cout << "Wrong Guesses: " << incorrectGuesses << "\n"
-                 <<"Word to solve: " << guessedWord << "\n"
-                 << wordLength << " letters left to guess\n";
+            //Display the info to the player.
+            ShowSolved(incorrectGuesses, guessedWord, wordLength);
         }
+        //Do this if the guessed letter isn't in the mystery word.
         else
         {
-            // strcat_s(allGuesses, input);
-            //strcat_s(incorrectGuesses, input);
+            //Add the incorrectly guessed letter to the proper arrays and increment
+           //the appropriate indexes for said arrays.
             allGuesses[guessesIndex] = guess;
             incorrectGuesses[incorrectGuessIndex] = guess;
             guessesIndex++;
             incorrectGuessIndex++;
+            //Increment the variable holding # of incorrect guesses made and draw the gallows.
             limit++;
             ShowGallows(limit);
-
-            cout << "Wrong Guesses: " << incorrectGuesses << "\n"
-                 << "Word to solve: " << guessedWord << "\n"
-                 << wordLength << " letters left to guess\n";
+            //Use the ShowSolved function to display data.
+            ShowSolved(incorrectGuesses, guessedWord, wordLength);
         }
         cout << "";
-
-        
     }
+    //Print out lose condition message.
     if (limit == 6)
     {
-        cout << "You missed too many guesses. Sorry!";
+        cout << "You missed too many guesses. Sorry!\nThe word is " << word;
     }
+    //Print out the win condition message.
     if (wordLength == 0)
     {
-        cout << "You win!!";
+        cout << "You win!! You guessed all the letters to " << word << "!";
     }
 
     
