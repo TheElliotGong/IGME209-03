@@ -97,9 +97,5 @@ void ShowSolved(char guess, char guessedWord[10], char guesses[], char incorrect
 
 }
 
-void AppendToArray(char array[], char character)
-{
-	int length = strlen(array);
-	
-}
+
 

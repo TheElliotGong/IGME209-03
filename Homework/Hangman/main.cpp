@@ -10,11 +10,11 @@ using namespace std;
 int main()
 {
     //The "blank word" that'll be filled in with the correct letters.
-    char guessedWord[10] = "________";
+    char guessedWord[9] = "________";
     //The word that the player is trying to guess.
-    char word[10] = "activate";
+    char word[9] = "activate";
     //Array that stores all the incorrect letters.
-    char incorrectGuesses[7];
+    char incorrectGuesses[7] = "";
     //Array that stores the correct letters.
     char correctGuesses[50];
     //Array that stores all the guessed letters.
@@ -24,7 +24,7 @@ int main()
     char guess;
     //Counter for the # of incorrect guesses.
     int limit = 0;
-    int wordLength = 8;
+    int wordLength = strlen(word);
     //Index of the arr
     int guessesIndex = 0;
     int correctIndex = 0;
