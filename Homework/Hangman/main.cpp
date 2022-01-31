@@ -100,14 +100,14 @@ int main()
     //Print out lose condition message.
     if (limit == 6)
     {
-        cout << "You missed too many guesses. Sorry!\nThe word is " << word;
+        cout << "You missed too many guesses. Sorry!\nThe word is " << word << ".";
     }
     //Print out the win condition message.
     if (wordLength == 0)
     {
-        cout << "You win!! You guessed all the letters to " << word << "!";
+        cout << "You win!! You guessed all the letters!";
     }
 
-    
+    //End the method.
 
 }

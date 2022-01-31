@@ -10,9 +10,8 @@
 #include <iostream>
 #include <cstring>
 #include <string.h>
+//Also use the std namespace to simplify printing and input.
 using namespace std;
-
-
 
 /// <summary>
 /// This method draws the hangman gallows based on the # of incorrect guesses the player made.
