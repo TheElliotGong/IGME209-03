@@ -16,10 +16,10 @@ int main()
     //Array that stores all the incorrect letters.
     char incorrectGuesses[7] = "";
     //Array that stores the correct letters.
-    char correctGuesses[50];
+    char correctGuesses[50] = "";
     //Array that stores all the guessed letters.
-    char allGuesses[50];
-    char input[2];
+    char allGuesses[50] = "";
+    char input[2] = "";
     //The character the user guesses in each round.
     char guess;
     //Counter for the # of incorrect guesses.
@@ -41,12 +41,12 @@ int main()
         //Get the guessed character from the input array.
         input[0] = guess;
        
-        /*while (strchr(allGuesses, guess))
+        while (strchr(allGuesses, guess))
         {
             cout << "You already guessed that letter. Pick another one: ";
             cin >> guess;
-            guess = input[0];
-        }*/
+            input[0] = guess;
+        }
         //Display the guessed letter for the player.
         cout << "Guess: " << guess << "\n";
         //Add the correctly guessed letter to the appropriate arrays.

@@ -81,7 +81,7 @@ void ShowGallows(int limit)
 	
 }
 
-void ShowSolved(char guess, char guessedWord[10], char guesses[], char incorrectGuesses[])
+void ShowSolved(char guess, char input[2], char guessedWord[9], char guesses[], char incorrectGuesses[], char correctGuesses[])
 {
 	int wordLength = 8;
 	char word[9] = "activate";
