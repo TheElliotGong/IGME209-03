@@ -1,6 +1,12 @@
 // Hangman.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
+/*Author: Elliot Gong
+  Purpose: Use the external functions to help simulate a game of hangman.
+  Restrictions: Must use external functions and get user input to make the game
+  functional. Store guesses in appropriate arrays and display drawings and feedback
+  to user. Game must keep going until player either wins or loses.
+  Date: 1/30/2022*/
 #include "hangman.h"
 #include <string.h>
 #include <iostream>

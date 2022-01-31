@@ -1,9 +1,18 @@
 #include "hangman.h"
+
+/*Author: Elliot Gong
+  Purpose: Initialize the functions declared in the hangman.h file.
+  Restrictions: Must use the same parameters declared for the function declarations in 
+  the header file.
+  Date: 1/30/2022*/
+
 //Add in the appropriate default/string header files
 #include <iostream>
 #include <cstring>
 #include <string.h>
 using namespace std;
+
+
 
 /// <summary>
 /// This method draws the hangman gallows based on the # of incorrect guesses the player made.
