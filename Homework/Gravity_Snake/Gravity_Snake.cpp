@@ -2,11 +2,16 @@
 //
 
 #include <iostream>
+#define SFML_STATIC
+#include <SFML\Graphics.hpp>
+#include <SFML\Window.hpp>
+#include <Box2D\Box2D.h>
 
+using namespace std;
 
 int main()
 {
-	std::cout << "Hello World!";
+	cout << "Hello World!";
 }
 
 
