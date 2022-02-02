@@ -2,14 +2,11 @@
 //
 
 #include <iostream>
-#include <Box2D/Box2D.h>
-#include <Box2D/Collision/b2Collision.h>
-#include <Box2D/Collision/Shapes/b2Shape.h>
 
 
 int main()
 {
-    
+	std::cout << "Hello World!";
 }
 
 

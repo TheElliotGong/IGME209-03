@@ -72,11 +72,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>include;$(IncludePath)</IncludePath>
-    <LibraryPath>lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>include\SFML;include\Box2D;$(IncludePath)</IncludePath>
+    <LibraryPath>lib\SFML;lib\Box2D</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>"C:\Users\ewcgo\source\repos\thetyper101\IGME209-03\Homework\Gravity_Snake\include\Box2D";"C:\Users\ewcgo\source\repos\thetyper101\IGME209-03\Homework\Gravity_Snake\include\SFML"</IncludePath>
+    <LibraryPath>"C:\Users\ewcgo\source\repos\thetyper101\IGME209-03\Homework\Gravity_Snake\lib\Box2D";"C:\Users\ewcgo\source\repos\thetyper101\IGME209-03\Homework\Gravity_Snake\lib\SFML"</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -94,7 +96,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Box2D.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
