@@ -1,8 +1,8 @@
 #pragma once
 
-void update();
+void Update();
 
-void display();
+void Display();
 
 void ApplyForces();
 
