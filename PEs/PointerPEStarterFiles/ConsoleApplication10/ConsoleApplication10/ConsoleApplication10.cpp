@@ -13,7 +13,7 @@ public:
 	int yPos;
 	void PrintPos()
 	{
-		cout << "X:" << xPos << " Y:" << yPos << endl;
+		cout << "Position - X:" << xPos << " Y:" << yPos << endl;
 	}
 };
 
@@ -42,19 +42,36 @@ public:
 
 int main()
 {
-	Monster *boss = new Monster();
-	Player *pOne = new Player();
-	//MovableObject *boss = new Monster();
-	//MovableObject *pOne = new Player();
+	//Monster *boss = new Monster();
+	//Player *pOne = new Player();
+	MovableObject *boss = new Monster();
+	MovableObject *pOne = new Player();
 	Monster *fakeMonster = (Monster*)pOne;
+
+	cout << "Boss address: " << &boss << endl;
+	cout << "Player address: " << &pOne << endl;
+	cout << "Fake Monster address: " << &fakeMonster << endl;
+
+	boss->xPos = -5;
+	boss->yPos = 30;
+
+	pOne->xPos = 65;
+	pOne->yPos = 24;
+
+	fakeMonster->xPos = 3;
+	fakeMonster->yPos = -11;
+
+	boss->PrintPos();
+	pOne->PrintPos();
+	fakeMonster->PrintPos();
 
 	// add code here
 
-
-
+	//This delete statements are causing the program to crash.
+	/*
 	delete boss;
 	delete pOne;
-	delete fakeMonster;
+	delete fakeMonster;*/
 
 	_getch();
     return 0;
