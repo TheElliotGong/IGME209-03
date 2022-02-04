@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{1fc52a1f-a2ac-4818-b73d-6611e4174a16}</ProjectGuid>
-    <RootNamespace>GravitySnake</RootNamespace>
+    <ProjectGuid>{4d05dab4-1d98-4aa2-a4d6-98e8c9fa13f4}</ProjectGuid>
+    <RootNamespace>PointerDemo</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -72,13 +72,9 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>include;$(IncludePath)</IncludePath>
-    <LibraryPath>lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>"C:\Users\ewcgo\source\repos\thetyper101\IGME209-03\Homework\Gravity_Snake\include\Box2D";"C:\Users\ewcgo\source\repos\thetyper101\IGME209-03\Homework\Gravity_Snake\include\SFML"</IncludePath>
-    <LibraryPath>"C:\Users\ewcgo\source\repos\thetyper101\IGME209-03\Homework\Gravity_Snake\lib\Box2D";"C:\Users\ewcgo\source\repos\thetyper101\IGME209-03\Homework\Gravity_Snake\lib\SFML"</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -92,12 +88,10 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>include\Box2D\Common;include\Box2D\Collision;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Box2D\Box2D.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -145,11 +139,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Gravity_Snake.cpp" />
-    <ClCompile Include="snake.cpp" />
+    <ClCompile Include="Pointer_Demo.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="snake.h" />
+    <ClInclude Include="Piece.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

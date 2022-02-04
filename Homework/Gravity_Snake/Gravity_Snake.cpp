@@ -3,13 +3,15 @@
 
 #include <iostream>
 #include "snake.h"
-#include <b2Timer.h>
-#include <b2Settings.h>
+#include "include\Box2D\Box2D.h"
+
 using namespace std;
 
 int main()
 {
-	
+	b2Vec2 gravity(0.0f, -10.0f);
+
+	b2World world(gravity);
 	cout << "Hello World!";
 }
 
