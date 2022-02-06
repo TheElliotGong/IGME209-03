@@ -1,5 +1,10 @@
 #pragma once
+#include <iostream>
+#include <cstring>
+#include "include\Box2D\Box2D.h"
+#include <conio.h>
 
+using namespace std;
 void Update();
 
 void Display();
