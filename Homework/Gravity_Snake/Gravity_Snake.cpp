@@ -14,12 +14,10 @@ int main()
 	boxDef.position.SetZero();
 
 	b2Body* box = world.CreateBody(&boxDef);
-	
+	b2PolygonShape area;
+	area.SetAsBox(2.5f, 2.5f);
+	getch();
 
-	for (int i = 0; i < 10; i++)
-	{
-
-	}
 }
 
 
