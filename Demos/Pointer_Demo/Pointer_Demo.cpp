@@ -2,9 +2,10 @@
 //
 
 #include <iostream>
+#include "Piece.h"
 #include <cstring>
 using namespace std;
-#include "Piece.h"
+
 #define MAX_PIECES 30;
 const int max_pieces = 30;
 int main()

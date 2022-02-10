@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MonkeyHoedown", "MonkeyHoedown\MonkeyHoedown.vcxproj", "{DB7B9942-0D26-45A0-9687-A3B6AA75B274}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DB7B9942-0D26-45A0-9687-A3B6AA75B274}.Debug|x64.ActiveCfg = Debug|x64
+		{DB7B9942-0D26-45A0-9687-A3B6AA75B274}.Debug|x64.Build.0 = Debug|x64
+		{DB7B9942-0D26-45A0-9687-A3B6AA75B274}.Debug|x86.ActiveCfg = Debug|Win32
+		{DB7B9942-0D26-45A0-9687-A3B6AA75B274}.Debug|x86.Build.0 = Debug|Win32
+		{DB7B9942-0D26-45A0-9687-A3B6AA75B274}.Release|x64.ActiveCfg = Release|x64
+		{DB7B9942-0D26-45A0-9687-A3B6AA75B274}.Release|x64.Build.0 = Release|x64
+		{DB7B9942-0D26-45A0-9687-A3B6AA75B274}.Release|x86.ActiveCfg = Release|Win32
+		{DB7B9942-0D26-45A0-9687-A3B6AA75B274}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {49D147BA-D499-4F66-A154-40B7AB8DE97F}
+	EndGlobalSection
+EndGlobal

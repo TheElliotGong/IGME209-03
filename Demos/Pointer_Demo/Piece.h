@@ -1,8 +1,7 @@
 #pragma once
 
-class Piece
+struct Piece
 {
-public:
 	char Name[64];
 	char gender[30];
 	int weight;
