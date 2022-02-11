@@ -12,5 +12,10 @@ namespace UnitTest1
 		TEST_METHOD(TestMethod1)
 		{
 		}
+
+		TEST_METHOD(TestGetTeam)
+		{
+
+		}
 	};
 }
