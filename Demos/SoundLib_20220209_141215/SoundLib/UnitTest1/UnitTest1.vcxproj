@@ -169,11 +169,6 @@
     <ClInclude Include="..\SoundLib\SoundLib.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SoundLib\SoundLib.vcxproj">
-      <Project>{6fe9539f-e0cd-4ac7-bf1f-52e4da79374d}</Project>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
