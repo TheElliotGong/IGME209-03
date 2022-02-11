@@ -4,7 +4,7 @@
 
 #include "snake.h"
 
-int targetCount = 2;
+int targetCount = 0;
 int main()
 {
 	b2Vec2 gravity(0.0f, -9.8f);
@@ -23,8 +23,19 @@ int main()
 	snake.type = b2_dynamicBody;
 	snake.position.Set(0.0f, 0.0f);
 	b2Body* player = world.CreateBody(&snake);
-	getch();
 
+	b2PolygonShape snakeShape;
+	snakeShape.SetAsBox(1.0f, 1.0f);
+	int key = 0;
+	while ( targetCount < 2)
+	{
+		if (kbhit())
+		{
+			key = _getch();
+			
+		}
+	}
+	
 }
 
 

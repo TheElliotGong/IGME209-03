@@ -2,7 +2,7 @@
 
 void Update()
 {
-
+	float time = 1.0f / 60.0f;
 }
 
 void Display()
