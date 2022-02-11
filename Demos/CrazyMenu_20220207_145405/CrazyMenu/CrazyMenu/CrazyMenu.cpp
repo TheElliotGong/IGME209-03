@@ -47,7 +47,7 @@ void ShowProgress(ProgressPtr callback)
 
 int main()
 {
-
+    //Create custom char data types.
     typedef char PlayerAttribute;
     PlayerAttribute str;
     PlayerAttribute wis;
