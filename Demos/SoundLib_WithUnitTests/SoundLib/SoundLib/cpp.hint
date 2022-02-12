@@ -1,0 +1,2 @@
+#define SOUNDLIB_API __declspec(dllexport)
+#define SOUNDLIB_API __declspec(dllimport)
