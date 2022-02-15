@@ -38,10 +38,6 @@ int main()
 		}
 		Update(player, world, targetX, targetY);
 	}
-	for (int i = 0; i < 60; i++)
-	{
-		
-	}
 	
 }
 
