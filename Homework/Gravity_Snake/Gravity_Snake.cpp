@@ -3,37 +3,44 @@
 
 
 #include "snake.h"
-
+double targetX;
+double targetY;
 int targetCount = 0;
+
 int main()
 {
+
+	cout << "Let's play Gravity Snake!\n";
+	//Create the world
 	b2Vec2 gravity(0.0f, -9.8f);
 	b2World world(gravity);
-
-	/*
-	b2BodyDef boxDef;
-	boxDef.position.SetZero();
-
-	b2Body* box = world.CreateBody(&boxDef);
-	b2PolygonShape area;
-	area.SetAsBox(2.5f, 2.5f);*/
-	
-	//Create the dynamic body that represents the snake player
+	//Create the playable snake as a dynamic body.
 	b2BodyDef snake;
 	snake.type = b2_dynamicBody;
 	snake.position.Set(0.0f, 0.0f);
+	//Create a pointer and have it point to the snake body.
 	b2Body* player = world.CreateBody(&snake);
-
+	//Attach a shape to the snake.
 	b2PolygonShape snakeShape;
 	snakeShape.SetAsBox(1.0f, 1.0f);
-	int key = 0;
-	while ( targetCount < 2)
+	//Add a fixture definition for the snake's box.
+	b2FixtureDef fixtureDef;
+	fixtureDef.shape = &snakeShape;
+	fixtureDef.density = 1.0f;
+
+	int numTargets = 0;
+	int key;
+	while (numTargets < 2 || (key = _getch()) != 27)
 	{
-		if (kbhit())
+		if (_kbhit())
 		{
-			key = _getch();
-			
+		
 		}
+		Update(player, world, targetX, targetY);
+	}
+	for (int i = 0; i < 60; i++)
+	{
+		
 	}
 	
 }
