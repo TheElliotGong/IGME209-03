@@ -30,9 +30,26 @@ int main()
     //Create an array of values for the pointer to access like an array.
     scores = new float[numOfScores];
 
+    for (int i = 0; i < numOfScores; i++)
+    {
+        cout << "Enter a score: ";
+        cin >> scores[i];
+    }
+
+
 }
 
 void AverageScore(float* scores, int count)
+{
+
+}
+
+void HighScore(float* scores, int count)
+{
+
+}
+
+void LowScore(float* scores, int count)
 {
 
 }
