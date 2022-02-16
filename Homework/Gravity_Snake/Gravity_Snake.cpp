@@ -29,12 +29,20 @@ int main()
 	fixtureDef.density = 1.0f;
 
 	int numTargets = 0;
-	int key;
-	while (numTargets < 2 || (key = _getch()) != 27)
+	char key;
+	while (numTargets < 2 )
 	{
-		if (_kbhit())
+		if (kbhit())
 		{
-		
+			key = getch();
+			if ((int)key == 27)
+			{
+				break;
+			}
+			switch (key)
+			{
+
+			}
 		}
 		Update(player, world, targetX, targetY);
 	}
