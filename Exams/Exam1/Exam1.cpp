@@ -7,6 +7,8 @@
 * Exam #1
 */
 #include <iostream>
+#include <ctype.h>
+#include <cctype>
 using namespace std;
 
 
@@ -18,12 +20,28 @@ int main()
 {
     int numOfScores;
     //Ask for how many scores they want to use.
+    //Check if user input was a bad case: Either below or equal to 0 or not a number
+    cout << "Enter the number of scores to use: ";
+    cin >> numOfScores;
+
+    while (cin.fail() || numOfScores <= 0)
+    {
+        cin.clear();
+        cin.ignore(256, '\n');
+        cout << "Enter the number of scores to use: ";
+        cin >> numOfScores;
+    }
+/*
+    while ( numOfScores <= 0)
+    {
+        cout << "Enter the number of scores to use: ";
+        cin >> numOfScores;
+    }
     do
     {
         cout << "Enter the number of scores to use: ";
         cin >> numOfScores;
-    } while (numOfScores <= 0); //If the inputted number is less than or equal to 0, 
-                                //keep asking them for a valid #.
+    } while ( numOfScores <= 0);*/
     
     //Create a pointer that points to # of inputted float values.
     float* scores = new float[numOfScores];
@@ -42,7 +60,11 @@ int main()
 
     return 0;
 }
-
+/// <summary>
+/// This method takes a float pointer array and determines the average value of the elements.
+/// </summary>
+/// <param name="scores">The float pointer that's holding the float values.</param>
+/// <param name="count">The # of variables to read in.</param>
 void AverageScore(float* scores, int count)
 {
     //Initialze and add up sum of scores.
@@ -55,7 +77,11 @@ void AverageScore(float* scores, int count)
     cout << "Average Score is " << (int)sum / count <<"\n";
 
 }
-
+/// <summary>
+/// This method goes through a pointer array of floats and determines the highest element value.
+/// </summary>
+/// <param name="scores">The float pointer that's holding the float values.</param>
+/// <param name="count">The # of variables to read in.</param>
 void HighScore(float* scores, int count)
 {
     float highestScore = -50;
