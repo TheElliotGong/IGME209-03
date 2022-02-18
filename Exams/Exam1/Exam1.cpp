@@ -23,33 +23,35 @@ int main()
     //Check if user input was a bad case: Either below or equal to 0 or not a number
     cout << "Enter the number of scores to use: ";
     cin >> numOfScores;
-
+    //Keep asking for a proper int if the user inputs a string or if the 
+    //inputted number is less than or equal to 0.
     while (cin.fail() || numOfScores <= 0)
     {
+        //Clear input so it doesn't crash.
         cin.clear();
         cin.ignore(256, '\n');
-        cout << "Enter the number of scores to use: ";
+        cout << "No strings or numbers less than or equal to 0 allowed. Enter the number of scores to use: ";
+        //Ask for input again.
         cin >> numOfScores;
     }
-/*
-    while ( numOfScores <= 0)
-    {
-        cout << "Enter the number of scores to use: ";
-        cin >> numOfScores;
-    }
-    do
-    {
-        cout << "Enter the number of scores to use: ";
-        cin >> numOfScores;
-    } while ( numOfScores <= 0);*/
-    
     //Create a pointer that points to # of inputted float values.
     float* scores = new float[numOfScores];
     //Ask for input to add values to pointer array.
     for (int i = 0; i < numOfScores; i++)
     {
+        //Ask for a value to be added to pointer array.
         cout << "Enter a score: ";
         cin >> scores[i];
+        //Ask for another answer if input is not an int or is less than 0.
+        while (cin.fail() || scores[i] <= 0)
+        {
+            //Clear input to prevent crashes.
+            cin.clear();
+            cin.ignore(256, '\n');
+            cout << "No strings or numbers less than or equal to 0 allowed. Enter a score: ";
+            //Ask for input again.
+            cin >> scores[i];
+        } 
     }
     //Call functions.
     AverageScore(scores, numOfScores);
@@ -57,7 +59,6 @@ int main()
     LowScore(scores, numOfScores);
     //Free up memory
     delete[] scores;
-
     return 0;
 }
 /// <summary>
@@ -84,26 +85,36 @@ void AverageScore(float* scores, int count)
 /// <param name="count">The # of variables to read in.</param>
 void HighScore(float* scores, int count)
 {
+    //Set a variable to hold the highest value.
     float highestScore = -50;
     for (int i = 0; i < count; i++)
     {
+        //Replace the value of the high score if the pointee value is higher.
         if (scores[i] > highestScore)
         {
             highestScore = scores[i];
         }
     }
+    //Print out the final highest score.
     cout << "High Score is " << highestScore << "\n";
 }
-
+/// <summary>
+/// This method goes through a pointer array of floats and determines the lowest element value.
+/// </summary>
+/// <param name="scores">The float pointer that's holding the float values.</param>
+/// <param name="count">The # of variables to read in.</param>
 void LowScore(float* scores, int count)
 {
+    //Set a variable to hold the lowest value.
     float lowestScore = 1000;
     for (int i = 0; i < count; i++)
     {
+        //Replace the value of the lower score if the pointee value is lower.
         if (scores[i] < lowestScore)
         {
             lowestScore = scores[i];
         }
     }
+    //Print out the final lowest score.
     cout << "Low Score is " << lowestScore << "\n";
 }
