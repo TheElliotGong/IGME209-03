@@ -7,11 +7,13 @@
 #include <stdlib.h>
 
 using namespace std;
-void Update(b2Body* player, b2World world, float targetX, float targetY);
+
+//Declare all functions.
+void Update(b2Body* player, b2World* world, float targetX, float targetY);
 
 void Display(float targetX, float targetY, float playerX, float playerY);
 
-void ApplyForces(char key, b2Body player);
+void ApplyForces(int key, b2Body* player);
 
 void MoveTarget(float& xPos, float& yPos);
 
