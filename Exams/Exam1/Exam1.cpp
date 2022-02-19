@@ -27,11 +27,11 @@ int main()
     //inputted number is less than or equal to 0.
     while (cin.fail() || numOfScores <= 0)
     {
-        //Clear input so it doesn't crash.
+        //Clear input and discard extracted characters from input sequence to prevent crashes.
         cin.clear();
         cin.ignore(256, '\n');
+        //Ask the user for a valid input value.
         cout << "No strings or numbers less than or equal to 0 allowed. Enter the number of scores to use: ";
-        //Ask for input again.
         cin >> numOfScores;
     }
     //Create a pointer that points to # of inputted float values.
@@ -45,15 +45,15 @@ int main()
         //Ask for another answer if input is not an int or is less than 0.
         while (cin.fail() || scores[i] <= 0)
         {
-            //Clear input to prevent crashes.
+            //Clear input and discard extracted characters from input sequence to prevent crashes.
             cin.clear();
             cin.ignore(256, '\n');
+            //Ask the user for a valid input value.
             cout << "No strings or numbers less than or equal to 0 allowed. Enter a score: ";
-            //Ask for input again.
             cin >> scores[i];
         } 
     }
-    //Call functions.
+    //Call all 3 functions.
     AverageScore(scores, numOfScores);
     HighScore(scores, numOfScores);
     LowScore(scores, numOfScores);
@@ -74,8 +74,8 @@ void AverageScore(float* scores, int count)
     {
         sum += scores[i];
     }
-    //Take the average and print it out.
-    cout << "Average Score is " << (int)sum / count <<"\n";
+    //Take the average, round it to the nearest int, and print it out.
+    cout << "Average Score is " << static_cast<int>(sum)/count <<"\n";
 
 }
 /// <summary>
@@ -86,7 +86,7 @@ void AverageScore(float* scores, int count)
 void HighScore(float* scores, int count)
 {
     //Set a variable to hold the highest value.
-    float highestScore = -50;
+    float highestScore = -10000;
     for (int i = 0; i < count; i++)
     {
         //Replace the value of the high score if the pointee value is higher.
@@ -106,7 +106,7 @@ void HighScore(float* scores, int count)
 void LowScore(float* scores, int count)
 {
     //Set a variable to hold the lowest value.
-    float lowestScore = 1000;
+    float lowestScore = 10000;
     for (int i = 0; i < count; i++)
     {
         //Replace the value of the lower score if the pointee value is lower.
