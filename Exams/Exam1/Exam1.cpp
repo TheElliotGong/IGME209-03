@@ -9,6 +9,7 @@
 #include <iostream>
 #include <ctype.h>
 #include <cctype>
+#include <math.h>
 using namespace std;
 
 
@@ -18,11 +19,17 @@ void HighScore(float* scores, int count);
 void LowScore(float* scores, int count);
 int main()
 {
+    //Keep track of how many scores the user shall put in.
     int numOfScores;
+    //This float serves as input, to check if user typed in a float/double instead of a 
+    //whole number.
+    float input;
     //Ask for how many scores they want to use.
     //Check if user input was a bad case: Either below or equal to 0 or not a number
-    cout << "Enter the number of scores to use: ";
-    cin >> numOfScores;
+    cout << "Enter the number of scores to use. It must be greater than 0: ";
+    cin >> input;
+    //Convert the inputted float to a proper int value.
+    numOfScores = (int)input;
     //Keep asking for a proper int if the user inputs a string or if the 
     //inputted number is less than or equal to 0.
     while (cin.fail() || numOfScores <= 0)
@@ -40,9 +47,10 @@ int main()
     for (int i = 0; i < numOfScores; i++)
     {
         //Ask for a value to be added to pointer array.
-        cout << "Enter a score: ";
+        cout << "Enter a score. It must be greater than 0: ";
         cin >> scores[i];
         //Ask for another answer if input is not an int or is less than 0.
+        
         while (cin.fail() || scores[i] <= 0)
         {
             //Clear input and discard extracted characters from input sequence to prevent crashes.
@@ -51,12 +59,13 @@ int main()
             //Ask the user for a valid input value.
             cout << "No strings or numbers less than or equal to 0 allowed. Enter a score: ";
             cin >> scores[i];
-        } 
+        }
     }
     //Call all 3 functions.
     AverageScore(scores, numOfScores);
     HighScore(scores, numOfScores);
     LowScore(scores, numOfScores);
+    cout << "Hello!";
     //Free up memory
     delete[] scores;
     return 0;
@@ -69,13 +78,13 @@ int main()
 void AverageScore(float* scores, int count)
 {
     //Initialze and add up sum of scores.
-    float sum = 0;
+    float sum = 0.0f;
     for (int i = 0; i < count; i++)
     {
         sum += scores[i];
     }
-    //Take the average, round it to the nearest int, and print it out.
-    cout << "Average Score is " << static_cast<int>(sum)/count <<"\n";
+    //Take the average, round it to the nearest lowest integer, and print it out.
+    cout << "Average Score is " << roundf(sum/count) <<"\n";
 
 }
 /// <summary>
@@ -86,7 +95,7 @@ void AverageScore(float* scores, int count)
 void HighScore(float* scores, int count)
 {
     //Set a variable to hold the highest value.
-    float highestScore = -10000;
+    float highestScore = -10000.0f;
     for (int i = 0; i < count; i++)
     {
         //Replace the value of the high score if the pointee value is higher.
@@ -106,7 +115,7 @@ void HighScore(float* scores, int count)
 void LowScore(float* scores, int count)
 {
     //Set a variable to hold the lowest value.
-    float lowestScore = 10000;
+    float lowestScore = 10000.0f;
     for (int i = 0; i < count; i++)
     {
         //Replace the value of the lower score if the pointee value is lower.
