@@ -19,19 +19,29 @@ void HighScore(float* scores, int count);
 void LowScore(float* scores, int count);
 int main()
 {
+    
     //Keep track of how many scores the user shall put in.
     int numOfScores;
-    //This float serves as input, to check if user typed in a float/double instead of a 
-    //whole number.
+    //This c++ string will hold the input sequence.
     float input;
     //Ask for how many scores they want to use.
     //Check if user input was a bad case: Either below or equal to 0 or not a number
     cout << "Enter the number of scores to use. It must be greater than 0: ";
     cin >> input;
+    /*This saves the length of the char array holding the input.
+    int length = sizeof(input) / sizeof(char);
+    int badCases = 0;
+    //Loop through the char 
+    for (int i = 0; i < length; i++)
+    {
+        if (isdigit(input[i]) == 0)
+        {
 
-    //Keep asking for a proper int if the user inputs a string or if the 
-    //inputted number is less than or equal to 0.
-    while (cin.fail() || input <= 0)
+        }
+    }*/
+    //Keep asking user for valid number if input is invalid or the inputted number is less than or 
+    //equal to 0.
+    while (!cin || input <= 0)
     {
         //Clear input and discard extracted characters from input sequence to prevent crashes.
         cin.clear();
@@ -51,7 +61,7 @@ int main()
         cout << "Enter a score. It must be greater than 0: ";
         cin >> scores[i];
         //Ask for another answer if input is not an int or is less than 0.
-        while (cin.fail() || scores[i] <= 0)
+        while (!cin || scores[i] <= 0)
         {
             //Clear input and discard extracted characters from input sequence to prevent crashes.
             cin.clear();
@@ -65,7 +75,6 @@ int main()
     AverageScore(scores, numOfScores);
     HighScore(scores, numOfScores);
     LowScore(scores, numOfScores);
-    cout << "Hello!";
     //Free up memory
     delete[] scores;
     return 0;
