@@ -28,19 +28,20 @@ int main()
     //Check if user input was a bad case: Either below or equal to 0 or not a number
     cout << "Enter the number of scores to use. It must be greater than 0: ";
     cin >> input;
-    //Convert the inputted float to a proper int value.
-    numOfScores = (int)input;
+
     //Keep asking for a proper int if the user inputs a string or if the 
     //inputted number is less than or equal to 0.
-    while (cin.fail() || numOfScores <= 0)
+    while (cin.fail() || input <= 0)
     {
         //Clear input and discard extracted characters from input sequence to prevent crashes.
         cin.clear();
         cin.ignore(256, '\n');
         //Ask the user for a valid input value.
         cout << "No strings or numbers less than or equal to 0 allowed. Enter the number of scores to use: ";
-        cin >> numOfScores;
+        cin >> input;
     }
+    //Convert the inputted float to a proper int value.    
+    numOfScores = (int)input;
     //Create a pointer that points to # of inputted float values.
     float* scores = new float[numOfScores];
     //Ask for input to add values to pointer array.
@@ -50,7 +51,6 @@ int main()
         cout << "Enter a score. It must be greater than 0: ";
         cin >> scores[i];
         //Ask for another answer if input is not an int or is less than 0.
-        
         while (cin.fail() || scores[i] <= 0)
         {
             //Clear input and discard extracted characters from input sequence to prevent crashes.
