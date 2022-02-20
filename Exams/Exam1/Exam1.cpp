@@ -10,6 +10,7 @@
 #include <ctype.h>
 #include <cctype>
 #include <math.h>
+#include <stdio.h>
 using namespace std;
 
 
@@ -17,57 +18,46 @@ using namespace std;
 void AverageScore(float* scores, int count);
 void HighScore(float* scores, int count);
 void LowScore(float* scores, int count);
+//float CharArrayToFloat(char* array);
+bool CheckArrayForLetters(char* array);
 int main()
 {
-    
+    //char inputStream[60];
     //Keep track of how many scores the user shall put in.
     int numOfScores;
+
     //This c++ string will hold the input sequence.
-    float input;
+    //float input;
     //Ask for how many scores they want to use.
     //Check if user input was a bad case: Either below or equal to 0 or not a number
-    cout << "Enter the number of scores to use. It must be greater than 0: ";
-    cin >> input;
-    /*This saves the length of the char array holding the input.
-    int length = sizeof(input) / sizeof(char);
-    int badCases = 0;
-    //Loop through the char 
-    for (int i = 0; i < length; i++)
+   /* cout << "Enter the number of scores to use. It must be greater than 0: ";
+    cin.getline(inputStream, 60);*/
+    cout << "Enter the number of scores to use. No strings or numbers less than or equal to 0 allowed: ";
+    cin >> numOfScores;
+    while (!cin || numOfScores <= 0)
     {
-        if (isdigit(input[i]) == 0)
-        {
-
-        }
-    }*/
-    //Keep asking user for valid number if input is invalid or the inputted number is less than or 
-    //equal to 0.
-    while (!cin || input <= 0)
-    {
-        //Clear input and discard extracted characters from input sequence to prevent crashes.
         cin.clear();
         cin.ignore(256, '\n');
-        //Ask the user for a valid input value.
-        cout << "No strings or numbers less than or equal to 0 allowed. Enter the number of scores to use: ";
-        cin >> input;
+        cout << "Enter the number of scores to use. No strings or numbers less than or equal to 0 allowed: ";
+        cin >> numOfScores;
     }
-    //Convert the inputted float to a proper int value.    
-    numOfScores = (int)input;
+    //Check if input started with a digit but ends with characters.
+    
     //Create a pointer that points to # of inputted float values.
     float* scores = new float[numOfScores];
     //Ask for input to add values to pointer array.
     for (int i = 0; i < numOfScores; i++)
     {
         //Ask for a value to be added to pointer array.
-        cout << "Enter a score. It must be greater than 0: ";
+        cin.clear();
+        cin.ignore(256, '\n');
+        cout << "Enter a score: ";
         cin >> scores[i];
-        //Ask for another answer if input is not an int or is less than 0.
-        while (!cin || scores[i] <= 0)
+        while (!cin)
         {
-            //Clear input and discard extracted characters from input sequence to prevent crashes.
             cin.clear();
             cin.ignore(256, '\n');
-            //Ask the user for a valid input value.
-            cout << "No strings or numbers less than or equal to 0 allowed. Enter a score: ";
+            cout << "Input cannot be a string. Try again: ";
             cin >> scores[i];
         }
     }
@@ -136,3 +126,4 @@ void LowScore(float* scores, int count)
     //Print out the final lowest score.
     cout << "Low Score is " << lowestScore << "\n";
 }
+
