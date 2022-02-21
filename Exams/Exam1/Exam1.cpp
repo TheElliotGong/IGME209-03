@@ -2,7 +2,7 @@
 //
 
 /*Author: Elliot Gong
-* Section: 03
+* Section: IGME 209-03
 * Date: 2/15/2022
 * Exam #1
 */
@@ -27,15 +27,17 @@ int main()
     //Ask the user for how many scores they want to use.
     cout << "Enter the number of scores to use. No strings or numbers less than or equal to 0 allowed: ";
     cin >> numOfScores;
+    //Keep asking them for input if the input is invalid or if the inputted number is less than or 
+    //equal to 0.
     while (!cin || numOfScores <= 0)
     {
+        //Clear input stream for the next sequence.
         cin.clear();
         cin.ignore(256, '\n');
+        //Reprompt the user for input.
         cout << "Enter the number of scores to use. No strings or numbers less than or equal to 0 allowed: ";
         cin >> numOfScores;
     }
-    //Check if input started with a digit but ends with characters.
-    
     //Create a pointer that points to # of inputted float values.
     float* scores = new float[numOfScores];
     //Ask for input to add values to pointer array.
@@ -55,6 +57,7 @@ int main()
             //Clear the input again to make room for the next sequence.
             cin.clear();
             cin.ignore(256, '\n');
+            //Reprompt them for input.
             cout << "Input cannot be a string. Try again: ";
             cin >> scores[i];
         }
@@ -74,13 +77,14 @@ int main()
 /// <param name="count">The # of variables to read in.</param>
 void AverageScore(float* scores, int count)
 {
-    //Initialze and add up sum of scores.
+    //Initialze a local float variable. 
     float sum = 0.0f;
+    //Loop through float pointer and add up sum of values to local variable.
     for (int i = 0; i < count; i++)
     {
         sum += scores[i];
     }
-    //Take the average, round it to the nearest lowest integer, and print it out.
+    //Divide local variable by # of scores, round it to the nearest integer, and print it out.
     cout << "Average Score is " << roundf(sum/count) <<"\n";
 
 }
@@ -93,6 +97,7 @@ void HighScore(float* scores, int count)
 {
     //Set a variable to hold the highest value.
     float highestScore = -10000.0f;
+    //Loop through the float pointer to determine the highest value.
     for (int i = 0; i < count; i++)
     {
         //Replace the value of the high score if the pointee value is higher.
@@ -113,6 +118,7 @@ void LowScore(float* scores, int count)
 {
     //Set a variable to hold the lowest value.
     float lowestScore = 10000.0f;
+    //Loop through the float pointer to determine the lowest value.
     for (int i = 0; i < count; i++)
     {
         //Replace the value of the lower score if the pointee value is lower.
