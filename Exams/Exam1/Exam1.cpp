@@ -19,7 +19,7 @@ void AverageScore(float* scores, int count);
 void HighScore(float* scores, int count);
 void LowScore(float* scores, int count);
 //float CharArrayToFloat(char* array);
-bool CheckArrayForLetters(char* array);
+
 int main()
 {
     //char inputStream[60];
@@ -48,13 +48,16 @@ int main()
     //Ask for input to add values to pointer array.
     for (int i = 0; i < numOfScores; i++)
     {
-        //Ask for a value to be added to pointer array.
+        //Clear any potential invalid input left over from the previous input sequence.
         cin.clear();
         cin.ignore(256, '\n');
+        //Ask users for a score.
         cout << "Enter a score: ";
         cin >> scores[i];
-        while (!cin)
+        //Keep asking for a score if the input is invalid.
+        while (!cin || scores[i] < 0)
         {
+            //Clear the input again to make room for the next sequence.
             cin.clear();
             cin.ignore(256, '\n');
             cout << "Input cannot be a string. Try again: ";
