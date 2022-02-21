@@ -71,10 +71,11 @@ int main()
     return 0;
 }
 /// <summary>
-/// This method takes a float pointer array and determines the average value of the elements.
+/// This method takes a float pointer array and determines the average value of the elements, rounded 
+/// to the nearest integer.
 /// </summary>
 /// <param name="scores">The float pointer that's holding the float values.</param>
-/// <param name="count">The # of variables to read in.</param>
+/// <param name="count">The # of float variables to sift through</param>
 void AverageScore(float* scores, int count)
 {
     //Initialze a local float variable. 
@@ -92,7 +93,7 @@ void AverageScore(float* scores, int count)
 /// This method goes through a pointer array of floats and determines the highest element value.
 /// </summary>
 /// <param name="scores">The float pointer that's holding the float values.</param>
-/// <param name="count">The # of variables to read in.</param>
+/// <param name="count">The # of float variables to sift through</param>
 void HighScore(float* scores, int count)
 {
     //Set a variable to hold the highest value.
@@ -113,7 +114,7 @@ void HighScore(float* scores, int count)
 /// This method goes through a pointer array of floats and determines the lowest element value.
 /// </summary>
 /// <param name="scores">The float pointer that's holding the float values.</param>
-/// <param name="count">The # of variables to read in.</param>
+/// <param name="count">The # of float variables to sift through</param>
 void LowScore(float* scores, int count)
 {
     //Set a variable to hold the lowest value.
