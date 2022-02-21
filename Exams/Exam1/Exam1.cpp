@@ -22,16 +22,9 @@ void LowScore(float* scores, int count);
 
 int main()
 {
-    //char inputStream[60];
-    //Keep track of how many scores the user shall put in.
+    //This int variable keeps track of how many scores there are.
     int numOfScores;
-
-    //This c++ string will hold the input sequence.
-    //float input;
-    //Ask for how many scores they want to use.
-    //Check if user input was a bad case: Either below or equal to 0 or not a number
-   /* cout << "Enter the number of scores to use. It must be greater than 0: ";
-    cin.getline(inputStream, 60);*/
+    //Ask the user for how many scores they want to use.
     cout << "Enter the number of scores to use. No strings or numbers less than or equal to 0 allowed: ";
     cin >> numOfScores;
     while (!cin || numOfScores <= 0)
@@ -49,13 +42,15 @@ int main()
     for (int i = 0; i < numOfScores; i++)
     {
         //Clear any potential invalid input left over from the previous input sequence.
+        //If this is the first score to be entered, than any leftover data from inputting
+        //the # of scores to be read will thankfully be cleared away.
         cin.clear();
         cin.ignore(256, '\n');
         //Ask users for a score.
         cout << "Enter a score: ";
         cin >> scores[i];
         //Keep asking for a score if the input is invalid.
-        while (!cin || scores[i] < 0)
+        while (!cin || scores[i] < 0 )
         {
             //Clear the input again to make room for the next sequence.
             cin.clear();
