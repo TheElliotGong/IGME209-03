@@ -4,8 +4,10 @@
 /*Author: Elliot Gong
 * Section: IGME 209-03
 * Date: 2/15/2022
-* Exam #1
+* Purpose: Exam #1
 */
+
+//Add appropriate header files and declare the std namespace.
 #include <iostream>
 #include <ctype.h>
 #include <cctype>
@@ -19,44 +21,46 @@ using namespace std;
 void AverageScore(float* scores, int count);
 void HighScore(float* scores, int count);
 void LowScore(float* scores, int count);
+//These helper functions help to parse data types from char arrays.
 void GetScoreCount(char scoreCountInput[], int& intVar);
 void GetCurrentScore(char scoreInput[], float& floatVar);
-//float CharArrayToFloat(char* array);
 
 int main()
 {
     //This int variable keeps track of how many scores there are.
     int numOfScores;
+    //This float keeps track of the current score inputted by the user.
     float currentScore;
     //This array keeps track of the string input used to determine the # of scores.
     char input[30];
     //This array keeps track of the string input used to enter float scores.
     char scoreInput[50];
     //Ask the user for how many scores they want to use.
+    cout << "No strings, blank input, or numbers less than 0 allowed.\n";
+    GetScoreCount(input, numOfScores); 
     //Keep asking them for input if the input is invalid, empty, or if the inputted number 
     //is less than or equal to 0.
-    GetScoreCount(input, numOfScores);
     while(numOfScores <= 0 || strlen(input) == 0)
     {
         //Clear input stream for the next sequence.
         //Reprompt the user for input.
+        cout << "No strings, blank input, or numbers less or equal to than 0 allowed.\n";
         GetScoreCount(input, numOfScores);
     }
     //Create a pointer that points to # of inputted float values.
     float* scores = new float[numOfScores];
     //Ask for input to add values to pointer array.
+    //Add the appropriate # of user inputted floats to the pointer float array.
     for (int i = 0; i < numOfScores; i++)
     {
-        //Prompt user input, and parse 
-        cout << "No strings, blank input, or numbers less or equal to than 0 allowed. Enter a Score: ";
-        cin.getline(scoreInput, 50);
-        currentScore = atof(scoreInput);
-        while (currentScore <= 0 || strlen(scoreInput) == 0)
+        //Prompt user input, and parse the input stream.
+        GetCurrentScore(scoreInput, currentScore);
+        //Ask user for valid input if the parsed number is less than 0.
+        while (currentScore < 0 || (currentScore == 0 && scoreInput[0] != '0') || strlen(scoreInput) == 0)
         {
             //Reprompt them for input.
-            cout << "No strings, blank input, or numbers less or equal to than 0 allowed. Enter a Score: ";
-            cin.getline(scoreInput, 50);
-            currentScore = atof(scoreInput);
+            cout << "No strings, blank input, or numbers less than 0 allowed.\n";
+            GetCurrentScore(scoreInput, currentScore);
         }
         //After input is finally valid, add it to the pointer array.
         scores[i] = currentScore;
@@ -86,7 +90,6 @@ void AverageScore(float* scores, int count)
     }
     //Divide local variable by # of scores, round it to the nearest integer, and print it out.
     cout << "Average Score is " << roundf(sum/count) <<"\n";
-
 }
 /// <summary>
 /// This method goes through a pointer array of floats and determines the highest element value.
@@ -139,13 +142,23 @@ void LowScore(float* scores, int count)
 void GetScoreCount(char scoreCountInput[], int& intVar)
 {
     //Prompt the user for input and save it to the array.
-    cout << "Enter the number of scores to use. No strings, empty input, or numbers less than or equal to 0 allowed: ";
+    cout << "Enter the number of scores to use: ";
     cin.getline(scoreCountInput, 70);
-    //Whatever int value was parsed from the int, save it to the reference parameter.
+    //Whatever int value was parsed from the array, save it to the reference parameter.
+    //If an int can't be parsed, then the value returned from 'atoi' is 0.
     intVar = atoi(scoreCountInput);
 }
-
+/// <summary>
+/// This function parses a char array and parses any possible double/float value from it.
+/// </summary>
+/// <param name="scoreInput">The char array that to parse the desired score from.</param>
+/// <param name="floatVar">The variable to assign any double/float value from.</param>
 void GetCurrentScore(char scoreInput[], float& floatVar)
 {
-
+    //Prompt the user for input and save it to the array.
+    cout << "Enter a Score: ";
+    //Whatever double/float value was parsed from the array, save it to the reference parameter.
+    //If an double/float can't be parsed, then the value returned from 'atoi' is 0.0.
+    cin.getline(scoreInput, 50);
+    floatVar = atof(scoreInput);
 }
