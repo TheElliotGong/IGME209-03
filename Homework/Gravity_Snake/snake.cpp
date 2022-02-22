@@ -4,10 +4,10 @@ float xPosition;
 float yPosition;
 
 
-void Update(b2Body* player, b2World* world,  float targetX, float targetY)
+void Update(b2Body& player, b2World& world,  float targetX, float targetY)
 {
-	world->Step(1.0f / 60.0f, 8, 3);
-	b2Vec2 pos = player->GetPosition();
+	world.Step(1.0f / 60.0f, 8, 3);
+	b2Vec2 pos = player.GetPosition();
 	Display(targetX, targetY, pos.x, pos.y);
 
 }
@@ -24,9 +24,9 @@ void Display(float targetX, float targetY, float playerX, float playerY)
 		<< playerX << ", " << playerY<<"\n";
 }
 
-void ApplyForces(int key, b2Body* player)
+void ApplyForces(int key, b2Body& player)
 {
-	b2Vec2 pos = player->GetPosition();
+	b2Vec2 pos = player.GetPosition();
 	switch (key)
 	{
 		case 72:
