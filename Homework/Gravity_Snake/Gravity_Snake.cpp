@@ -7,16 +7,16 @@
 
 int main()
 {
-	//Define target location, which within -5 to 5 range for x and y.
-	double targetX = GenerateRandomNumber(-5.0f, 5.0f);
-	double targetY = GenerateRandomNumber(-5.0f, 5.0f);
+	//Use float pointers to target location, which within -5 to 5 range for x and y.
+	float targetX = GenerateRandomNumber(-5.0f, 5.0f);
+	float targetY = GenerateRandomNumber(-5.0f, 5.0f);
 	//This variable keeps track of how many targets the player has hit.
 	int targetCount = 0;
 	//This int will hold the numerical value of the key pressed.
 	int key;
 	cout << "Let's play Gravity Snake!\n";
 	//Create the world
-	b2Vec2 gravity(0.0f, -9.8f/60);
+	b2Vec2 gravity(0.0f, -9.8f);
 	b2World* world = new b2World(gravity);
 	//Create the ground body so the snake won't fall infinitely.
 	b2BodyDef* groundBody = new b2BodyDef;
@@ -33,7 +33,7 @@ int main()
 	b2Body* player = world->CreateBody(snake);
 	//Attach a shape to the snake.
 	b2PolygonShape snakeShape;
-	snakeShape.SetAsBox(1.0f, 1.0f);
+	snakeShape.SetAsBox(0.25f, 0.25f);
 	//Add a fixture definition for the snake's box.
 	
 	b2FixtureDef fixtureDef;
@@ -60,12 +60,8 @@ int main()
 			ApplyForces(key, player);
 		}
 
-		Update(player, world, targetX, targetY);
-		if (targetX - player->GetPosition().x <= 0.02 || targetX + 0.02 >= player->GetPosition().x ||
-			targetY - player->GetPosition().y <= 0.02 || targetY + 0.02 >= player->GetPosition().y)
-		{
-
-		}
+		Update(player, world, targetX, targetY, numTargets);
+		
 	}
 	
 

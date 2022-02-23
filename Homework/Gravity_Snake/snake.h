@@ -9,9 +9,9 @@
 using namespace std;
 
 //Declare all functions.
-void Update(b2Body* player, b2World* world, float targetX, float targetY);
+void Update(b2Body* player, b2World* world, float& targetX, float& targetY, int& targetCount);
 
-void Display(float targetX, float targetY, float playerX, float playerY);
+void Display(float& targetX, float& targetY, float playerX, float playerY, int& targetCount);
 
 void ApplyForces(int key, b2Body* player);
 

@@ -4,11 +4,11 @@ float xPosition;
 float yPosition;
 
 
-void Update(b2Body* player, b2World* world,  float targetX, float targetY)
+void Update(b2Body* player, b2World* world,  float& targetX, float& targetY, int& targetCount)
 {
-	world->Step(1.0f / 60.0f, 8, 3);
+	world->Step(1.0f / 60.0f, 6, 2);
 	b2Vec2 pos = player->GetPosition();
-	Display(targetX, targetY, pos.x, pos.y);
+	Display(targetX, targetY, pos.x, pos.y, targetCount);
 
 }
 /// <summary>
@@ -18,24 +18,40 @@ void Update(b2Body* player, b2World* world,  float targetX, float targetY)
 /// <param name="targetY">The target's y coordinate.</param>
 /// <param name="playerX">The player's x coordinate.</param>
 /// <param name="playerY">The player's y coordinate.</param>
-void Display(float targetX, float targetY, float playerX, float playerY)
+void Display(float& targetX, float& targetY, float playerX, float playerY, int& targetCount)
 {
-	cout << "Target " << targetX << ", " << targetY << " - - > Snake "
+	//Check if the target and player have collided.
+	if (targetX - playerX <= 0.02f || playerX - targetX <= 0.02f
+		|| targetY - playerY <= 0.02f || playerY - targetY <= 0.02f)
+	{
+		targetCount++;
+		cout << "Target " << targetX << ", " << targetY << " - - > Snake "
+			<< playerX << ", " << playerY << " (hit target)\n";
+		//Move the target to a new location.
+		MoveTarget(targetX, targetY);
+	}
+	else
+	{
+		cout << "Target " << targetX << ", " << targetY << " - - > Snake "
 		<< playerX << ", " << playerY<<"\n";
+	}
+	
+
 }
 
 void ApplyForces(int key, b2Body* player)
 {
 	b2Vec2 pos = player->GetPosition();
+	key = toupper(key);
 	switch (key)
 	{
-		case 72:
+		case 'W':
 			pos.y -= 5.0f;
 			break;
-		case 75:
+		case 'A':
 			pos.x -= 5.0f;
 			break;
-		case 77:
+		case 'D':
 			pos.x += 5.0f;
 			break;
 	}
@@ -56,7 +72,7 @@ void MoveTarget(float& xPos, float& yPos)
 
 float GenerateRandomNumber(float min, float max)
 {
-	float value = min + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (max - min)));
+	float value = min + static_cast <float> (rand()) /  (RAND_MAX / (max - min));
 	value = float(int(value * 10 + 0.5)) / 10;
 	return value;
 }
