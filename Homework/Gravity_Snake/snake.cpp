@@ -21,8 +21,10 @@ void Update(b2Body* player, b2World* world,  float& targetX, float& targetY, int
 void Display(float& targetX, float& targetY, float playerX, float playerY, int& targetCount)
 {
 	//Check if the target and player have collided.
-	if (targetX - playerX <= 0.02f || playerX - targetX <= 0.02f
-		|| targetY - playerY <= 0.02f || playerY - targetY <= 0.02f)
+	if ((targetX - playerX <= 0.02f && (targetY - 0.02f <= playerY <= targetY + 0.02f)) 
+		|| (playerX - targetX <= 0.02f && (targetY - 0.02f <= playerY <= targetY + 0.02f))
+		|| (targetY - playerY <= 0.02f &&  (targetX - 0.02f <= playerX <= targetX + 0.02f))
+		|| (playerY - targetY <= 0.02f && (targetX - 0.02f <= playerX <= targetX + 0.02f)))
 	{
 		targetCount++;
 		cout << "Target " << targetX << ", " << targetY << " - - > Snake "
@@ -39,20 +41,20 @@ void Display(float& targetX, float& targetY, float playerX, float playerY, int& 
 
 }
 
-void ApplyForces(int key, b2Body* player)
+void ApplyForces(int key, float& playerX, float& playerY)
 {
-	b2Vec2 pos = player->GetPosition();
+
 	key = toupper(key);
 	switch (key)
 	{
-		case 'W':
-			pos.y -= 5.0f;
+		case 'w':
+			playerY -= 5.0f;
 			break;
-		case 'A':
-			pos.x -= 5.0f;
+		case 'a':
+			playerX -= 5.0f;
 			break;
-		case 'D':
-			pos.x += 5.0f;
+		case 'd':
+			playerX += 5.0f;
 			break;
 	}
 }
@@ -72,7 +74,7 @@ void MoveTarget(float& xPos, float& yPos)
 
 float GenerateRandomNumber(float min, float max)
 {
-	float value = min + static_cast <float> (rand()) /  (RAND_MAX / (max - min));
+	float value = min +  (rand()) /  (RAND_MAX / (max - min));
 	value = float(int(value * 10 + 0.5)) / 10;
 	return value;
 }
