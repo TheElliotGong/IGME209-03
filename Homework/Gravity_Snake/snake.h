@@ -1,4 +1,5 @@
 #pragma once
+//Include all the necssary header files, including the box2d api
 #include <iostream>
 #include <cstring>
 #include "include\Box2D\Box2D.h"
@@ -8,8 +9,9 @@
 #include <ctime>
 #include <math.h>
 #include<iomanip>
+#include <chrono>
 using namespace std;
-
+using namespace chrono;
 //Declare all functions.
 void Update(b2Body* player, b2World* world, float& targetX, float& targetY, int& targetCount);
 
