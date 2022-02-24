@@ -18,7 +18,7 @@ int main()
 	int key;
 	cout << "Let's play Gravity Snake!\n";
 	//Create the world
-	b2Vec2 gravity(0.0f, -2.5f);
+	b2Vec2 gravity(0.0f, -5.0f);
 	b2World* world = new b2World(gravity);
 	//Create the ground body so the snake won't fall infinitely.
 	b2BodyDef* groundBody = new b2BodyDef;
@@ -43,6 +43,7 @@ int main()
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &snakeShape;
 	fixtureDef.density = 1.0f;
+	fixtureDef.friction = 0.4f;
 	player->CreateFixture(&fixtureDef);
 
 	//Create a pos variable to keep track of player position.
@@ -51,6 +52,7 @@ int main()
 	//Keep the game playing until the player has hit 2 targets.
 	while (numTargets < 2 )
 	{
+		
 		if (_kbhit())
 		{
 			//Get the int code for the key pressed.
@@ -61,7 +63,7 @@ int main()
 				break;
 			}
 			//Otherwise, apply forces to make the player move either by the WASD keys or by pressing enter.
-			ApplyForces(key, playerX, playerY);
+			ApplyForces(key, player);
 		}
 		Update(player, world, targetX, targetY, numTargets);
 		
