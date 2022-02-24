@@ -20,3 +20,5 @@ void ApplyForces(int key, b2Body* player);
 void MoveTarget(float& xPos, float& yPos);
 
 float GenerateRandomNumber(float min, float max);
+
+bool WithinRange(float value, float min, float max);

@@ -24,13 +24,13 @@ void Display(float& targetX, float& targetY, float playerX, float playerY, int& 
 	//Check if the target and player have collided.
 
 	//If player is on the target's left
-	if ((targetX - playerX <= 0.03f && (targetY - 0.03f <= playerY <= targetY + 0.03f)) 
+	if ( (WithinRange(playerX, targetX - 0.03f, targetX) && WithinRange(playerY, targetY - 0.03f, targetY + 0.03f))
 		//If player is on the target's right.
-		|| (playerX - targetX <= 0.03f && (targetY - 0.03f <= playerY <= targetY + 0.03f))
+		|| (WithinRange(playerX, targetX , targetX + 0.03f) && WithinRange(playerY, targetY - 0.03f, targetY + 0.03f))
 		//If player is above the target
-		|| (targetY - playerY <= 0.03f &&  (targetX - 0.03f <= playerX <= targetX + 0.03f))
+		|| (WithinRange(playerX, targetX - 0.03f, targetX + 0.03f) && WithinRange(playerY, targetY, targetY + 0.03f))
 		//If player is below the target
-		|| (playerY - targetY <= 0.03f && (targetX - 0.03f <= playerX <= targetX + 0.03f)))
+		|| (WithinRange(playerX, targetX - 0.03f, targetX + 0.03f) && WithinRange(playerY, targetY - 0.03f, targetY)))
 	{
 		targetCount++;
 		cout << "Target " << targetX << ", " << targetY << " - - > Snake "
@@ -95,4 +95,9 @@ float GenerateRandomNumber(float min, float max)
 	float value = min +  (rand()) /  (RAND_MAX / (max - min));
 	value = float(int(value * 10 + 0.5)) / 10;
 	return value;
+}
+
+bool WithinRange(float value, float min, float max)
+{
+	return ((value - max) * (value - min) <= 0);
 }
