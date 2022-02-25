@@ -1,12 +1,27 @@
 #include "snake.h"
 
-float xPosition;
-float yPosition;
+/*Author: Elliot Gong
+* Purpose: Initialize the functions declared in the header file.
+* Restrictions: Must update the b2world and apply forces to the player based on keyboard input.
+* Date: 2/20/2022
+*/
 
-
+/// <summary>
+/// This method updates the box2d world and its objects as well as printing out the positions of the 
+/// player and target.
+/// </summary>
+/// <param name="player">The player object, whose position will be checked to see if it collides with
+/// the target.</param>
+/// <param name="world">The b2world holding the player object.</param>
+/// <param name="targetX">The target's x coordinate.</param>
+/// <param name="targetY">The target's y coordinate.</param>
+/// <param name="targetCount">The num of targets hit.</param>
 void Update(b2Body* player, b2World* world,  float& targetX, float& targetY, int& targetCount)
 {
+	//Use the b2World class's step function to update the world.
 	world->Step(1.0f / 8000.0f, 6, 2);
+	//Get the player object's position and pass that into the display function along with
+	//the other parameters.
 	b2Vec2 pos = player->GetPosition();
 	Display(targetX, targetY, pos.x, pos.y, targetCount);
 
@@ -49,13 +64,12 @@ void Display(float& targetX, float& targetY, float playerX, float playerY, int& 
 	}
 }
 /// <summary>
-/// This method "pushes" the player based on keyboard input, using the was keys.
+/// This method applies different forces to the player based on keyboard input, using the was keys.
 /// </summary>
 /// <param name="key>The int value of the pressed key</param>
 /// <param name="player">The b2body object to apply the force to.</param>
 void ApplyForces(int key, b2Body* player)
 {
-	
 	//Apply different forces on the player based on the key code.
 	switch (key)
 	{

@@ -1,5 +1,5 @@
 #pragma once
-//Include all the necssary header files, including the box2d api
+//Include all the necessary header files, including the box2d api.
 #include <iostream>
 #include <cstring>
 #include "include\Box2D\Box2D.h"
@@ -12,6 +12,13 @@
 #include <chrono>
 using namespace std;
 using namespace chrono;
+
+/*Author: Elliot Gong
+* Purpose: Declare the functions needed for the Gravity Snake game.
+* Restrictions: Must use the required functions.
+* Date: 2/20/2022
+*/
+
 //Declare all functions.
 void Update(b2Body* player, b2World* world, float& targetX, float& targetY, int& targetCount);
 
@@ -21,6 +28,8 @@ void ApplyForces(int key, b2Body* player);
 
 void MoveTarget(float& xPos, float& yPos);
 
+//These header functions will be used to help get a random float within a range and determine if a
+//float is within a range.
 float GenerateRandomNumber(float min, float max);
 
 bool WithinRange(float value, float min, float max);
