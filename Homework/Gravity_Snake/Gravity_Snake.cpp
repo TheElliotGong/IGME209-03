@@ -3,7 +3,6 @@
 
 //Include the snake header file.
 #include "snake.h"
-
 /*Author: Elliot Gong
 *Purpose: Simulate the Snake Game in Box2D and add gravity to make the snake "fall". Display the game 
 *in text format. Record the time taken to hit the 2 targets to score the player

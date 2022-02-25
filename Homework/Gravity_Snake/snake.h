@@ -21,15 +21,10 @@ using namespace chrono;
 
 //Declare all functions.
 void Update(b2Body* player, b2World* world, float& targetX, float& targetY, int& targetCount);
-
 void Display(float& targetX, float& targetY, float playerX, float playerY, int& targetCount);
-
 void ApplyForces(int key, b2Body* player);
-
 void MoveTarget(float& xPos, float& yPos);
-
 //These header functions will be used to help get a random float within a range and determine if a
 //float is within a range.
 float GenerateRandomNumber(float min, float max);
-
 bool WithinRange(float value, float min, float max);
