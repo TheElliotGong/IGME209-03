@@ -40,13 +40,13 @@ void Display(float& targetX, float& targetY, float playerX, float playerY, int& 
 	//to count as a collision.
 
 	//If player is on the target's left
-	if ( (WithinRange(playerX, targetX - 0.25f, targetX) && WithinRange(playerY, targetY - 0.25f, targetY + 0.25f))
+	if ( (WithinRange(playerX, targetX - 0.05f, targetX) && WithinRange(playerY, targetY - 0.05f, targetY + 0.05f))
 		//If player is on the target's right.
-		|| (WithinRange(playerX, targetX , targetX + 0.25f) && WithinRange(playerY, targetY - 0.25f, targetY + 0.25f))
+		|| (WithinRange(playerX, targetX , targetX + 0.05f) && WithinRange(playerY, targetY - 0.05f, targetY + 0.05f))
 		//If player is above the target
-		|| (WithinRange(playerX, targetX - 0.25f, targetX + 0.25f) && WithinRange(playerY, targetY, targetY + 0.25f))
+		|| (WithinRange(playerX, targetX - 0.05f, targetX + 0.05f) && WithinRange(playerY, targetY, targetY + 0.05f))
 		//If player is below the target
-		|| (WithinRange(playerX, targetX - 0.25f, targetX + 0.25f) && WithinRange(playerY, targetY - 0.25f, targetY)))
+		|| (WithinRange(playerX, targetX - 0.05f, targetX + 0.05f) && WithinRange(playerY, targetY - 0.05f, targetY)))
 	{
 		//Increment the reference value that keeps track of the # of targets hit.
 		targetCount++;
@@ -75,16 +75,21 @@ void ApplyForces(int key, b2Body* player)
 	{
 		case 'w':
 			///If the player presses the w key, move the player up.
-			player->ApplyForceToCenter(b2Vec2(0.0f, 200.0f), false);
+			player->ApplyForceToCenter(b2Vec2(0.0f, 80.0f), false);
+			break;
+		case 's':
+			player->ApplyForceToCenter(b2Vec2(0.0f, -60.0f), false);
 			break;
 		case 'a':
 			//If the player presses the a key, move the player left.
-			player->ApplyForceToCenter(b2Vec2(-200.0f, 0.0f), false);
+			player->ApplyForceToCenter(b2Vec2(-30.0f, 0.0f), false);
 			break;
 			//If the player presses the d key, move the player right.
 		case 'd':
-			player->ApplyForceToCenter(b2Vec2(200.0f, 0.0f), false);
+			player->ApplyForceToCenter(b2Vec2(30.0f, 0.0f), false);
 			break;
+		
+
 	}
 }
 /// <summary>

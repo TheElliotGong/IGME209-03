@@ -31,7 +31,7 @@ int main()
 	groundBody->position.Set(0, -5.5f);
 	b2Body* ground = world->CreateBody(groundBody);
 	b2PolygonShape* box = new b2PolygonShape;
-	box->SetAsBox(120.0f, 0.1f);
+	box->SetAsBox(250.0f, 0.2f);
 	ground->CreateFixture(box, 0.0f);
 	//Create the playable snake as a dynamic body and set its position
 	b2BodyDef* snake = new b2BodyDef;
@@ -43,7 +43,7 @@ int main()
 	float playerY = player->GetPosition().y;
 	//Attach a shape to the snake.
 	b2PolygonShape snakeShape;
-	snakeShape.SetAsBox(0.1f, 0.1f);
+	snakeShape.SetAsBox(0.05f, 0.05f);
 	//Add a fixture definition for the snake's box.
 	//Set density, friction, and assign the fixturedef to the player.
 	b2FixtureDef fixtureDef;
@@ -87,12 +87,12 @@ int main()
 	//If they complete the game within 40 seconds, give them a "2 star" grade.
 	else if (20 < time <= 40)
 	{
-		cout << "Time taken to hit both targets: " << time << " seconds. Not bad! You didn't take too long.";
+		cout << "Time taken to hit both targets: " << time << " seconds. Not bad! You earned 2 stars!";
 	}
 	//If they take longer than 40 seconds, give them a "1 star" grade.
 	else if (40 < time)
 	{
-		cout << "Time taken to hit both targets: " << time << " seconds. So close! Good luck next time.";
+		cout << "Time taken to hit both targets: " << time << " seconds. So close! You earned 1 star!";
 	}
 	//Delete the pointer objects.
 	delete world;
