@@ -3,6 +3,9 @@
 
 //Include the snake header file.
 #include "snake.h"
+#define SFML_STATIC
+#include <SFML\Window.hpp>
+#include <SFML\Graphics.hpp>
 /*Author: Elliot Gong
 *Purpose: Simulate the Snake Game in Box2D and add gravity to make the snake "fall". Display the game 
 *in text format. Record the time taken to hit the 2 targets to score the player
@@ -10,6 +13,8 @@
 *Date:2/20/2022*/
 int main()
 {
+	sf::RenderWindow window(sf::VideoMode(800, 600), "Gravity Snake");
+	window.setTitle("Gravity Snake: Graphical Edition");
 	//Reset random so different values will always be randomly generated each time.
 	srand(static_cast <unsigned> (time(0)));
 	//Use float pointers to target location, which within -5 to 5 range for x and y.
