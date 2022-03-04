@@ -6,6 +6,7 @@
 * Date: 2/20/2022
 */
 
+
 /// <summary>
 /// This method updates the box2d world and its objects as well as printing out the positions of the 
 /// player and target.
@@ -127,4 +128,53 @@ bool WithinRange(float value, float min, float max)
 {
 	//Calculate if the value is in between the min and the max
 	return ((value - max) * (value - min) <= 0);
+}
+
+void ProcessInput(b2Body* player)
+{
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+	{
+		player->ApplyForceToCenter(b2Vec2(0.0f, 50.0f), false);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+	{
+		player->ApplyForceToCenter(b2Vec2(0.0f, -50.0f), false);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+	{
+		player->ApplyForceToCenter(b2Vec2(-50.0f, 0.0f), false);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+	{
+		player->ApplyForceToCenter(b2Vec2(50.0f, 0.0f), false);
+	}
+	
+}
+
+void ApplyForceUp(b2Body* player)
+{
+
+}
+
+
+void ApplyForceDown(b2Body* player)
+{
+
+}
+
+
+void ApplyForceLeft(b2Body* player)
+{
+
+}
+
+
+void ApplyForceRight(b2Body* player)
+{
+
+}
+
+void StopMoving(b2Body* player)
+{
+
 }

@@ -10,6 +10,9 @@
 #include <math.h>
 #include<iomanip>
 #include <chrono>
+#define SFML_STATIC
+#include <SFML\Window.hpp>
+#include <SFML\Graphics.hpp>
 using namespace std;
 using namespace chrono;
 
@@ -28,3 +31,13 @@ void MoveTarget(float& xPos, float& yPos);
 //float is within a range.
 float GenerateRandomNumber(float min, float max);
 bool WithinRange(float value, float min, float max);
+//SFML Snake Game Functions
+void ProcessInput(b2Body* player);
+void ApplyForceUp(b2Body* player);
+void ApplyForceDown(b2Body* player);
+void ApplyForceLeft(b2Body* player);
+void ApplyForceRight(b2Body* player);
+void StopMoving(b2Body* player);
+void ReverseGravity(b2World* world);
+void SetUpTargets(int count);
+bool SelectNextTarget();
