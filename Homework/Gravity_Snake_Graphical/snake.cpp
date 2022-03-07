@@ -132,49 +132,74 @@ bool WithinRange(float value, float min, float max)
 
 void ProcessInput(b2Body* player)
 {
+	void (*forceFunctionPointer)(b2Body * player);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
-		player->ApplyForceToCenter(b2Vec2(0.0f, 50.0f), false);
+		forceFunctionPointer = &ApplyForceUp;
+		forceFunctionPointer(player);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 	{
-		player->ApplyForceToCenter(b2Vec2(0.0f, -50.0f), false);
+		forceFunctionPointer = &ApplyForceDown;
+		forceFunctionPointer(player);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
-		player->ApplyForceToCenter(b2Vec2(-50.0f, 0.0f), false);
+		forceFunctionPointer = &ApplyForceLeft;
+		forceFunctionPointer(player);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
-		player->ApplyForceToCenter(b2Vec2(50.0f, 0.0f), false);
+		forceFunctionPointer = &ApplyForceRight;
+		forceFunctionPointer(player);
 	}
 	
 }
 
 void ApplyForceUp(b2Body* player)
 {
-
+	player->ApplyForceToCenter(b2Vec2(0.0f, 50.0f), false);
 }
 
 
 void ApplyForceDown(b2Body* player)
 {
-
+	player->ApplyForceToCenter(b2Vec2(0.0f, -50.0f), false);
 }
 
 
 void ApplyForceLeft(b2Body* player)
 {
-
+	player->ApplyForceToCenter(b2Vec2(-50.0f, 0.0f), false);
 }
 
 
 void ApplyForceRight(b2Body* player)
 {
-
+	player->ApplyForceToCenter(b2Vec2(50.0f, 0.0f), false);
 }
 
 void StopMoving(b2Body* player)
 {
+	player->SetLinearVelocity(b2Vec2_zero);
+}
+
+void ReverseGravity(b2World* world)
+{
+	world->SetGravity(b2Vec2(0, 10.0f));
+}
+void SetUpNextTarget()
+{
+	string input;
+	int size;
+	do
+	{
+		cout << "How many targets do you want? It must be at least 10: ";
+		getline(cin, input);
+		size = stoi(input);
+	} while (size < 10 || input.length() == 0);
+	
+	b2Vec2 positions[size];
+	
 
 }

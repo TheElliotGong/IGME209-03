@@ -10,6 +10,8 @@
 #include <math.h>
 #include<iomanip>
 #include <chrono>
+#include <ctype.h>
+#include <cctype>
 #define SFML_STATIC
 #include <SFML\Window.hpp>
 #include <SFML\Graphics.hpp>
@@ -39,5 +41,5 @@ void ApplyForceLeft(b2Body* player);
 void ApplyForceRight(b2Body* player);
 void StopMoving(b2Body* player);
 void ReverseGravity(b2World* world);
-void SetUpTargets(int count);
+void SetUpTargets();
 bool SelectNextTarget();
