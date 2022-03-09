@@ -5,7 +5,8 @@
 * Restrictions: Must update the b2world and apply forces to the player based on keyboard input.
 * Date: 2/20/2022
 */
-
+int index = 0; 
+vector<b2Vec2*> targetLocations;
 
 /// <summary>
 /// This method updates the box2d world and its objects as well as printing out the positions of the 
@@ -198,8 +199,14 @@ void SetUpNextTarget()
 		getline(cin, input);
 		size = stoi(input);
 	} while (size < 10 || input.length() == 0);
-	
-	b2Vec2 positions[size];
-	
 
+	for (int i = 0; i < size + 1; i++)
+	{
+		targetLocations.push_back(new b2Vec2(GenerateRandomNumber(0, 1000), GenerateRandomNumber(0, 1000)));
+	}
+}
+
+bool SelectNewTargets()
+{
+	index++;
 }

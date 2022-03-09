@@ -14,11 +14,19 @@ int main()
 	b2Vec2* targetLocations;
 	b2Vec2 currentLocation;
 
-	sf::RenderWindow window(sf::VideoMode(800, 600), "Gravity Snake");
+	sf::RenderWindow window(sf::VideoMode(1000, 1000), "Gravity Snake");
 	window.setTitle("Gravity Snake: Graphical Edition");
 	//Reset random so different values will always be randomly generated each time.
 	srand(static_cast <unsigned> (time(0)));
-	//Use float pointers to target location, which within -5 to 5 range for x and y.
+	
+	sf::CircleShape snakePlayer(30.0f);
+	snakePlayer.setPosition(500, 500);
+	snakePlayer.setFillColor(sf::Color::Yellow);
+	
+	sf::RectangleShape target(sf::Vector2f(15.0f, 15.0f));
+	target.setPosition(targetLocations[0]);
+
+	//Record the current time at start of the game, after setting up all the box2D objects.
 	float targetX = GenerateRandomNumber(-5.0f, 5.0f);
 	float targetY = GenerateRandomNumber(-5.0f, 5.0f);
 	//This variable keeps track of how many targets the player has hit.
@@ -61,7 +69,7 @@ int main()
 	//Record the current time at start of the game, after setting up all the box2D objects.
 	auto startTime = steady_clock::now();
 	//Keep the game playing until the player has hit 2 targets.
-	while (numTargets < 2 )
+	while (numTargets < 2)
 	{
 		//Check if the player hit the keyboard.
 		if (_kbhit())
@@ -77,8 +85,11 @@ int main()
 			ApplyForces(key, player);
 		}
 		//Call the update function after seeing if there was no keyboard input.
-		Update(player, world, targetX, targetY, numTargets);	
+		Update(player, world, targetX, targetY, numTargets);
 	}
+	//Keep the game playing until the player has hit 2 targets.
+	
+
 	//Track the current time at the end of the program, after the player has hit 2 targets.
 	auto endTime = steady_clock::now();
 	//Determine the time spent trying to get the snake to hit the 2 targets.
@@ -100,9 +111,7 @@ int main()
 		cout << "Time taken to hit both targets: " << time << " seconds. So close! You earned 1 star!";
 	}
 	//Delete the pointer objects.
-	delete world;
-	delete groundBody;
-	delete snake;
+
 	//End the program.
 	return 0;
 }
