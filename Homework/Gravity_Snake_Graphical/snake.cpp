@@ -16,6 +16,8 @@
 /// <param name="targetX">The target's x coordinate.</param>
 /// <param name="targetY">The target's y coordinate.</param>
 /// <param name="targetCount">The num of targets hit.</param>
+/// 
+
 void Update(b2Body* player, b2World* world,  float& targetX, float& targetY, int& targetCount)
 {
 	//Use the b2World class's step function to update the world.
@@ -134,24 +136,21 @@ void ProcessInput(b2Body* player)
 	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
-		funcd = &ApplyForceUp;
-		func(player);
+		forceFunctionPointer = &ApplyForceUp;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 	{
 		forceFunctionPointer = &ApplyForceDown;
-		forceFunctionPointer(player);
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
 		forceFunctionPointer = &ApplyForceLeft;
-		forceFunctionPointer(player);
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
 		forceFunctionPointer = &ApplyForceRight;
-		forceFunctionPointer(player);
 	}
+	forceFunctionPointer(player);
 	
 }
 
@@ -188,14 +187,15 @@ void ReverseGravity(b2World* world)
 	world->SetGravity(b2Vec2(0, 10.0f));
 }
 
-void SetUpTargets(int size, b2Vec2 *targetLocations, b2Vec2 currentPosition)
+void SetUpTargets(int size)
 {
 	targetLocations = new b2Vec2[size + 1];
 	for (int i = 0; i < size + 1; i++)
 	{
 		if (i == size)
 		{
-			targetLocations[i] = b2vec2(0, 1000);
+			b2Vec2 bottomLeft = b2Vec2(-1000, 1000);
+			targetLocations[i] = bottomLeft;
 		}
 		else
 		{
@@ -205,9 +205,9 @@ void SetUpTargets(int size, b2Vec2 *targetLocations, b2Vec2 currentPosition)
 	currentPosition = targetLocations[0];
 }
 
-bool SelectNextTarget(int index, int size, b2Vec2 *targetLocations)
+bool SelectNextTarget(int size)
 {
-	if (index < )
+	if (index < size + 1)
 	{
 		index++;
 		currentPosition = targetLocations[index];
