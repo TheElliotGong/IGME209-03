@@ -9,32 +9,33 @@
 *in text format. Record the time taken to hit the 2 targets to score the player
 *Restrictions: Must have the snake hit 2 targets and end the program when it does. Also include 
 *Date:2/20/2022*/
+
+//Global variables
+int index = 0;
+b2Vec2 *targetLocations;
+b2Vec2 currentPosition;
+//Declare a function typedef used to applying forces to the player.
+void (*forceFunctionPointer)(b2Body* player);
+
 int main()
 {
-	b2Vec2* targetLocations;
-	b2Vec2 currentLocation;
 
 	sf::RenderWindow window(sf::VideoMode(1000, 1000), "Gravity Snake");
 	window.setTitle("Gravity Snake: Graphical Edition");
+	window.setFramerateLimit(60);
 	//Reset random so different values will always be randomly generated each time.
 	srand(static_cast <unsigned> (time(0)));
-	
+	//Draw the snake player using SFML code.
 	sf::CircleShape snakePlayer(30.0f);
 	snakePlayer.setPosition(500, 500);
-	snakePlayer.setFillColor(sf::Color::Yellow);
-	
-	sf::RectangleShape target(sf::Vector2f(15.0f, 15.0f));
+	snakePlayer.setFillColor(sf::Color::Red);
 	//target.setPosition(targetLocations[0]);
-
-	//Record the current time at start of the game, after setting up all the box2D objects.
-	float targetX = GenerateRandomNumber(-5.0f, 5.0f);
-	float targetY = GenerateRandomNumber(-5.0f, 5.0f);
+	sf::RectangleShape targetShape(sf::Vector2f(10.0f, 10.0f));
+	targetShape.setFillColor(sf::Color::Yellow);
 	//This variable keeps track of how many targets the player has hit.
 	int targetCount = 0;
 	//This int will hold the numerical value of the key pressed.
-	int key;
 	//Print out the opening statement.
-	cout << "Let's play Gravity Snake!\n";
 	//Create the b2world
 	b2Vec2 gravity(0.0f, -10.0f);
 	b2World* world = new b2World(gravity);
@@ -52,8 +53,6 @@ int main()
 	snake->position.Set(0.0f, -5.1f);
 	//Create a pointer player and have it point to the snake body.
 	b2Body* player = world->CreateBody(snake);
-	float playerX = player->GetPosition().x;
-	float playerY = player->GetPosition().y;
 	//Attach a shape to the snake.
 	b2PolygonShape snakeShape;
 	snakeShape.SetAsBox(0.05f, 0.05f);
@@ -66,26 +65,40 @@ int main()
 	player->CreateFixture(&fixtureDef);
 	//Create a pos variable to keep track of player position.
 	int numTargets = 0;
+	//Get the desired # of targets from the player.
+	string input;
+	int size;
+	do
+	{
+		cout << "How many targets do you want? It must be at least 10: ";
+		getline(cin, input);
+		size = stoi(input);
+	} while (size < 10 || input.length() == 0);
+	SetUpTargets(size, targetLocations, currentPosition);
 	//Record the current time at start of the game, after setting up all the box2D objects.
 	auto startTime = steady_clock::now();
-	//Keep the game playing until the player has hit 2 targets.
-	while (numTargets < 2)
+	//Set up the targets.
+	
+	//Keep the game playing until the player has hit all targets or closed the window.
+	while (window.isOpen() && numTargets < size + 1)
 	{
-		//Check if the player hit the keyboard.
-		if (_kbhit())
+		sf::Event event;
+		while (window.pollEvent(event))
 		{
-			//Get the int code for the key pressed.
-			key = _getch();
-			//If the user pressed escape, the loop breaks and the program ends.
-			if (key == 13)
-			{
-				break;
-			}
-			//Otherwise, apply forces to make the player move either by the WASD keys or by pressing enter.
-			ApplyForces(key, player);
+			if (event.type == sf::Event::Closed)
+				window.close();
 		}
-		//Call the update function after seeing if there was no keyboard input.
-		Update(player, world, targetX, targetY, numTargets);
+		window.clear(sf::Color::Black);
+		ProcessInput(player);
+		world->Step(1.0f / 8000.0f, 6, 2);
+		for (b2Body* BodyIterator = world->GetBodyList(); BodyIterator != 0; BodyIterator = BodyIterator->GetNext())
+		{
+			if (BodyIterator->GetType() == b2_dynamicBody)
+			{
+
+			}
+		}
+		
 	}
 	//Keep the game playing until the player has hit 2 targets.
 	

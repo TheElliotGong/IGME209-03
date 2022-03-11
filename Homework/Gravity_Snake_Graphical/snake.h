@@ -41,5 +41,5 @@ void ApplyForceLeft(b2Body* player);
 void ApplyForceRight(b2Body* player);
 void StopMoving(b2Body* player);
 void ReverseGravity(b2World* world);
-void SetUpTargets();
-bool SelectNextTarget();
+void SetUpTargets(int size, b2Vec2 *targetLocations, b2Vec2 currentPosition);
+bool SelectNextTarget(int index, int size, b2Vec2 *targetLocations);

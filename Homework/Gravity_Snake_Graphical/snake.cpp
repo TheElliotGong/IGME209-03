@@ -5,10 +5,7 @@
 * Restrictions: Must update the b2world and apply forces to the player based on keyboard input.
 * Date: 2/20/2022
 */
-int index = 0; 
-vector<b2Vec2*> targetLocations;
-b2Vec2* currentPosition;
-void (*forceFunctionPointer)(b2Body* player);
+
 /// <summary>
 /// This method updates the box2d world and its objects as well as printing out the positions of the 
 /// player and target.
@@ -137,8 +134,8 @@ void ProcessInput(b2Body* player)
 	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
-		forceFunctionPointer = &ApplyForceUp;
-		forceFunctionPointer(player);
+		funcd = &ApplyForceUp;
+		func(player);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 	{
@@ -190,37 +187,27 @@ void ReverseGravity(b2World* world)
 {
 	world->SetGravity(b2Vec2(0, 10.0f));
 }
-void SetUpNextTarget()
-{
-	string input;
-	int size;
-	do
-	{
-		cout << "How many targets do you want? It must be at least 10: ";
-		getline(cin, input);
-		size = stoi(input);
-	} while (size < 10 || input.length() == 0);
 
+void SetUpTargets(int size, b2Vec2 *targetLocations, b2Vec2 currentPosition)
+{
+	targetLocations = new b2Vec2[size + 1];
 	for (int i = 0; i < size + 1; i++)
 	{
 		if (i == size)
 		{
-			targetLocations.push_back(new b2Vec2(0, 0));
+			targetLocations[i] = b2vec2(0, 1000);
 		}
 		else
 		{
-			targetLocations.push_back(new b2Vec2(GenerateRandomNumber(0, 1000), GenerateRandomNumber(0, 1000)));
-
+			targetLocations[i] = new b2Vec2(GenerateRandomNumber(0, 1000), GenerateRandomNumber(0, 1000)));
 		}
-		
-		
 	}
+	currentPosition = targetLocations[0];
 }
 
-bool SelectNewTargets()
+bool SelectNextTarget(int index, int size, b2Vec2 *targetLocations)
 {
-	
-	if (index < targetLocations.size() + 1)
+	if (index < )
 	{
 		index++;
 		currentPosition = targetLocations[index];
@@ -230,4 +217,5 @@ bool SelectNewTargets()
 	{
 		return false;
 	}
+	return false;
 }
