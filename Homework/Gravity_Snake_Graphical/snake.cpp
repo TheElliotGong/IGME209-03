@@ -7,7 +7,8 @@
 */
 int index = 0; 
 vector<b2Vec2*> targetLocations;
-
+b2Vec2* currentPosition;
+void (*forceFunctionPointer)(b2Body* player);
 /// <summary>
 /// This method updates the box2d world and its objects as well as printing out the positions of the 
 /// player and target.
@@ -133,7 +134,7 @@ bool WithinRange(float value, float min, float max)
 
 void ProcessInput(b2Body* player)
 {
-	void (*forceFunctionPointer)(b2Body * player);
+	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
 		forceFunctionPointer = &ApplyForceUp;
@@ -202,11 +203,31 @@ void SetUpNextTarget()
 
 	for (int i = 0; i < size + 1; i++)
 	{
-		targetLocations.push_back(new b2Vec2(GenerateRandomNumber(0, 1000), GenerateRandomNumber(0, 1000)));
+		if (i == size)
+		{
+			targetLocations.push_back(new b2Vec2(0, 0));
+		}
+		else
+		{
+			targetLocations.push_back(new b2Vec2(GenerateRandomNumber(0, 1000), GenerateRandomNumber(0, 1000)));
+
+		}
+		
+		
 	}
 }
 
 bool SelectNewTargets()
 {
-	index++;
+	
+	if (index < targetLocations.size() + 1)
+	{
+		index++;
+		currentPosition = targetLocations[index];
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }

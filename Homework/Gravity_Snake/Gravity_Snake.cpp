@@ -13,8 +13,6 @@
 *Date:2/20/2022*/
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(800, 600), "Gravity Snake");
-	window.setTitle("Gravity Snake: Graphical Edition");
 	//Reset random so different values will always be randomly generated each time.
 	srand(static_cast <unsigned> (time(0)));
 	//Use float pointers to target location, which within -5 to 5 range for x and y.
@@ -25,7 +23,7 @@ int main()
 	//This int will hold the numerical value of the key pressed.
 	int key;
 	//Print out the opening statement.
-	cout << "Let's play Gravity Snake!\n";
+	cout << "Welcome to Gravity Snake!";
 	//Create the b2world
 	b2Vec2 gravity(0.0f, -10.0f);
 	b2World* world = new b2World(gravity);

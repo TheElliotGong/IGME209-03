@@ -24,7 +24,7 @@ int main()
 	snakePlayer.setFillColor(sf::Color::Yellow);
 	
 	sf::RectangleShape target(sf::Vector2f(15.0f, 15.0f));
-	target.setPosition(targetLocations[0]);
+	//target.setPosition(targetLocations[0]);
 
 	//Record the current time at start of the game, after setting up all the box2D objects.
 	float targetX = GenerateRandomNumber(-5.0f, 5.0f);
