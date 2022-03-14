@@ -17,6 +17,12 @@
 /// <param name="targetY">The target's y coordinate.</param>
 /// <param name="targetCount">The num of targets hit.</param>
 /// 
+int index;
+b2Vec2* targetLocations;
+b2Vec2 currentPosition;
+//Declare a function typedef used to applying forces to the player.
+void (*forceFunctionPointer)(b2Body* player);
+
 
 void Update(b2Body* player, b2World* world,  float& targetX, float& targetY, int& targetCount)
 {
@@ -133,7 +139,6 @@ bool WithinRange(float value, float min, float max)
 
 void ProcessInput(b2Body* player)
 {
-	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
 		forceFunctionPointer = &ApplyForceUp;
@@ -150,7 +155,7 @@ void ProcessInput(b2Body* player)
 	{
 		forceFunctionPointer = &ApplyForceRight;
 	}
-	forceFunctionPointer(player);
+	(*forceFunctionPointer)(player);
 	
 }
 
@@ -194,12 +199,11 @@ void SetUpTargets(int size)
 	{
 		if (i == size)
 		{
-			b2Vec2 bottomLeft = b2Vec2(-1000, 1000);
-			targetLocations[i] = bottomLeft;
+			targetLocations[i] = b2Vec2(-1000, 1000);
 		}
 		else
 		{
-			targetLocations[i] = new b2Vec2(GenerateRandomNumber(0, 1000), GenerateRandomNumber(0, 1000)));
+			targetLocations[i] = b2Vec2(GenerateRandomNumber(0, 1000), GenerateRandomNumber(0, 1000));
 		}
 	}
 	currentPosition = targetLocations[0];

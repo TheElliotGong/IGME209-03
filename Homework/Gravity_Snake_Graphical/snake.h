@@ -44,8 +44,8 @@ void ReverseGravity(b2World* world);
 void SetUpTargets(int size);
 bool SelectNextTarget(int size);
 //Declare global variables.
-int index = 0;
-b2Vec2* targetLocations;
-b2Vec2 currentPosition;
+extern int index;
+extern b2Vec2* targetLocations;
+extern b2Vec2 currentPosition;
 //Declare a function typedef used to applying forces to the player.
-void (*forceFunctionPointer)(b2Body* player);
+extern void (*forceFunctionPointer)(b2Body* player);
