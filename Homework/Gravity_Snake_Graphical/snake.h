@@ -34,18 +34,16 @@ void MoveTarget(float& xPos, float& yPos);
 float GenerateRandomNumber(float min, float max);
 bool WithinRange(float value, float min, float max);
 //SFML Snake Game Functions
-void ProcessInput(b2Body* player);
+
 void ApplyForceUp(b2Body* player);
 void ApplyForceDown(b2Body* player);
 void ApplyForceLeft(b2Body* player);
 void ApplyForceRight(b2Body* player);
 void StopMoving(b2Body* player);
 void ReverseGravity(b2World* world);
-void SetUpTargets(int size);
+void SetUpTargets();
 bool SelectNextTarget(int size);
-//Declare global variables.
-extern int index;
-extern b2Vec2* targetLocations;
-extern b2Vec2 currentPosition;
-//Declare a function typedef used to applying forces to the player.
-extern void (*forceFunctionPointer)(b2Body* player);
+void ProcessInput(b2Body* player);
+
+
+
