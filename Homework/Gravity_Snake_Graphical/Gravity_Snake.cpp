@@ -30,22 +30,22 @@ int main()
 	int targetCount = 0;
 	//This int will hold the numerical value of the key pressed.
 	//Create the b2world
-	b2Vec2 gravity(0.0f, 6.0f);
+	b2Vec2 gravity(0, 10.f/scale);
 	b2World* world = new b2World(gravity);
 
 	//Create the ground.
 	b2BodyDef* groundBody = new b2BodyDef;
-	groundBody->position.Set(400.f/scale, 596.f/scale);
+	groundBody->position.Set(400.f / scale, 596.f/scale);
 	groundBody->type = b2_staticBody;
 	b2Body* ground = world->CreateBody(groundBody);
 	//Create the ceiling.
 	b2BodyDef* ceilingBody = new b2BodyDef;
-	ceilingBody->position.Set(400.f / scale, 4.f / scale);
+	ceilingBody->position.Set(400.f / scale, 4.f/scale);
 	ceilingBody->type = b2_staticBody;
 	b2Body* ceiling = world->CreateBody(ceilingBody);
 	//Create the shape for the ground body.
 	b2PolygonShape* box = new b2PolygonShape;
-	box->SetAsBox(400.f/scale, 4.f/scale);
+	box->SetAsBox(400.f / scale, 4.f / scale);
 	//create the fixture definition for the ground & ceiling.
 	b2FixtureDef groundAndCeilingFixture;
 	groundAndCeilingFixture.density = 0.f;
@@ -65,7 +65,7 @@ int main()
 	b2Body* rightWall = world->CreateBody(rightWallBody);
 	//Define the walls' shape.
 	b2PolygonShape* wallShape = new b2PolygonShape;
-	wallShape->SetAsBox(4.f, 242.f);
+	wallShape->SetAsBox(4.f / scale , 292.f/scale);
 	//Define the walls' fixture.
 	b2FixtureDef wallFixture;
 	wallFixture.density = 0.f;
@@ -77,17 +77,17 @@ int main()
 	//Create the playable snake as a dynamic body and set its position
 	b2BodyDef* snake = new b2BodyDef;
 	snake->type = b2_dynamicBody;
-	snake->position.Set(400.f/scale, 50.f/scale);
+	snake->position.Set(400.f / scale, 200.f / scale);
 	//Create a pointer player and have it point to the snake body.
 	b2Body* player = world->CreateBody(snake);
 	//Attach a shape to the snake.
 	b2CircleShape snakeShape;
-	snakeShape.m_radius = 16.f/scale;
+	snakeShape.m_radius = 16.f / scale;
 	//Add a fixture definition for the snake's box.
 	//Set density, friction, and assign the fixturedef to the player.
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &snakeShape;
-	fixtureDef.density = 1.0f;
+	fixtureDef.density = 0.4f;
 	fixtureDef.friction = 1.0f;
 	player->CreateFixture(&fixtureDef);
 	//Define the sfml shape of the player.
@@ -100,12 +100,12 @@ int main()
 	//Define the sfml shape of the ground and ceiling.
 	sf::RectangleShape groundShape(sf::Vector2f(800.f, 8.f));
 	groundShape.setOrigin(400.f, 4.f);
-	groundShape.setFillColor(sf::Color::White);
+	groundShape.setFillColor(sf::Color::Green);
 	groundShape.setPosition(groundBody->position.x * scale, groundBody->position.y * scale);
 	//Define the sfml shape of the left and right wall.
 	sf::RectangleShape wallFigure(sf::Vector2f(8.f, 584.f));
 	wallFigure.setOrigin(4.f, 292.f);
-	wallFigure.setFillColor(sf::Color::White);
+	wallFigure.setFillColor(sf::Color::Green);
 	wallFigure.setPosition(leftWallBody->position.x * scale, leftWallBody->position.y * scale);
 
 
@@ -129,7 +129,7 @@ int main()
 	targetFixtureDef.shape = targetPolygon;
 	target->CreateFixture(&targetFixtureDef);
 	//Create the window after the user input is taken.
-	
+
 	//Record the current time at start of the game, after setting up all the box2D objects.
 	auto startTime = steady_clock::now();
 	//Keep the game playing until the player has hit all targets or closed the window.
@@ -145,7 +145,7 @@ int main()
 		ProcessInput(player);
 		world->Step(1.0f / 60.0f, 8, 3);
 		//Draw the b2bodies using sfml.
-		snakePlayer.setPosition(player->GetPosition().x * scale, player->GetPosition().y * scale);
+		snakePlayer.setPosition(player->GetPosition().x * scale, 600 - (player->GetPosition().y * scale));
 		window.draw(snakePlayer);
 		//Draw the target
 		window.draw(targetShape);
@@ -168,8 +168,6 @@ int main()
 
 		
 	}
-	//Keep the game playing until the player has hit 2 targets.
-	
 
 	//Track the current time at the end of the program, after the player has hit 2 targets.
 	auto endTime = steady_clock::now();
@@ -177,22 +175,28 @@ int main()
 	long time = duration_cast<seconds>(endTime - startTime).count();
 	//Based on the amount of time spent on the game, print out different messages.
 	//If they complete the game within 20 seconds, give them a "3 star" grade.
-	if (time <= 20)
+	if (time <= 20 && numTargets == targetCount + 1)
 	{
 		cout << "Time taken to hit both targets: " << time << " seconds. Good job! You earned 3 stars!";
 	}
 	//If they complete the game within 40 seconds, give them a "2 star" grade.
-	else if (20 < time <= 40)
+	else if (20 < time <= 40 && numTargets == targetCount + 1)
 	{
 		cout << "Time taken to hit both targets: " << time << " seconds. Not bad! You earned 2 stars!";
 	}
 	//If they take longer than 40 seconds, give them a "1 star" grade.
-	else if (40 < time)
+	else if (40 < time && numTargets == targetCount + 1)
 	{
 		cout << "Time taken to hit both targets: " << time << " seconds. So close! You earned 1 star!";
 	}
 	//Delete the pointer objects.
 	delete[] targetLocations;
+	
+	delete groundBody;
+	delete ceilingBody;
+	delete leftWallBody;
+	delete rightWallBody;
+	
 	//End the program.
 	return 0;
 }
@@ -203,52 +207,45 @@ void ProcessInput(b2Body* player)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
 		 playerFunctionPointer = &ApplyForceUp;
-		 //ApplyForceUp(player);
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 	{
 		playerFunctionPointer = &ApplyForceDown;
-		//ApplyForceDown(player);
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
 		playerFunctionPointer = &ApplyForceLeft;
-		//ApplyForceLeft(player);
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
 		playerFunctionPointer = &ApplyForceRight;
-		//ApplyForceRight(player);
 	}
 	if (playerFunctionPointer != nullptr)
 	{
 		playerFunctionPointer(player);
 	}
-	
-
 }
 
 void ApplyForceUp(b2Body* player)
 {
-	player->ApplyForceToCenter(b2Vec2(0.0f, -30.0f), false);
+	player->ApplyForceToCenter(b2Vec2(0.0f, 30/scale), false);
 }
 
 
 void ApplyForceDown(b2Body* player)
 {
-	player->ApplyForceToCenter(b2Vec2(0.0f, 30.0f), false);
+	player->ApplyForceToCenter(b2Vec2(0.0f, -30/scale), false);
 }
-
 
 void ApplyForceLeft(b2Body* player)
 {
-	player->ApplyForceToCenter(b2Vec2(-15.0f, 0.0f), false);
+	player->ApplyForceToCenter(b2Vec2(-20/scale, 0.0f), false);
 }
 
 
 void ApplyForceRight(b2Body* player)
 {
-	player->ApplyForceToCenter(b2Vec2(15.0f, 0.0f), false);
+	player->ApplyForceToCenter(b2Vec2(20/scale, 0.0f), false);
 }
 
 void StopMoving(b2Body* player)
@@ -258,7 +255,8 @@ void StopMoving(b2Body* player)
 
 void ReverseGravity(b2World* world)
 {
-	world->SetGravity(b2Vec2(0, 10.0f));
+	//Reverse the y component of the world's gravity.
+	world->SetGravity(b2Vec2(0, -1 * world->GetGravity().y));
 }
 
 void SetUpTargets()
