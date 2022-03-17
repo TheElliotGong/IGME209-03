@@ -42,8 +42,8 @@ void ApplyForceRight(b2Body* player);
 void StopMoving(b2Body& player);
 void ReverseGravity(b2World* world);
 void SetUpTargets();
-bool SelectNextTarget(b2BodyDef* targetBodyDef);
+bool SelectNextTarget(b2BodyDef* targetBodyDef, sf::RectangleShape& targetShape);
 void ProcessInput(b2Body* player, int& keyPresses);
-void CheckCollision(b2Body* player, b2Body* target, b2BodyDef* targetDef, b2Vec2& currentPosition);
+void CheckCollision(b2Body* player, b2Body* target, b2BodyDef* targetDef, b2Vec2& currentPosition, sf::RectangleShape& targetShape);
 
 

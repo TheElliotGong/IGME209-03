@@ -9,11 +9,12 @@
 *in text format. Record the time taken to hit the 2 targets to score the player
 *Restrictions: Must have the snake hit 2 targets and end the program when it does. Also include 
 *Date:2/20/2022*/
-int index;
+int index = 0;
 b2Vec2* targetLocations;
 b2Vec2 currentPosition;
 int targetCount;
 int keyPress = 0;
+bool targetsLeft;
 //Declare a function typedef used to applying forces to the player.
 typedef void (*forceFunctionPointer)(b2Body*);
 forceFunctionPointer playerFunctionPointer;
@@ -28,7 +29,6 @@ int main()
 	//Reset random so different values will always be randomly generated each time.
 	srand(static_cast <unsigned> (time(0)));
 	//This variable keeps track of how many targets the player has hit.
-	int targetCount = 0;
 	//This int will hold the numerical value of the key pressed.
 	//Create the b2world
 	b2Vec2 gravity(0, -6.f);
@@ -97,6 +97,7 @@ int main()
 
 	//Define the sfml shape of the player.
 	sf::CircleShape snakePlayer(8.f);
+	snakePlayer.setOrigin(8.f, 8.f);
 	snakePlayer.setPosition(400, 300);
 	snakePlayer.setFillColor(sf::Color::Red);
 	
@@ -119,27 +120,28 @@ int main()
 	
 	//Define the sfml shape of the target.
 	sf::RectangleShape targetShape(sf::Vector2f(10.0f, 10.0f));
-	targetShape.setPosition(targetBodyDef->position.x * scale, targetBodyDef->position.y * scale);
+	targetShape.setOrigin(5, 5);
+	targetShape.setPosition(currentPosition.x * scale, currentPosition.y * scale);
 	targetShape.setFillColor(sf::Color::Yellow);
 	//Define the sfml shape of the ground and ceiling.
 	sf::RectangleShape groundShape(sf::Vector2f(800.f, 8.f));
 	groundShape.setOrigin(400.f, 4.f);
 	groundShape.setFillColor(sf::Color::Green);
-	groundShape.setPosition(groundBody->position.x * scale, groundBody->position.y * scale);
+	groundShape.setPosition(groundBody->position.x * scale, 600 - (groundBody->position.y * scale));
+
 	//Define the sfml shape of the left and right wall.
 	sf::RectangleShape wallFigure(sf::Vector2f(8.f, 584.f));
 	wallFigure.setOrigin(4.f, 292.f);
 	wallFigure.setFillColor(sf::Color::Green);
 	wallFigure.setPosition(leftWallBody->position.x * scale, leftWallBody->position.y * scale);
 
-//CKeep track of the number of targets hit.
-	int numTargets = 1;
+
 	//Create the window after the user input is taken.
 
 	//Record the current time at start of the game, after setting up all the box2D objects.
 	auto startTime = steady_clock::now();
 	//Keep the game playing until the player has hit all targets or closed the window.
-	while (window.isOpen() && numTargets < targetCount)
+	while (window.isOpen() && index < targetCount)
 	{
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -149,21 +151,20 @@ int main()
 		}
 		window.clear(sf::Color::Black);
 		ProcessInput(player, keyPress);
-		CheckCollision(player, target, targetBodyDef, currentPosition);
+		CheckCollision(player, target, targetBodyDef, currentPosition, targetShape);
 		world->Step(1.0f / 60.0f, 8, 3);
 		//Change the position of the sfml snake shape according to the box2 snake object
 		snakePlayer.setPosition(player->GetPosition().x * scale, 600 - (player->GetPosition().y * scale));
-		targetShape.setPosition(currentPosition.x * scale, 600 - (currentPosition.y * scale));
 		window.draw(snakePlayer);
 		//Draw the target
 		window.draw(targetShape);
 		//Draw the ground shape.
 		window.draw(groundShape);
 		//Move the ground shape to the top so it becomes the "ceiling" and draw that.
-		groundShape.setPosition(ceilingBody->position.x * scale, ceilingBody->position.y * scale);
+		groundShape.setPosition(ceilingBody->position.x * scale, 600 - (ceilingBody->position.y * scale));
 		window.draw(groundShape);
+		groundShape.setPosition(groundBody->position.x * scale, 600 - (groundBody->position.y * scale));
 		//Move the ground shape back to its original place on the "floor"
-		groundShape.setPosition(groundBody->position.x * scale, groundBody->position.y * scale);
 		//Draw the "left" wall first.
 		window.draw(wallFigure);
 		//Move the wall to the right so we can draw the "right" wall.
@@ -183,17 +184,17 @@ int main()
 	long time = duration_cast<seconds>(endTime - startTime).count();
 	//Based on the amount of time spent on the game, print out different messages.
 	//If they complete the game within 20 seconds, give them a "3 star" grade.
-	if (time <= 20 && numTargets == targetCount)
+	if (time <= 20 && index == targetCount)
 	{
 		cout << "Time taken to hit both targets: " << time << " seconds. Good job! You earned 3 stars!";
 	}
 	//If they complete the game within 40 seconds, give them a "2 star" grade.
-	else if (20 < time <= 40 && numTargets == targetCount)
+	else if (20 < time <= 40 && index == targetCount)
 	{
 		cout << "Time taken to hit both targets: " << time << " seconds. Not bad! You earned 2 stars!";
 	}
 	//If they take longer than 40 seconds, give them a "1 star" grade.
-	else if (40 < time && numTargets == targetCount)
+	else if (40 < time && index == targetCount)
 	{
 		cout << "Time taken to hit both targets: " << time << " seconds. So close! You earned 1 star!";
 	}
@@ -280,6 +281,7 @@ void SetUpTargets()
 		getline(cin, input);
 		targetCount = stoi(input);
 	} while (targetCount < 10 || input.length() == 0);
+	//Add an extra target to the array.
 	targetCount += 1;
 	targetLocations = new b2Vec2[targetCount];
 	for (int i = 0; i < targetCount; i++)
@@ -296,13 +298,14 @@ void SetUpTargets()
 	currentPosition = targetLocations[0];
 }
 
-bool SelectNextTarget(b2BodyDef* targetBodyDef)
+bool SelectNextTarget(b2BodyDef* targetBodyDef, sf::RectangleShape& targetShape)
 {
 	if (index < targetCount)
 	{
 		index++;
 		currentPosition = targetLocations[index];
 		targetBodyDef->position.Set(currentPosition.x, currentPosition.y);
+		targetShape.setPosition(targetBodyDef->position.x * scale, targetBodyDef->position.y * scale);
 		return true;
 	}
 	else
@@ -312,7 +315,7 @@ bool SelectNextTarget(b2BodyDef* targetBodyDef)
 	return false;
 }
 
-void CheckCollision(b2Body* player, b2Body* target, b2BodyDef* targetBody, b2Vec2& currentPosition)
+void CheckCollision(b2Body* player, b2Body* target, b2BodyDef* targetBody, b2Vec2& currentPosition, sf::RectangleShape& targetShape)
 {
 	//If the player i son the target's left.
 	if ((WithinRange(player->GetPosition().x, target->GetPosition().x - 13.f / scale, target->GetPosition().x) && WithinRange(player->GetPosition().y, target->GetPosition().y - 13.f / scale, target->GetPosition().y + 13.f / scale))
@@ -323,7 +326,7 @@ void CheckCollision(b2Body* player, b2Body* target, b2BodyDef* targetBody, b2Vec
 		//If player is below the target
 		|| (WithinRange(player->GetPosition().x, target->GetPosition().x - 13.f / scale, target->GetPosition().x + 13.f / scale) && WithinRange(player->GetPosition().y, target->GetPosition().y - 13.f/scale, target->GetPosition().y)))
 	{
-		SelectNextTarget(targetBody);
+		targetsLeft = SelectNextTarget(targetBody, targetShape);
 	}
 }
 float GenerateRandomNumber(float min, float max)
