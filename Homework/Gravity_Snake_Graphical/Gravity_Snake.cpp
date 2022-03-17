@@ -13,6 +13,7 @@ int index;
 b2Vec2* targetLocations;
 b2Vec2 currentPosition;
 int targetCount;
+int keyPress = 0;
 //Declare a function typedef used to applying forces to the player.
 typedef void (*forceFunctionPointer)(b2Body*);
 forceFunctionPointer playerFunctionPointer;
@@ -30,17 +31,17 @@ int main()
 	int targetCount = 0;
 	//This int will hold the numerical value of the key pressed.
 	//Create the b2world
-	b2Vec2 gravity(0, 10.f/scale);
+	b2Vec2 gravity(0, -6.f);
 	b2World* world = new b2World(gravity);
 
 	//Create the ground.
 	b2BodyDef* groundBody = new b2BodyDef;
-	groundBody->position.Set(400.f / scale, 596.f/scale);
+	groundBody->position.Set(400.f / scale, 4.f/scale);
 	groundBody->type = b2_staticBody;
 	b2Body* ground = world->CreateBody(groundBody);
 	//Create the ceiling.
 	b2BodyDef* ceilingBody = new b2BodyDef;
-	ceilingBody->position.Set(400.f / scale, 4.f/scale);
+	ceilingBody->position.Set(400.f / scale, 596.f/scale);
 	ceilingBody->type = b2_staticBody;
 	b2Body* ceiling = world->CreateBody(ceilingBody);
 	//Create the shape for the ground body.
@@ -82,7 +83,7 @@ int main()
 	b2Body* player = world->CreateBody(snake);
 	//Attach a shape to the snake.
 	b2CircleShape snakeShape;
-	snakeShape.m_radius = 16.f / scale;
+	snakeShape.m_radius = 8.f / scale;
 	//Add a fixture definition for the snake's box.
 	//Set density, friction, and assign the fixturedef to the player.
 	b2FixtureDef fixtureDef;
@@ -90,12 +91,35 @@ int main()
 	fixtureDef.density = 0.4f;
 	fixtureDef.friction = 1.0f;
 	player->CreateFixture(&fixtureDef);
+	//Create the body definition for the target.
+
+
+
 	//Define the sfml shape of the player.
-	sf::CircleShape snakePlayer(8.0f);
+	sf::CircleShape snakePlayer(8.f);
 	snakePlayer.setPosition(400, 300);
 	snakePlayer.setFillColor(sf::Color::Red);
+	
+	//Set up the targets.
+	SetUpTargets();
+
+    b2BodyDef* targetBodyDef = new b2BodyDef;
+	targetBodyDef->type = b2_staticBody;
+	targetBodyDef->position = currentPosition;
+	//Create the target body object.
+	b2Body* target = world->CreateBody(targetBodyDef);
+	//Create the shape definition for the target.
+	b2PolygonShape* targetPolygon = new b2PolygonShape;
+	targetPolygon->SetAsBox(5.f/scale, 5.f/scale);
+	//Create the fixture definition for the target.
+	b2FixtureDef targetFixtureDef;
+	targetFixtureDef.density = 0.f;
+	targetFixtureDef.shape = targetPolygon;
+	target->CreateFixture(&targetFixtureDef);
+	
 	//Define the sfml shape of the target.
 	sf::RectangleShape targetShape(sf::Vector2f(10.0f, 10.0f));
+	targetShape.setPosition(targetBodyDef->position.x * scale, targetBodyDef->position.y * scale);
 	targetShape.setFillColor(sf::Color::Yellow);
 	//Define the sfml shape of the ground and ceiling.
 	sf::RectangleShape groundShape(sf::Vector2f(800.f, 8.f));
@@ -108,32 +132,14 @@ int main()
 	wallFigure.setFillColor(sf::Color::Green);
 	wallFigure.setPosition(leftWallBody->position.x * scale, leftWallBody->position.y * scale);
 
-
-	//CKeep track of the number of targets hit.
-	int numTargets = 0;
-	//Set up the targets.
-	SetUpTargets();
-
-	//Create the body definition for the target.
-	b2BodyDef* targetBodyDef = new b2BodyDef;
-	targetBodyDef->type = b2_staticBody;
-	targetBodyDef->position = targetLocations[0];
-	//Create the target body object.
-	b2Body* target = world->CreateBody(targetBodyDef);
-	//Create the shape definition for the target.
-	b2PolygonShape* targetPolygon = new b2PolygonShape;
-	targetPolygon->SetAsBox(5.f, 5.f);
-	//Create the fixture definition for the target.
-	b2FixtureDef targetFixtureDef;
-	targetFixtureDef.density = 0.f;
-	targetFixtureDef.shape = targetPolygon;
-	target->CreateFixture(&targetFixtureDef);
+//CKeep track of the number of targets hit.
+	int numTargets = 1;
 	//Create the window after the user input is taken.
 
 	//Record the current time at start of the game, after setting up all the box2D objects.
 	auto startTime = steady_clock::now();
 	//Keep the game playing until the player has hit all targets or closed the window.
-	while (window.isOpen() && numTargets < targetCount + 1)
+	while (window.isOpen() && numTargets < targetCount)
 	{
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -142,10 +148,12 @@ int main()
 				window.close();
 		}
 		window.clear(sf::Color::Black);
-		ProcessInput(player);
+		ProcessInput(player, keyPress);
+		CheckCollision(player, target, targetBodyDef, currentPosition);
 		world->Step(1.0f / 60.0f, 8, 3);
-		//Draw the b2bodies using sfml.
+		//Change the position of the sfml snake shape according to the box2 snake object
 		snakePlayer.setPosition(player->GetPosition().x * scale, 600 - (player->GetPosition().y * scale));
+		targetShape.setPosition(currentPosition.x * scale, 600 - (currentPosition.y * scale));
 		window.draw(snakePlayer);
 		//Draw the target
 		window.draw(targetShape);
@@ -163,11 +171,11 @@ int main()
 		window.draw(wallFigure);
 		//Move the wall back its original position on the left.
 		wallFigure.setPosition(leftWallBody->position.x * scale, leftWallBody->position.y * scale);
-
-		window.display();
-
 		
-	}
+		window.display();
+		keyPress = 0;
+		
+	}StopMoving(*player);
 
 	//Track the current time at the end of the program, after the player has hit 2 targets.
 	auto endTime = steady_clock::now();
@@ -175,17 +183,17 @@ int main()
 	long time = duration_cast<seconds>(endTime - startTime).count();
 	//Based on the amount of time spent on the game, print out different messages.
 	//If they complete the game within 20 seconds, give them a "3 star" grade.
-	if (time <= 20 && numTargets == targetCount + 1)
+	if (time <= 20 && numTargets == targetCount)
 	{
 		cout << "Time taken to hit both targets: " << time << " seconds. Good job! You earned 3 stars!";
 	}
 	//If they complete the game within 40 seconds, give them a "2 star" grade.
-	else if (20 < time <= 40 && numTargets == targetCount + 1)
+	else if (20 < time <= 40 && numTargets == targetCount)
 	{
 		cout << "Time taken to hit both targets: " << time << " seconds. Not bad! You earned 2 stars!";
 	}
 	//If they take longer than 40 seconds, give them a "1 star" grade.
-	else if (40 < time && numTargets == targetCount + 1)
+	else if (40 < time && numTargets == targetCount)
 	{
 		cout << "Time taken to hit both targets: " << time << " seconds. So close! You earned 1 star!";
 	}
@@ -201,26 +209,29 @@ int main()
 	return 0;
 }
 
-void ProcessInput(b2Body* player)
+void ProcessInput(b2Body* player, int& keyPresses)
 {
-
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
-		 playerFunctionPointer = &ApplyForceUp;
+		keyPresses = 1;
+		playerFunctionPointer = &ApplyForceUp;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 	{
+		keyPresses = 1;
 		playerFunctionPointer = &ApplyForceDown;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
+		keyPresses = 1;
 		playerFunctionPointer = &ApplyForceLeft;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
+		keyPresses = 1;
 		playerFunctionPointer = &ApplyForceRight;
 	}
-	if (playerFunctionPointer != nullptr)
+	if (playerFunctionPointer != nullptr && keyPresses == 1)
 	{
 		playerFunctionPointer(player);
 	}
@@ -248,9 +259,9 @@ void ApplyForceRight(b2Body* player)
 	player->ApplyForceToCenter(b2Vec2(20/scale, 0.0f), false);
 }
 
-void StopMoving(b2Body* player)
+void StopMoving(b2Body& player)
 {
-	player->SetLinearVelocity(b2Vec2_zero);
+	player.SetLinearVelocity(b2Vec2_zero);
 }
 
 void ReverseGravity(b2World* world)
@@ -262,38 +273,36 @@ void ReverseGravity(b2World* world)
 void SetUpTargets()
 {
 	string input;
-	int size;
-
 	//Ask the user for the desired target count.
 	do
 	{
 		cout << "How many targets do you want? It must be at least 10: ";
 		getline(cin, input);
-		size = stoi(input);
-	} while (size < 10 || input.length() == 0);
-	targetCount = size;
-	targetLocations = new b2Vec2[size + 1];
-	for (int i = 0; i < size + 1; i++)
+		targetCount = stoi(input);
+	} while (targetCount < 10 || input.length() == 0);
+	targetCount += 1;
+	targetLocations = new b2Vec2[targetCount];
+	for (int i = 0; i < targetCount; i++)
 	{
-		if (i == size)
+		if (i == targetCount - 1)
 		{
 			targetLocations[i] = b2Vec2(13.f/scale, 587.f/scale);
 		}
 		else
 		{
 			targetLocations[i] = b2Vec2(GenerateRandomNumber(13.f, 787.f)/scale, GenerateRandomNumber(13.f, 587.f)/scale );
-			//targetLocations[i] = b2Vec2(GenerateRandomNumber(0, 800)/scale, GenerateRandomNumber(0, 600)/scale);
 		}
 	}
 	currentPosition = targetLocations[0];
 }
 
-bool SelectNextTarget(int size)
+bool SelectNextTarget(b2BodyDef* targetBodyDef)
 {
-	if (index < size + 1)
+	if (index < targetCount)
 	{
 		index++;
 		currentPosition = targetLocations[index];
+		targetBodyDef->position.Set(currentPosition.x, currentPosition.y);
 		return true;
 	}
 	else
@@ -303,6 +312,20 @@ bool SelectNextTarget(int size)
 	return false;
 }
 
+void CheckCollision(b2Body* player, b2Body* target, b2BodyDef* targetBody, b2Vec2& currentPosition)
+{
+	//If the player i son the target's left.
+	if ((WithinRange(player->GetPosition().x, target->GetPosition().x - 13.f / scale, target->GetPosition().x) && WithinRange(player->GetPosition().y, target->GetPosition().y - 13.f / scale, target->GetPosition().y + 13.f / scale))
+		//If player is on the target's right.
+		|| (WithinRange(player->GetPosition().x, target->GetPosition().x, target->GetPosition().x + 13.f/scale) && WithinRange(player->GetPosition().y, target->GetPosition().y - 13.f / scale, target->GetPosition().y + 13.f / scale))
+		//If player is above the target
+		|| (WithinRange(player->GetPosition().x, target->GetPosition().x - 13.f/scale, target->GetPosition().x + 13.f / scale) && WithinRange(player->GetPosition().y, target->GetPosition().y, target->GetPosition().y + 0.05f))
+		//If player is below the target
+		|| (WithinRange(player->GetPosition().x, target->GetPosition().x - 13.f / scale, target->GetPosition().x + 13.f / scale) && WithinRange(player->GetPosition().y, target->GetPosition().y - 13.f/scale, target->GetPosition().y)))
+	{
+		SelectNextTarget(targetBody);
+	}
+}
 float GenerateRandomNumber(float min, float max)
 {
 	//Calculate the random float and round it out.
@@ -322,3 +345,4 @@ bool WithinRange(float value, float min, float max)
 	//Calculate if the value is in between the min and the max
 	return ((value - max) * (value - min) <= 0);
 }
+

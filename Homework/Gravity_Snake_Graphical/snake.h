@@ -39,11 +39,11 @@ void ApplyForceUp(b2Body* player);
 void ApplyForceDown(b2Body* player);
 void ApplyForceLeft(b2Body* player);
 void ApplyForceRight(b2Body* player);
-void StopMoving(b2Body* player);
+void StopMoving(b2Body& player);
 void ReverseGravity(b2World* world);
 void SetUpTargets();
-bool SelectNextTarget(int size);
-void ProcessInput(b2Body* player);
-
+bool SelectNextTarget(b2BodyDef* targetBodyDef);
+void ProcessInput(b2Body* player, int& keyPresses);
+void CheckCollision(b2Body* player, b2Body* target, b2BodyDef* targetDef, b2Vec2& currentPosition);
 
 
