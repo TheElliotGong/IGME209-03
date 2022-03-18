@@ -25,16 +25,10 @@ using namespace chrono;
 * Date: 3/15/2022
 */
 
-//Declare all functions.
-void Update(b2Body* player, b2World* world, float& targetX, float& targetY, int& targetCount);
-//void Display(float& targetX, float& targetY, float playerX, float playerY, int& targetCount);
-void ApplyForces(int key, b2Body* player);
-void MoveTarget(float& xPos, float& yPos);
 //These helper functions will be used to help get a random float within a range and determine if a
 //float is within a range.
 float GenerateRandomNumber(float min, float max);
 bool BodiesCollided(sf::RectangleShape target, sf::CircleShape player);
-bool IsStringANumber(string& input);
 //SFML Graphical Snake Game Functions
 void ApplyForceUp(b2Body* player);
 void ApplyForceDown(b2Body* player);

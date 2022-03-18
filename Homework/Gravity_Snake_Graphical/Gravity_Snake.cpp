@@ -10,6 +10,8 @@
 *Restrictions: Must have the snake hit at least 10 targets and end the program when it does. Also convert
 * Box2D's Cartesian coordinate system to be drawn in SFML's pixel coordinate system.
 *Date:3/16/2022*/
+
+//Declare the neessary global variables in addition to some that will aid with function operations.
 int index = 0;
 b2Vec2* targetLocations;
 b2Vec2 currentPosition;
@@ -27,70 +29,56 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(800, 600), "Gravity Snake");
 	window.setTitle("Gravity Snake: Graphical Edition");
 	window.setFramerateLimit(60);
-
 	//Reset random so different values will always be randomly generated each time.
 	srand(static_cast <unsigned> (time(0)));
-
 	//Create the b2world
 	b2Vec2 gravity(0, -6.f);
 	b2World* world = new b2World(gravity);
-
 	//Create the ground.
 	b2BodyDef* groundBody = new b2BodyDef;
 	groundBody->position.Set(400.f / scale, 4.f/scale);
 	groundBody->type = b2_staticBody;
 	b2Body* ground = world->CreateBody(groundBody);
-
 	//Create the ceiling.
 	b2BodyDef* ceilingBody = new b2BodyDef;
 	ceilingBody->position.Set(400.f / scale, 596.f/scale);
 	ceilingBody->type = b2_staticBody;
 	b2Body* ceiling = world->CreateBody(ceilingBody);
-
 	//Create the shape for the ground and ceiling bodies.
 	b2PolygonShape* box = new b2PolygonShape;
 	box->SetAsBox(400.f / scale, 4.f / scale);
-
 	//create the fixture definition for the ground & ceiling.
 	b2FixtureDef groundAndCeilingFixture;
 	groundAndCeilingFixture.density = 0.f;
 	groundAndCeilingFixture.shape = box;
-
 	//Assign the fixtures to the ground and ceiling.
 	ground->CreateFixture(&groundAndCeilingFixture);
 	ceiling->CreateFixture(&groundAndCeilingFixture);
-
 	//Create the left wall.
 	b2BodyDef* leftWallBody = new b2BodyDef;
 	leftWallBody->position.Set(4.f / scale, 300.f / scale);
 	leftWallBody->type = b2_staticBody;
 	b2Body* leftWall = world->CreateBody(leftWallBody);
-
 	//Create the right wall.
 	b2BodyDef* rightWallBody = new b2BodyDef;
 	rightWallBody->position.Set(796.f / scale, 300.f / scale);
 	rightWallBody->type = b2_staticBody;
 	b2Body* rightWall = world->CreateBody(rightWallBody);
-
 	//Define the walls' shape.
 	b2PolygonShape* wallShape = new b2PolygonShape;
 	wallShape->SetAsBox(4.f / scale , 292.f/scale);
-
 	//Define the walls' fixture.
 	b2FixtureDef wallFixture;
 	wallFixture.density = 0.f;
 	wallFixture.shape = wallShape;
-
 	//Assign the fixtures to the walls.
 	rightWall->CreateFixture(&wallFixture);
 	leftWall->CreateFixture(&wallFixture);
-
 	//Create the playable snake as a dynamic body and set its position
 	b2BodyDef* snake = new b2BodyDef;
 	snake->type = b2_dynamicBody;
 	snake->position.Set(400.f / scale, 200.f / scale);
 	b2Body* player = world->CreateBody(snake);
-
 	//Define the snake's shape.
 	b2CircleShape snakeShape;
 	snakeShape.m_radius = 8.f / scale;
@@ -100,39 +88,30 @@ int main()
 	fixtureDef.density = 0.4f;
 	fixtureDef.friction = 1.0f;
 	player->CreateFixture(&fixtureDef);
-	
 	//Set up the targets.
 	SetUpTargets();
-	//Create the body definition for the target.
-
-
 	//Define the sfml shape of the player.
 	sf::CircleShape snakePlayer(8.f);
 	snakePlayer.setOrigin(8.f, 8.f);
 	snakePlayer.setPosition(400, 300);
 	snakePlayer.setFillColor(sf::Color::Red);
-
 	//Define the sfml shape of the target.
 	sf::RectangleShape targetShape(sf::Vector2f(10.0f, 10.0f));
 	targetShape.setOrigin(5, 5);
 	targetShape.setPosition(currentPosition.x * scale, 600 - currentPosition.y * scale);
 	targetShape.setFillColor(sf::Color::Yellow);
-
 	//Define the sfml shape of the ground and ceiling.
 	sf::RectangleShape groundShape(sf::Vector2f(800.f, 8.f));
 	groundShape.setOrigin(400.f, 4.f);
 	groundShape.setFillColor(sf::Color::Green);
 	groundShape.setPosition(groundBody->position.x * scale, 600 - (groundBody->position.y * scale));
-
 	//Define the sfml shape of the left and right wall.
 	sf::RectangleShape wallFigure(sf::Vector2f(8.f, 584.f));
 	wallFigure.setOrigin(4.f, 292.f);
 	wallFigure.setFillColor(sf::Color::Green);
 	wallFigure.setPosition(leftWallBody->position.x * scale, leftWallBody->position.y * scale);
-
 	//Record the current time at start of the game, after setting up all the box2D objects.
 	auto startTime = steady_clock::now();
-
 	//Keep the game playing until the player has hit all targets or closed the window.
 	while (window.isOpen() && targetsLeft)
 	{
@@ -173,26 +152,25 @@ int main()
 	}
 	//Have the player stop moving in box2d when the game is over.
 	StopMoving(*player);
-
 	//Track the current time at the end of the program, after the player has hit 2 targets.
 	auto endTime = steady_clock::now();
 	//Determine the time spent trying to get the snake to hit the 2 targets.
 	long time = duration_cast<seconds>(endTime - startTime).count();
 	//Based on the amount of time spent on the game, print out different messages.
 	//If they complete the game within 20 seconds, give them a "3 star" grade.
-	if (time <= 30 && index == targetCount)
+	if (time <= 45 && index + 1 == targetCount)
 	{
-		cout << "Time taken to hit both targets: " << time << " seconds. Good job! You earned 3 stars!";
+		cout << "Time taken to hit all targets: " << time << " seconds. Good job! You earned 3 stars!\n";
 	}
 	//If they complete the game within 40 seconds, give them a "2 star" grade.
-	else if (30 < time <= 50 && index == targetCount)
+	else if (45 < time <= 72 && index + 1== targetCount)
 	{
-		cout << "Time taken to hit both targets: " << time << " seconds. Not bad! You earned 2 stars!";
+		cout << "Time taken to hit all targets: " << time << " seconds. Not bad! You earned 2 stars!\n";
 	}
 	//If they take longer than 40 seconds, give them a "1 star" grade.
-	else if (50 < time && index == targetCount)
+	else if (72 < time && index + 1 == targetCount)
 	{
-		cout << "Time taken to hit both targets: " << time << " seconds. So close! You earned 1 star!";
+		cout << "Time taken to hit all targets: " << time << " seconds. So close! You earned 1 star!\n";
 	}
 	cout << "Thanks for playing!";
 	//Delete the pointer objects.
@@ -201,7 +179,6 @@ int main()
 	delete ceilingBody;
 	delete leftWallBody;
 	delete rightWallBody;
-	
 	//End the program.
 	return 0;
 }
@@ -214,6 +191,8 @@ void ProcessInput(b2Body* player, int& keyPresses, b2World* world)
 {
 	//Attach appropriate functions to the function pointer based on keyboard input. Also update
 	//the keypresses parameter to indicate a key has been pressed.
+
+	//If the space key is pressed, call the reverse gravity method.
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 	{
 		ReverseGravity(world);
@@ -412,10 +391,4 @@ bool BodiesCollided(sf::RectangleShape target, sf::CircleShape player)
 	//Check to see if the 2 bodies are colliding via their corners.
 	float cornerDistance = sqrt(pow(xDistance, 2) + pow(yDistance, 2));
 	return (cornerDistance <= (5.f * sqrt(2) + 8.f)); 
-}
-
-bool IsStringANumber(string& input)
-{
-	return !input.empty() && find_if(input.begin(), 
-		input.end(), [](unsigned char c) { return !isdigit(c); }) == input.end();
 }
