@@ -1,9 +1,9 @@
 #include "snake.h"
 
 /*Author: Elliot Gong
-* Purpose: Initialize the functions declared in the header file.
+* Purpose: Update the current functions to accomodate for the SFML Graphical functions.
 * Restrictions: Must update the b2world and apply forces to the player based on keyboard input.
-* Date: 2/20/2022
+* Date: 3/15/2022
 */
 
 /// <summary>

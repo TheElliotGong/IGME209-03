@@ -6,9 +6,10 @@
 
 /*Author: Elliot Gong
 *Purpose: Simulate the Snake Game in Box2D and add gravity to make the snake "fall". Display the game 
-*in text format. Record the time taken to hit the 2 targets to score the player
-*Restrictions: Must have the snake hit 2 targets and end the program when it does. Also include 
-*Date:2/20/2022*/
+*using SFML. Record the time taken to hit the 2 targets to score the player
+*Restrictions: Must have the snake hit at least 10 targets and end the program when it does. Also convert
+* Box2D's Cartesian coordinate system to be drawn in SFML's pixel coordinate system.
+*Date:3/16/2022*/
 int index = 0;
 b2Vec2* targetLocations;
 b2Vec2 currentPosition;
@@ -99,25 +100,11 @@ int main()
 	fixtureDef.density = 0.4f;
 	fixtureDef.friction = 1.0f;
 	player->CreateFixture(&fixtureDef);
-
-	
 	
 	//Set up the targets.
 	SetUpTargets();
 	//Create the body definition for the target.
-    b2BodyDef* targetBodyDef = new b2BodyDef;
-	targetBodyDef->type = b2_staticBody;
-	targetBodyDef->position = currentPosition;
-	//Create the target body object.
-	b2Body* target = world->CreateBody(targetBodyDef);
-	//Create the shape definition for the target.
-	b2PolygonShape* targetPolygon = new b2PolygonShape;
-	targetPolygon->SetAsBox(5.f/scale, 5.f/scale);
-	//Create the fixture definition for the target.
-	b2FixtureDef targetFixtureDef;
-	targetFixtureDef.density = 0.f;
-	targetFixtureDef.shape = targetPolygon;
-	target->CreateFixture(&targetFixtureDef);
+
 
 	//Define the sfml shape of the player.
 	sf::CircleShape snakePlayer(8.f);
@@ -159,8 +146,8 @@ int main()
 		//Clear the canvas, check for player keyboard input, and see if the snake has 
 		//collided with the current target.
 		window.clear(sf::Color::Black);
-		ProcessInput(player, keyPress);
-		CheckCollision(snake, targetBodyDef, targetShape, snakePlayer);
+		ProcessInput(player, keyPress, world);
+		CheckCollision(snake, targetShape, snakePlayer);
 		world->Step(1.0f / 60.0f, 8, 3);
 		//Change the position of the sfml snake shape according to the box2 snake object
 		snakePlayer.setPosition(player->GetPosition().x * scale, 600 - (player->GetPosition().y * scale));
@@ -193,20 +180,21 @@ int main()
 	long time = duration_cast<seconds>(endTime - startTime).count();
 	//Based on the amount of time spent on the game, print out different messages.
 	//If they complete the game within 20 seconds, give them a "3 star" grade.
-	if (time <= 20 && index == targetCount)
+	if (time <= 30 && index == targetCount)
 	{
 		cout << "Time taken to hit both targets: " << time << " seconds. Good job! You earned 3 stars!";
 	}
 	//If they complete the game within 40 seconds, give them a "2 star" grade.
-	else if (20 < time <= 40 && index == targetCount)
+	else if (30 < time <= 50 && index == targetCount)
 	{
 		cout << "Time taken to hit both targets: " << time << " seconds. Not bad! You earned 2 stars!";
 	}
 	//If they take longer than 40 seconds, give them a "1 star" grade.
-	else if (40 < time && index == targetCount)
+	else if (50 < time && index == targetCount)
 	{
 		cout << "Time taken to hit both targets: " << time << " seconds. So close! You earned 1 star!";
 	}
+	cout << "Thanks for playing!";
 	//Delete the pointer objects.
 	delete[] targetLocations;
 	delete groundBody;
@@ -222,13 +210,16 @@ int main()
 /// </summary>
 /// <param name="player">The box2d body object that will be affected by the controls.</param>
 /// <param name="keyPresses">The int checking to see if any key has been pressed.</param>
-void ProcessInput(b2Body* player, int& keyPresses)
+void ProcessInput(b2Body* player, int& keyPresses, b2World* world)
 {
 	//Attach appropriate functions to the function pointer based on keyboard input. Also update
 	//the keypresses parameter to indicate a key has been pressed.
-
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+	{
+		ReverseGravity(world);
+	}
 	//Attach the "moveup" function to the pointer if the up arrow key is pressed.
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
 		keyPresses = 1;
 		playerFunctionPointer = &ApplyForceUp;
@@ -323,8 +314,9 @@ void SetUpTargets()
 		cout << "How many targets do you want? It must be at least 10: ";
 		getline(cin, input);
 		//Parse an int from the input if possible.
-		targetCount = stoi(input);
-	} while (targetCount < 10 || input.length() == 0);
+		targetCount = atoi(input.c_str());
+		//Keep asking for valid input.
+	} while (targetCount < 10 || input.empty() == true);
 	//Add an extra target to the array.
 	targetCount += 1;
 	targetLocations = new b2Vec2[targetCount];
@@ -354,7 +346,7 @@ void SetUpTargets()
 /// <param name="targetBodyDef">The target's box2D body definition that will potentially be moved.</param>
 /// <param name="targetShape">The target's SFML shape that will potentially be moved.</param>
 /// <returns></returns>
-bool SelectNextTarget(b2BodyDef* targetBodyDef, sf::RectangleShape& targetShape)
+bool SelectNextTarget( sf::RectangleShape& targetShape)
 {
 	//Return false if the current index has reached the end of the vector array.
 	if (index == targetCount - 1)
@@ -367,8 +359,7 @@ bool SelectNextTarget(b2BodyDef* targetBodyDef, sf::RectangleShape& targetShape)
 	{
 		index++;
 		currentPosition = targetLocations[index];
-		targetBodyDef->position.Set(currentPosition.x, currentPosition.y);
-		targetShape.setPosition(targetBodyDef->position.x * scale, 600 - (targetBodyDef->position.y * scale));
+		targetShape.setPosition(currentPosition.x * scale, 600 - (currentPosition.y * scale));
 		return true;
 	}
 }
@@ -380,13 +371,13 @@ bool SelectNextTarget(b2BodyDef* targetBodyDef, sf::RectangleShape& targetShape)
 /// <param name="targetBody"></param>
 /// <param name="currentPosition"></param>
 /// <param name="targetShape"></param>
-void CheckCollision(b2BodyDef* playerDef, b2BodyDef* targetDef, sf::RectangleShape& targetShape, sf::CircleShape playerShape)
+void CheckCollision(b2BodyDef* playerDef, sf::RectangleShape& targetShape, sf::CircleShape playerShape)
 {
 	//If the player is on the target's left.
 	if (BodiesCollided(targetShape, playerShape))
 	{
 		//Update the global bool variable 
-		targetsLeft = SelectNextTarget(targetDef, targetShape);
+		targetsLeft = SelectNextTarget(targetShape);
 	}
 }
 /// <summary>
@@ -411,19 +402,20 @@ float GenerateRandomNumber(float min, float max)
 /// <returns></returns>
 bool BodiesCollided(sf::RectangleShape target, sf::CircleShape player)
 {
-
 	//Calculate the absolute difference between the bodies' x and y coordinates.
 	float xDistance = abs(player.getPosition().x - target.getPosition().x);
 	float yDistance = abs(player.getPosition().y - target.getPosition().y);
-
 	//Check to see if the 2 bodies aren't colliding each other.
 	if (xDistance > 13.f || yDistance > 13.f) { return false; }
 	//Check to see if bodies are colliding on any of the 4 sides: left, right, top, and bottom.
 	else if (xDistance <= 13.f && yDistance <= 13.f) { return true; }
-
 	//Check to see if the 2 bodies are colliding via their corners.
 	float cornerDistance = sqrt(pow(xDistance, 2) + pow(yDistance, 2));
-
 	return (cornerDistance <= (5.f * sqrt(2) + 8.f)); 
 }
 
+bool IsStringANumber(string& input)
+{
+	return !input.empty() && find_if(input.begin(), 
+		input.end(), [](unsigned char c) { return !isdigit(c); }) == input.end();
+}
