@@ -25,7 +25,7 @@ void Update(b2Body* player, b2World* world,  float& targetX, float& targetY, int
 	//Get the player object's position and pass that into the display function along with
 	//the other parameters.
 	b2Vec2 pos = player->GetPosition();
-	Display(targetX, targetY, pos.x, pos.y, targetCount);
+	//Display(targetX, targetY, pos.x, pos.y, targetCount);
 
 }
 /// <summary>
@@ -35,34 +35,7 @@ void Update(b2Body* player, b2World* world,  float& targetX, float& targetY, int
 /// <param name="targetY">The target's y coordinate.</param>
 /// <param name="playerX">The player's x coordinate.</param>
 /// <param name="playerY">The player's y coordinate.</param>
-void Display(float& targetX, float& targetY, float playerX, float playerY, int& targetCount)
-{
-	//Check if the target and player have collided. They must be within 0.25 units of each other for it 
-	//to count as a collision.
-	//If player is on the target's left
-	if ( (WithinRange(playerX, targetX - 0.05f, targetX) && WithinRange(playerY, targetY - 0.05f, targetY + 0.05f))
-		//If player is on the target's right.
-		|| (WithinRange(playerX, targetX , targetX + 0.05f) && WithinRange(playerY, targetY - 0.05f, targetY + 0.05f))
-		//If player is above the target
-		|| (WithinRange(playerX, targetX - 0.05f, targetX + 0.05f) && WithinRange(playerY, targetY, targetY + 0.05f))
-		//If player is below the target
-		|| (WithinRange(playerX, targetX - 0.05f, targetX + 0.05f) && WithinRange(playerY, targetY - 0.05f, targetY)))
-	{
-		//Increment the reference value that keeps track of the # of targets hit.
-		targetCount++;
-		//Print out the the matching player and target locations on a new line.
-		cout << "Target " << targetX << ", " << targetY << " - - > Snake "
-			<< fixed<<setprecision(2)<<playerX << ", " << fixed << setprecision(2) << playerY << " (hit target)\n";
-		//Move the target to a new location.
-		MoveTarget(targetX, targetY);
-	}
-	//Otherwise, keep printing out the locations of the target and player on the same line.
-	else
-	{
-		cout << "Target " << targetX << ", " << targetY << " - - > Snake "
-		<< fixed << setprecision(2) << playerX << ", " << fixed << setprecision(2) << playerY <<"\r";
-	}
-}
+
 /// <summary>
 /// This method applies different forces to the player based on keyboard input, using the was keys.
 /// </summary>

@@ -26,10 +26,10 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(800, 600), "Gravity Snake");
 	window.setTitle("Gravity Snake: Graphical Edition");
 	window.setFramerateLimit(60);
+
 	//Reset random so different values will always be randomly generated each time.
 	srand(static_cast <unsigned> (time(0)));
-	//This variable keeps track of how many targets the player has hit.
-	//This int will hold the numerical value of the key pressed.
+
 	//Create the b2world
 	b2Vec2 gravity(0, -6.f);
 	b2World* world = new b2World(gravity);
@@ -39,38 +39,47 @@ int main()
 	groundBody->position.Set(400.f / scale, 4.f/scale);
 	groundBody->type = b2_staticBody;
 	b2Body* ground = world->CreateBody(groundBody);
+
 	//Create the ceiling.
 	b2BodyDef* ceilingBody = new b2BodyDef;
 	ceilingBody->position.Set(400.f / scale, 596.f/scale);
 	ceilingBody->type = b2_staticBody;
 	b2Body* ceiling = world->CreateBody(ceilingBody);
-	//Create the shape for the ground body.
+
+	//Create the shape for the ground and ceiling bodies.
 	b2PolygonShape* box = new b2PolygonShape;
 	box->SetAsBox(400.f / scale, 4.f / scale);
+
 	//create the fixture definition for the ground & ceiling.
 	b2FixtureDef groundAndCeilingFixture;
 	groundAndCeilingFixture.density = 0.f;
 	groundAndCeilingFixture.shape = box;
+
 	//Assign the fixtures to the ground and ceiling.
 	ground->CreateFixture(&groundAndCeilingFixture);
 	ceiling->CreateFixture(&groundAndCeilingFixture);
+
 	//Create the left wall.
 	b2BodyDef* leftWallBody = new b2BodyDef;
 	leftWallBody->position.Set(4.f / scale, 300.f / scale);
 	leftWallBody->type = b2_staticBody;
 	b2Body* leftWall = world->CreateBody(leftWallBody);
+
 	//Create the right wall.
 	b2BodyDef* rightWallBody = new b2BodyDef;
 	rightWallBody->position.Set(796.f / scale, 300.f / scale);
 	rightWallBody->type = b2_staticBody;
 	b2Body* rightWall = world->CreateBody(rightWallBody);
+
 	//Define the walls' shape.
 	b2PolygonShape* wallShape = new b2PolygonShape;
 	wallShape->SetAsBox(4.f / scale , 292.f/scale);
+
 	//Define the walls' fixture.
 	b2FixtureDef wallFixture;
 	wallFixture.density = 0.f;
 	wallFixture.shape = wallShape;
+
 	//Assign the fixtures to the walls.
 	rightWall->CreateFixture(&wallFixture);
 	leftWall->CreateFixture(&wallFixture);
@@ -79,26 +88,19 @@ int main()
 	b2BodyDef* snake = new b2BodyDef;
 	snake->type = b2_dynamicBody;
 	snake->position.Set(400.f / scale, 200.f / scale);
-	//Create a pointer player and have it point to the snake body.
 	b2Body* player = world->CreateBody(snake);
-	//Attach a shape to the snake.
+
+	//Define the snake's shape.
 	b2CircleShape snakeShape;
 	snakeShape.m_radius = 8.f / scale;
-	//Add a fixture definition for the snake's box.
-	//Set density, friction, and assign the fixturedef to the player.
+	//Define the snake's fixture.
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &snakeShape;
 	fixtureDef.density = 0.4f;
 	fixtureDef.friction = 1.0f;
 	player->CreateFixture(&fixtureDef);
+
 	
-
-
-	//Define the sfml shape of the player.
-	sf::CircleShape snakePlayer(8.f);
-	snakePlayer.setOrigin(8.f, 8.f);
-	snakePlayer.setPosition(400, 300);
-	snakePlayer.setFillColor(sf::Color::Red);
 	
 	//Set up the targets.
 	SetUpTargets();
@@ -116,12 +118,19 @@ int main()
 	targetFixtureDef.density = 0.f;
 	targetFixtureDef.shape = targetPolygon;
 	target->CreateFixture(&targetFixtureDef);
-	
+
+	//Define the sfml shape of the player.
+	sf::CircleShape snakePlayer(8.f);
+	snakePlayer.setOrigin(8.f, 8.f);
+	snakePlayer.setPosition(400, 300);
+	snakePlayer.setFillColor(sf::Color::Red);
+
 	//Define the sfml shape of the target.
 	sf::RectangleShape targetShape(sf::Vector2f(10.0f, 10.0f));
 	targetShape.setOrigin(5, 5);
 	targetShape.setPosition(currentPosition.x * scale, 600 - currentPosition.y * scale);
 	targetShape.setFillColor(sf::Color::Yellow);
+
 	//Define the sfml shape of the ground and ceiling.
 	sf::RectangleShape groundShape(sf::Vector2f(800.f, 8.f));
 	groundShape.setOrigin(400.f, 4.f);
@@ -134,23 +143,24 @@ int main()
 	wallFigure.setFillColor(sf::Color::Green);
 	wallFigure.setPosition(leftWallBody->position.x * scale, leftWallBody->position.y * scale);
 
-	
-	//Create the window after the user input is taken.
-
 	//Record the current time at start of the game, after setting up all the box2D objects.
 	auto startTime = steady_clock::now();
+
 	//Keep the game playing until the player has hit all targets or closed the window.
 	while (window.isOpen() && targetsLeft)
 	{
+		//Check if player closes the window manually.
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
 		}
+		//Clear the canvas, check for player keyboard input, and see if the snake has 
+		//collided with the current target.
 		window.clear(sf::Color::Black);
 		ProcessInput(player, keyPress);
-		CheckCollision(player, target, targetBodyDef, currentPosition, targetShape);
+		CheckCollision(snake, targetBodyDef, targetShape);
 		world->Step(1.0f / 60.0f, 8, 3);
 		//Change the position of the sfml snake shape according to the box2 snake object
 		snakePlayer.setPosition(player->GetPosition().x * scale, 600 - (player->GetPosition().y * scale));
@@ -171,12 +181,11 @@ int main()
 		window.draw(wallFigure);
 		//Move the wall back its original position on the left.
 		wallFigure.setPosition(leftWallBody->position.x * scale, leftWallBody->position.y * scale);
-		
+		//Display all items.
 		window.display();
-		keyPress = 0;
-		
-		
-	}StopMoving(*player);
+	}
+	//Have the player stop moving in box2d when the game is over.
+	StopMoving(*player);
 
 	//Track the current time at the end of the program, after the player has hit 2 targets.
 	auto endTime = steady_clock::now();
@@ -200,7 +209,6 @@ int main()
 	}
 	//Delete the pointer objects.
 	delete[] targetLocations;
-	
 	delete groundBody;
 	delete ceilingBody;
 	delete leftWallBody;
@@ -209,33 +217,47 @@ int main()
 	//End the program.
 	return 0;
 }
-
+/// <summary>
+/// This function takes in player input and moves the box2d player object based on the key pressed.
+/// </summary>
+/// <param name="player">The box2d body object that will be affected by the controls.</param>
+/// <param name="keyPresses">The int checking to see if any key has been pressed.</param>
 void ProcessInput(b2Body* player, int& keyPresses)
 {
+	//Attach appropriate functions to the function pointer based on keyboard input. Also update
+	//the keypresses parameter to indicate a key has been pressed.
+
+	//Attach the "moveup" function to the pointer if the up arrow key is pressed.
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
 		keyPresses = 1;
 		playerFunctionPointer = &ApplyForceUp;
 	}
+	//Attach the "movedown" function to the pointer if the down arrow key is pressed.
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 	{
 		keyPresses = 1;
 		playerFunctionPointer = &ApplyForceDown;
 	}
+	//Attach the "moveleft" function to the pointer if the left arrow key is pressed.
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
 		keyPresses = 1;
 		playerFunctionPointer = &ApplyForceLeft;
 	}
+	//Attach the "moveright" function to the pointer if the right arrow key is pressed.
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
 		keyPresses = 1;
 		playerFunctionPointer = &ApplyForceRight;
 	}
+	//Finally, call the pointer if a function is attached and if a control key has actually been pressed.
 	if (playerFunctionPointer != nullptr && keyPresses == 1)
 	{
 		playerFunctionPointer(player);
 	}
+	//Reset the int parameter to prepare for the next update cycle.
+	keyPress = 0;
 }
 
 void ApplyForceUp(b2Body* player)
@@ -274,16 +296,19 @@ void ReverseGravity(b2World* world)
 void SetUpTargets()
 {
 	string input;
-	//Ask the user for the desired target count.
+	//Ask the user for the desired target count. Store input in a local string variable.
 	do
 	{
 		cout << "How many targets do you want? It must be at least 10: ";
 		getline(cin, input);
+		//Parse an int from the input if possible.
 		targetCount = stoi(input);
 	} while (targetCount < 10 || input.length() == 0);
+
 	//Add an extra target to the array.
 	targetCount += 1;
 	targetLocations = new b2Vec2[targetCount];
+	//Fill out the dynamic array with randomly generated 2D vectors.
 	for (int i = 0; i < targetCount; i++)
 	{
 		if (i == targetCount - 1)
@@ -298,6 +323,7 @@ void SetUpTargets()
 	}
 	//Set current position of the target as the first element in the vector array.
 	currentPosition = targetLocations[0];
+	//In addition, set the global bool variable to true, indicating there are targets left to hit.
 	targetsLeft = true;
 
 }
@@ -306,31 +332,32 @@ bool SelectNextTarget(b2BodyDef* targetBodyDef, sf::RectangleShape& targetShape)
 {
 	if (index == targetCount - 1)
 	{
-		return true;
+		return false;
 	}
 	else
 	{
 		index++;
 		currentPosition = targetLocations[index];
-		targetBodyDef->position.Set(currentPosition.x, currentPosition.y);
+		targetBodyDef->position = currentPosition;
 		targetShape.setPosition(targetBodyDef->position.x * scale, 600 - (targetBodyDef->position.y * scale));
 		return true;
 	}
 }
-
-void CheckCollision(b2Body* player, b2Body* target, b2BodyDef* targetBody, b2Vec2& currentPosition, sf::RectangleShape& targetShape)
+/// <summary>
+/// This function checks if the snake has collided with a target.
+/// </summary>
+/// <param name="player"></param>
+/// <param name="target"></param>
+/// <param name="targetBody"></param>
+/// <param name="currentPosition"></param>
+/// <param name="targetShape"></param>
+void CheckCollision(b2BodyDef* playerDef, b2BodyDef* targetDef, sf::RectangleShape& targetShape)
 {
 	//If the player is on the target's left.
-	if ((WithinRange(player->GetPosition().x, target->GetPosition().x - 13.f / scale, target->GetPosition().x) && WithinRange(player->GetPosition().y, target->GetPosition().y - 13.f / scale, target->GetPosition().y + 13.f / scale))
-		//If player is on the target's right.
-		|| (WithinRange(player->GetPosition().x, target->GetPosition().x, target->GetPosition().x + 13.f/scale) && WithinRange(player->GetPosition().y, target->GetPosition().y - 13.f / scale, target->GetPosition().y + 13.f / scale))
-		//If player is above the target
-		|| (WithinRange(player->GetPosition().x, target->GetPosition().x - 13.f/scale, target->GetPosition().x + 13.f / scale) && WithinRange(player->GetPosition().y, target->GetPosition().y, target->GetPosition().y + 0.05f))
-		//If player is below the target
-		|| (WithinRange(player->GetPosition().x, target->GetPosition().x - 13.f / scale, target->GetPosition().x + 13.f / scale) && WithinRange(player->GetPosition().y, target->GetPosition().y - 13.f/scale, target->GetPosition().y)))
+	if (WithinRange(targetDef, playerDef))
 	{
 		//Update the global bool variable 
-		targetsLeft = SelectNextTarget(targetBody, targetShape);
+		targetsLeft = SelectNextTarget(targetDef, targetShape);
 	}
 }
 /// <summary>
@@ -353,9 +380,22 @@ float GenerateRandomNumber(float min, float max)
 /// <param name="min">The minimum value of the range.</param>
 /// <param name="max">The maximum value of the range.</param>
 /// <returns></returns>
-bool WithinRange(float value, float min, float max)
+bool WithinRange(b2BodyDef* target, b2BodyDef* player)
 {
-	//Calculate if the value is in between the min and the max
-	return ((value - max) * (value - min) <= 0);
+	//Calculate the absolute difference between the bodies's x and y coordinates.
+	float xDistance = abs(player->position.x - target->position.x);
+	float yDistance = abs(player->position.y - target->position.y);
+
+	//Check to see if the 2 bodies are even close enough to be considered as "colliding".
+	if (xDistance > (5.f/scale + 8.f/scale)) { return false; }
+	if (yDistance > (5.f/scale + 8.f/scale)) { return false; }
+
+	if (xDistance <= (5.f/scale)) { return true; }
+	if (yDistance <= (5.f/scale)) { return true; }
+
+	float cornerDistance = pow((xDistance - 5.f/scale), 2)+
+		pow((yDistance - 5.f/scale), 2);
+
+	return (cornerDistance <= pow(8.f/scale, 2));
 }
 
