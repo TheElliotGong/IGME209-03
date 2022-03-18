@@ -259,40 +259,61 @@ void ProcessInput(b2Body* player, int& keyPresses)
 	//Reset the int parameter to prepare for the next update cycle.
 	keyPress = 0;
 }
-
+/// <summary>
+/// This function applies an upward force on the player body.
+/// </summary>
+/// <param name="player">the body that will be affected by the force.</param>
 void ApplyForceUp(b2Body* player)
 {
 	player->ApplyForceToCenter(b2Vec2(0.0f, 30/scale), false);
 }
 
-
+/// <summary>
+/// This function applies a downward force on the player body.
+/// </summary>
+/// <param name="player">the body that will be affected by the force.</param>
 void ApplyForceDown(b2Body* player)
 {
 	player->ApplyForceToCenter(b2Vec2(0.0f, -30/scale), false);
 }
-
+/// <summary>
+/// This function applies a force towards the body's left.
+/// </summary>
+/// <param name="player">the body that will be affected by the force.</param>
 void ApplyForceLeft(b2Body* player)
 {
 	player->ApplyForceToCenter(b2Vec2(-20/scale, 0.0f), false);
 }
 
-
+/// <summary>
+/// This function applies a force toward the body's right.
+/// </summary>
+/// <param name="player">the body that will be affected by the force.</param>
 void ApplyForceRight(b2Body* player)
 {
 	player->ApplyForceToCenter(b2Vec2(20/scale, 0.0f), false);
 }
-
+/// <summary>
+/// This function makes the player stop moving entirely.
+/// </summary>
+/// <param name="player">the body that will be affected.</param>
 void StopMoving(b2Body& player)
 {
 	player.SetLinearVelocity(b2Vec2_zero);
 }
-
+/// <summary>
+/// This function reverses the gravity of the desired world.
+/// </summary>
+/// <param name="world">the world that will have its gravity reversed.</param>
 void ReverseGravity(b2World* world)
 {
 	//Reverse the y component of the world's gravity.
 	world->SetGravity(b2Vec2(0, -1 * world->GetGravity().y));
 }
-
+/// <summary>
+/// This function will take user input and set up a dynamic array of random vector positions that will
+/// be used for the target's location.
+/// </summary>
 void SetUpTargets()
 {
 	string input;
@@ -304,7 +325,6 @@ void SetUpTargets()
 		//Parse an int from the input if possible.
 		targetCount = stoi(input);
 	} while (targetCount < 10 || input.length() == 0);
-
 	//Add an extra target to the array.
 	targetCount += 1;
 	targetLocations = new b2Vec2[targetCount];
@@ -327,13 +347,22 @@ void SetUpTargets()
 	//In addition, set the global bool variable to true, indicating there are targets left to hit.
 	targetsLeft = true;
 }
-
+/// <summary>
+/// This function moves the current target location to the next valid location and returns a bool
+/// based on if the current target is the last one.
+/// </summary>
+/// <param name="targetBodyDef">The target's box2D body definition that will potentially be moved.</param>
+/// <param name="targetShape">The target's SFML shape that will potentially be moved.</param>
+/// <returns></returns>
 bool SelectNextTarget(b2BodyDef* targetBodyDef, sf::RectangleShape& targetShape)
 {
+	//Return false if the current index has reached the end of the vector array.
 	if (index == targetCount - 1)
 	{
 		return false;
 	}
+	//Otherwise, increment the index and change the currentposition vector.
+	//Set the positions for the body and the sfml shape to the new current vector and return true.
 	else
 	{
 		index++;
