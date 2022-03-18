@@ -33,9 +33,8 @@ void MoveTarget(float& xPos, float& yPos);
 //These header functions will be used to help get a random float within a range and determine if a
 //float is within a range.
 float GenerateRandomNumber(float min, float max);
-bool WithinRange(b2BodyDef* target, b2BodyDef* player);
-//SFML Snake Game Functions
-
+bool BodiesCollided(sf::RectangleShape target, sf::CircleShape player);
+//SFML Graphical Snake Game Functions
 void ApplyForceUp(b2Body* player);
 void ApplyForceDown(b2Body* player);
 void ApplyForceLeft(b2Body* player);
@@ -45,6 +44,6 @@ void ReverseGravity(b2World* world);
 void SetUpTargets();
 bool SelectNextTarget(b2BodyDef* targetBodyDef, sf::RectangleShape& targetShape);
 void ProcessInput(b2Body* player, int& keyPresses);
-void CheckCollision( b2BodyDef* playerDef, b2BodyDef* targetDef, sf::RectangleShape& targetShape);
+void CheckCollision( b2BodyDef* playerDef, b2BodyDef* targetDef, sf::RectangleShape& targetShape, sf::CircleShape playerShape);
 
 

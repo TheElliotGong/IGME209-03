@@ -160,7 +160,7 @@ int main()
 		//collided with the current target.
 		window.clear(sf::Color::Black);
 		ProcessInput(player, keyPress);
-		CheckCollision(snake, targetBodyDef, targetShape);
+		CheckCollision(snake, targetBodyDef, targetShape, snakePlayer);
 		world->Step(1.0f / 60.0f, 8, 3);
 		//Change the position of the sfml snake shape according to the box2 snake object
 		snakePlayer.setPosition(player->GetPosition().x * scale, 600 - (player->GetPosition().y * scale));
@@ -318,6 +318,7 @@ void SetUpTargets()
 		}
 		else
 		{
+			//Otherwise, the random vectors should fit within the defined play area.
 			targetLocations[i] = b2Vec2(GenerateRandomNumber(13.f, 787.f)/scale, GenerateRandomNumber(13.f, 587.f)/scale );
 		}
 	}
@@ -325,7 +326,6 @@ void SetUpTargets()
 	currentPosition = targetLocations[0];
 	//In addition, set the global bool variable to true, indicating there are targets left to hit.
 	targetsLeft = true;
-
 }
 
 bool SelectNextTarget(b2BodyDef* targetBodyDef, sf::RectangleShape& targetShape)
@@ -338,7 +338,7 @@ bool SelectNextTarget(b2BodyDef* targetBodyDef, sf::RectangleShape& targetShape)
 	{
 		index++;
 		currentPosition = targetLocations[index];
-		targetBodyDef->position = currentPosition;
+		targetBodyDef->position.Set(currentPosition.x, currentPosition.y);
 		targetShape.setPosition(targetBodyDef->position.x * scale, 600 - (targetBodyDef->position.y * scale));
 		return true;
 	}
@@ -351,10 +351,10 @@ bool SelectNextTarget(b2BodyDef* targetBodyDef, sf::RectangleShape& targetShape)
 /// <param name="targetBody"></param>
 /// <param name="currentPosition"></param>
 /// <param name="targetShape"></param>
-void CheckCollision(b2BodyDef* playerDef, b2BodyDef* targetDef, sf::RectangleShape& targetShape)
+void CheckCollision(b2BodyDef* playerDef, b2BodyDef* targetDef, sf::RectangleShape& targetShape, sf::CircleShape playerShape)
 {
 	//If the player is on the target's left.
-	if (WithinRange(targetDef, playerDef))
+	if (BodiesCollided(targetShape, playerShape))
 	{
 		//Update the global bool variable 
 		targetsLeft = SelectNextTarget(targetDef, targetShape);
@@ -374,28 +374,27 @@ float GenerateRandomNumber(float min, float max)
 	return value;
 }
 /// <summary>
-/// This function checks if a float value is within a specified range.
+/// This function checks the player and target bodies are colliding.
 /// </summary>
 /// <param name="value">The float that'll be checked to see if it's within the range.</param>
 /// <param name="min">The minimum value of the range.</param>
 /// <param name="max">The maximum value of the range.</param>
 /// <returns></returns>
-bool WithinRange(b2BodyDef* target, b2BodyDef* player)
+bool BodiesCollided(sf::RectangleShape target, sf::CircleShape player)
 {
-	//Calculate the absolute difference between the bodies's x and y coordinates.
-	float xDistance = abs(player->position.x - target->position.x);
-	float yDistance = abs(player->position.y - target->position.y);
 
-	//Check to see if the 2 bodies are even close enough to be considered as "colliding".
-	if (xDistance > (5.f/scale + 8.f/scale)) { return false; }
-	if (yDistance > (5.f/scale + 8.f/scale)) { return false; }
+	//Calculate the absolute difference between the bodies' x and y coordinates.
+	float xDistance = abs(player.getPosition().x - target.getPosition().x);
+	float yDistance = abs(player.getPosition().y - target.getPosition().y);
 
-	if (xDistance <= (5.f/scale)) { return true; }
-	if (yDistance <= (5.f/scale)) { return true; }
+	//Check to see if the 2 bodies aren't colliding each other.
+	if (xDistance > 13.f || yDistance > 13.f) { return false; }
+	//Check to see if bodies are colliding on any of the 4 sides: left, right, top, and bottom.
+	else if (xDistance <= 13.f && yDistance <= 13.f) { return true; }
 
-	float cornerDistance = pow((xDistance - 5.f/scale), 2)+
-		pow((yDistance - 5.f/scale), 2);
+	//Check to see if the 2 bodies are colliding via their corners.
+	float cornerDistance = sqrt(pow(xDistance, 2) + pow(yDistance, 2));
 
-	return (cornerDistance <= pow(8.f/scale, 2));
+	return (cornerDistance <= (5.f * sqrt(2) + 8.f)); 
 }
 
