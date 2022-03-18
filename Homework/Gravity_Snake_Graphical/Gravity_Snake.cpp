@@ -91,8 +91,7 @@ int main()
 	fixtureDef.density = 0.4f;
 	fixtureDef.friction = 1.0f;
 	player->CreateFixture(&fixtureDef);
-	//Create the body definition for the target.
-
+	
 
 
 	//Define the sfml shape of the player.
@@ -103,7 +102,7 @@ int main()
 	
 	//Set up the targets.
 	SetUpTargets();
-
+	//Create the body definition for the target.
     b2BodyDef* targetBodyDef = new b2BodyDef;
 	targetBodyDef->type = b2_staticBody;
 	targetBodyDef->position = currentPosition;
@@ -121,7 +120,7 @@ int main()
 	//Define the sfml shape of the target.
 	sf::RectangleShape targetShape(sf::Vector2f(10.0f, 10.0f));
 	targetShape.setOrigin(5, 5);
-	targetShape.setPosition(currentPosition.x * scale, currentPosition.y * scale);
+	targetShape.setPosition(currentPosition.x * scale, 600 - currentPosition.y * scale);
 	targetShape.setFillColor(sf::Color::Yellow);
 	//Define the sfml shape of the ground and ceiling.
 	sf::RectangleShape groundShape(sf::Vector2f(800.f, 8.f));
@@ -135,13 +134,13 @@ int main()
 	wallFigure.setFillColor(sf::Color::Green);
 	wallFigure.setPosition(leftWallBody->position.x * scale, leftWallBody->position.y * scale);
 
-
+	
 	//Create the window after the user input is taken.
 
 	//Record the current time at start of the game, after setting up all the box2D objects.
 	auto startTime = steady_clock::now();
 	//Keep the game playing until the player has hit all targets or closed the window.
-	while (window.isOpen() && index < targetCount)
+	while (window.isOpen() && targetsLeft)
 	{
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -175,6 +174,7 @@ int main()
 		
 		window.display();
 		keyPress = 0;
+		
 		
 	}StopMoving(*player);
 
@@ -288,6 +288,7 @@ void SetUpTargets()
 	{
 		if (i == targetCount - 1)
 		{
+			//The last target should be in the top left corner of the screen.
 			targetLocations[i] = b2Vec2(13.f/scale, 587.f/scale);
 		}
 		else
@@ -295,29 +296,31 @@ void SetUpTargets()
 			targetLocations[i] = b2Vec2(GenerateRandomNumber(13.f, 787.f)/scale, GenerateRandomNumber(13.f, 587.f)/scale );
 		}
 	}
+	//Set current position of the target as the first element in the vector array.
 	currentPosition = targetLocations[0];
+	targetsLeft = true;
+
 }
 
 bool SelectNextTarget(b2BodyDef* targetBodyDef, sf::RectangleShape& targetShape)
 {
-	if (index < targetCount)
+	if (index == targetCount - 1)
 	{
-		index++;
-		currentPosition = targetLocations[index];
-		targetBodyDef->position.Set(currentPosition.x, currentPosition.y);
-		targetShape.setPosition(targetBodyDef->position.x * scale, targetBodyDef->position.y * scale);
 		return true;
 	}
 	else
 	{
-		return false;
+		index++;
+		currentPosition = targetLocations[index];
+		targetBodyDef->position.Set(currentPosition.x, currentPosition.y);
+		targetShape.setPosition(targetBodyDef->position.x * scale, 600 - (targetBodyDef->position.y * scale));
+		return true;
 	}
-	return false;
 }
 
 void CheckCollision(b2Body* player, b2Body* target, b2BodyDef* targetBody, b2Vec2& currentPosition, sf::RectangleShape& targetShape)
 {
-	//If the player i son the target's left.
+	//If the player is on the target's left.
 	if ((WithinRange(player->GetPosition().x, target->GetPosition().x - 13.f / scale, target->GetPosition().x) && WithinRange(player->GetPosition().y, target->GetPosition().y - 13.f / scale, target->GetPosition().y + 13.f / scale))
 		//If player is on the target's right.
 		|| (WithinRange(player->GetPosition().x, target->GetPosition().x, target->GetPosition().x + 13.f/scale) && WithinRange(player->GetPosition().y, target->GetPosition().y - 13.f / scale, target->GetPosition().y + 13.f / scale))
@@ -326,9 +329,16 @@ void CheckCollision(b2Body* player, b2Body* target, b2BodyDef* targetBody, b2Vec
 		//If player is below the target
 		|| (WithinRange(player->GetPosition().x, target->GetPosition().x - 13.f / scale, target->GetPosition().x + 13.f / scale) && WithinRange(player->GetPosition().y, target->GetPosition().y - 13.f/scale, target->GetPosition().y)))
 	{
+		//Update the global bool variable 
 		targetsLeft = SelectNextTarget(targetBody, targetShape);
 	}
 }
+/// <summary>
+/// This function helps generate a random float within a defined range.
+/// </summary>
+/// <param name="min">The maximum possible value of the randomly generated </param>
+/// <param name="max">The minimum possible value of the randomly generated float.</param>
+/// <returns></returns>
 float GenerateRandomNumber(float min, float max)
 {
 	//Calculate the random float and round it out.
