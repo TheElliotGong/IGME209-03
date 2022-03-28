@@ -3,8 +3,12 @@
 
 #include "Player.h"
 #include "Fighter.h"
+#include <stdlib.h>
+#include <time.h>
 int main()
 {
+    srand(time(NULL));
+
     Player p1 = Player();
     Player p2 = Player(8, 15, 30, "Eddie");
     Player* p3 = new Player();
@@ -21,9 +25,46 @@ int main()
     brawler.PrintFighter();
     duelist->PrintFighter();
 
+    p1.~Player();
+    p2.~Player();
+
     delete p3;
     delete p4;
+
+    brawler.~Fighter();
     delete duelist;
+
+    int choice;
+    int nameIndex;
+    int weaponIndex;
+    const char* names[] = {"Donald", "Howie", "Peter", "Carter", "Zack", 
+                          "Richard", "Tim", "Fred", "Steven", "Barnes"};
+    const char* weapons[] = { "swords", "guns", "bombs", "shields", "spears", "whips", "clubs" };
+    Player* players[10];
+    for (int i = 0; i < 10; i++)
+    {
+        weaponIndex = rand() % 7;
+        nameIndex = rand() % 10;
+        choice = rand() % 2;
+        if (choice == 0)
+        {
+            players[i] = new Player(5, 10, 12, names[nameIndex]);
+        }
+        else if (choice == 1)
+        {
+            players[i] = new Fighter(5, 10, 12, names[nameIndex], weapons[weaponIndex]);
+        }
+    }
+
+    for (int i = 0; i < 9; i++)
+    {
+        players[i + 1]->Attack(players[i]);
+        delete players[i];
+        players[i] = nullptr;
+    }
+    cout << players[9]->GetName() << " is the winner!";
+    delete players[9];
+    players[9] = nullptr;
 
     return 0;
 }

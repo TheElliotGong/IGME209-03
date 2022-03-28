@@ -18,10 +18,15 @@ Player::Player()
 
 Player::~Player()
 {
-	cout << "Destroying player object.";
+	cout << "Destroying player object.\n";
 }
 void Player::PrintPlayer()
 {
 	cout << "Name: " << this->name << "\nTier: " << this->tier
 		 << "\nStrength: " << this->strength << "\nSpeed: " << this->speed <<"\n";
+}
+
+ void Player::Attack(Player* victim)
+{
+	 cout << this->name << " attacks " << victim->GetName();
 }

@@ -11,10 +11,16 @@ Fighter::Fighter() : Player()
 }
 Fighter::~Fighter()
 {
-	cout << "Destroying fighter object.";
+	cout << "Destroying fighter object.\n";
 }
 void Fighter::PrintFighter()
 {
 	PrintPlayer();
 	cout << "Weapon skill: " << this->weaponSkill << "\n";
+}
+
+void Fighter::Attack(Player* victim)
+{
+	Player::Attack(victim);
+	cout << " with " << this->weaponSkill << "\n";
 }

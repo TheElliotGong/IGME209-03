@@ -14,5 +14,10 @@ public:
 	Player(int tier, int strength, int speed, const char* name);
 	~Player();
 	void PrintPlayer();
+	virtual void Attack(Player* victim);
+	const char* GetName()
+	{
+		return name;
+	}
 };
 

@@ -10,5 +10,6 @@ class Fighter :
         Fighter(int tier, int strength, int speed, const char* name, const char* weaponSkill);
         ~Fighter();
         void PrintFighter();
+        void Attack(Player* victim);
 };
 
