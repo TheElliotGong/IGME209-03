@@ -1,13 +1,18 @@
 #pragma once
+#include <iostream>
+using namespace std;
+
 class Player
 {
 private:
 	int tier;
 	int strength;
 	int speed;
-	char* name;
+	const char* name;
 public:
-	Player(int tier, int strength, int speed, char* name);
+	Player();
+	Player(int tier, int strength, int speed, const char* name);
+	~Player();
 	void PrintPlayer();
 };
 

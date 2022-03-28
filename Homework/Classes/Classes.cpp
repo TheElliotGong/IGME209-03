@@ -1,11 +1,31 @@
 // Classes.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-#include <iostream>
-
+#include "Player.h"
+#include "Fighter.h"
 int main()
 {
-    std::cout << "Hello World!\n";
+    Player p1 = Player();
+    Player p2 = Player(8, 15, 30, "Eddie");
+    Player* p3 = new Player();
+    Player* p4 = new Player(10, 12, 45, "Jordan");
+
+    Fighter brawler = Fighter(15, 30, 12, "Alex", "Axes");
+    Fighter* duelist = new Fighter(14, 20, 35, "Robert", "Rapiers");
+
+    p1.PrintPlayer();
+    p2.PrintPlayer();
+    p3->PrintPlayer();
+    p4->PrintPlayer();
+
+    brawler.PrintFighter();
+    duelist->PrintFighter();
+
+    delete p3;
+    delete p4;
+    delete duelist;
+
+    return 0;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
