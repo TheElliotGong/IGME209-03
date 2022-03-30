@@ -4,10 +4,10 @@ class Fighter :
     public Player
 {
     private:
-        const char* weaponSkill;
+        string weaponSkill;
     public:
         Fighter();
-        Fighter(int tier, int strength, int speed, const char* name, const char* weaponSkill);
+        Fighter(int tier, int strength, int speed, string name, string weaponSkill);
         ~Fighter();
         void PrintFighter();
         void Attack(Player* victim);

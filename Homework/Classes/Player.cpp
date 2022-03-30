@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(int tier, int strength, int speed, const char* name)
+Player::Player(int tier, int strength, int speed, string name)
 {
 	this->tier = tier;
 	this->strength = strength;
@@ -28,5 +28,5 @@ void Player::PrintPlayer()
 
  void Player::Attack(Player* victim)
 {
-	 cout << this->name << " attacks " << victim->GetName();
+	 cout << this->name << " attacks " << victim->GetName() << "\n";
 }

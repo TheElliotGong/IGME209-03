@@ -8,7 +8,7 @@
 int main()
 {
     srand(time(NULL));
-
+    cout << "Welcome to the Tournament of Failures!!\n";
     Player p1 = Player();
     Player p2 = Player(8, 15, 30, "Eddie");
     Player* p3 = new Player();
@@ -37,9 +37,9 @@ int main()
     int choice;
     int nameIndex;
     int weaponIndex;
-    const char* names[] = {"Donald", "Howie", "Peter", "Carter", "Zack", 
+    string names[] = {"Donald", "Howie", "Peter", "Carter", "Zack", 
                           "Richard", "Tim", "Fred", "Steven", "Barnes"};
-    const char* weapons[] = { "swords", "guns", "bombs", "shields", "spears", "whips", "clubs" };
+    string weapons[] = { "swords", "guns", "bombs", "shields", "spears", "whips", "clubs" };
     Player* players[10];
     for (int i = 0; i < 10; i++)
     {
@@ -55,17 +55,15 @@ int main()
             players[i] = new Fighter(5, 10, 12, names[nameIndex], weapons[weaponIndex]);
         }
     }
-
     for (int i = 0; i < 9; i++)
     {
         players[i + 1]->Attack(players[i]);
         delete players[i];
         players[i] = nullptr;
     }
-    cout << players[9]->GetName() << " is the winner!";
-    delete players[9];
-    players[9] = nullptr;
-
+    cout << players[9]->GetName() << " is the winner!\n";
+   
+    
     return 0;
 }
 

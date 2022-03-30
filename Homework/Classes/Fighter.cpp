@@ -1,6 +1,6 @@
 #include "Fighter.h"
 
-Fighter::Fighter(int tier, int strength, int speed, const char* name, const char* weaponSkill)
+Fighter::Fighter(int tier, int strength, int speed, string name, string weaponSkill)
 	: Player(tier, strength, speed, name)
 {
 	this->weaponSkill = weaponSkill;
@@ -22,5 +22,5 @@ void Fighter::PrintFighter()
 void Fighter::Attack(Player* victim)
 {
 	Player::Attack(victim);
-	cout << " with " << this->weaponSkill << "\n";
+	cout << this->GetName() << " attacks " << victim->GetName() << " with " << this->weaponSkill << "\n";
 }

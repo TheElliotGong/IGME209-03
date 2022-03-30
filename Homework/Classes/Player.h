@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <string>
 using namespace std;
 
 class Player
@@ -8,14 +9,14 @@ private:
 	int tier;
 	int strength;
 	int speed;
-	const char* name;
+	string name;
 public:
 	Player();
-	Player(int tier, int strength, int speed, const char* name);
+	Player(int tier, int strength, int speed, string name);
 	~Player();
 	void PrintPlayer();
 	virtual void Attack(Player* victim);
-	const char* GetName()
+	string GetName()
 	{
 		return name;
 	}
