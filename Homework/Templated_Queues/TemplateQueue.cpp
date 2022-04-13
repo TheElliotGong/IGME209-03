@@ -15,13 +15,31 @@ template <class T> TemplateQueue<T>::TemplateQueue(int queueSize)
 	
 }
 
+template <class T> TemplateQueue<T>::TemplateQueue(const TemplateQueue& original)
+{
+	this->queueType = original.queueType;
+	this->size = original.size;
+	this->count = original.count;
+}
+template <class T> TemplateQueue<T>::~TemplateQueue()
+{
+	delete[] this->queueType;
+}
 template <class T> void TemplateQueue<T>::Push(T obj)
 {
 	IncreaseCapacity();
+	this->queueType[count] = obj;
 	this.count++;
 }
 template <class T> void TemplateQueue<T>::Pop()
 {
+	delete this->queueType[0];
+	for (int i = 0; i < count - 1; i++)
+	{
+		this->queueTypequeueType[i] = this->queueType[i + 1];
+	}
+	delete this->queueType[count];
+	this->queueType[count] = nullptr;
 	this.count--;
 }
 
@@ -37,7 +55,10 @@ template <class T> int TemplateQueue<T>::GetSize()
 {
 	return sizeof(this->queueType) / sizeof(this->queueType[0]);
 }
-
+/// <summary>
+/// This method enlarges the array used to store the template objects.
+/// </summary>
+/// <typeparam name="T">The template object type that array will store.</typeparam>
 template <class T> void TemplateQueue<T>::IncreaseCapacity()
 {
 	if (count == size)
@@ -52,13 +73,11 @@ template <class T> void TemplateQueue<T>::IncreaseCapacity()
 		size *= 2;
 		delete[] queueType;
 		queueType = largerQueue;
-
-
 	}
 }
 template <class T> bool TemplateQueue<T>::IsEmpty()
 {
-	if (this.size <= 0)
+	if (this.count <= 0)
 	{
 		return true;
 	}

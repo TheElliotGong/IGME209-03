@@ -6,7 +6,9 @@ template <class T> class TemplateQueue
 public:
 	TemplateQueue();
 	TemplateQueue(int queueSize);
+	TemplateQueue(const TemplateQueue& original);
 	~TemplateQueue();
+	//Necessary methods
 	void Push(T obj);
 	void Pop();
 	void Print();
