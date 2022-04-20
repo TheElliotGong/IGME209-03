@@ -6,7 +6,10 @@
 int main()
 {
     TemplateQueue<int> test = TemplateQueue<int>(8);
-    
+    test.Push(13);
+    test.Push(4);
+    std::cout << "Queue size: " << test.GetSize() << "\n";
+    test.Print();
 
     return 0;
 }
