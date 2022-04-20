@@ -8,6 +8,18 @@ public:
 	TemplateQueue(int queueSize);
 	TemplateQueue(const TemplateQueue& original);
 	~TemplateQueue();
+	TemplateQueue<T>& operator = (TemplateQueue<T>& other)
+	{
+		//Check we're not calling this on itself.
+		if (this != other)
+		{
+			size = other.size;
+			count = other.count;
+			delete[] queueType;
+			this->queueType = new T[this.size];
+		}
+		return *this;
+	}
 	//Necessary methods
 	void Push(T obj);
 	void Pop();

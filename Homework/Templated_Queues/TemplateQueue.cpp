@@ -3,40 +3,61 @@
 //Base constructor
 template <class T> TemplateQueue<T>::TemplateQueue()
 {
-	this->queueType = new T[10];
-	this.size = 10;
-	this.count = 0;
+	queueType = new T[10];
+	size = 10;
+	count = 0;
 }
 template <class T> TemplateQueue<T>::TemplateQueue(int queueSize)
 {
-	this->queueType = new T[queueSize];
-	this.size = queueSize; 
-	this.count = 0;
+	queueType = new T[queueSize];
+	size = queueSize; 
+	count = 0;
 	
 }
-
+/// <summary>
+/// This is the copy constructor for the custom Template Queue class.
+/// </summary>
+/// <typeparam name="T">The data type that will be used for this class.</typeparam>
+/// <param name="original">The original object that will be copied.</param>
 template <class T> TemplateQueue<T>::TemplateQueue(const TemplateQueue& original)
 {
-	this->queueType = original.queueType;
+
 	this->size = original.size;
 	this->count = original.count;
+	this.queueType = new T[this.size];
+	for (int i = 0; i < this.count; i++)
+	{
+		this->queueType[i] = original.queueType[i];
+	}
 }
+
+
+
+/// <summary>
+/// This is the Template Queue destructor.
+/// </summary>
+/// <typeparam name="T"></typeparam>
 template <class T> TemplateQueue<T>::~TemplateQueue()
 {
-	delete[] this->queueType;
+	delete[] queueType;
 }
+
 template <class T> void TemplateQueue<T>::Push(T obj)
 {
 	IncreaseCapacity();
 	this->queueType[count] = obj;
 	this.count++;
 }
+/// <summary>
+/// This method removes the first element in the template queue.
+/// </summary>
+/// <typeparam name="T">The data type of the removed element.</typeparam>
 template <class T> void TemplateQueue<T>::Pop()
 {
 	delete this->queueType[0];
 	for (int i = 0; i < count - 1; i++)
 	{
-		this->queueTypequeueType[i] = this->queueType[i + 1];
+		this->queueType[i] = this->queueType[i + 1];
 	}
 	delete this->queueType[count];
 	this->queueType[count] = nullptr;
@@ -53,7 +74,7 @@ template <class T> void TemplateQueue<T>::Print()
 
 template <class T> int TemplateQueue<T>::GetSize()
 {
-	return sizeof(this->queueType) / sizeof(this->queueType[0]);
+	return this->count;
 }
 /// <summary>
 /// This method enlarges the array used to store the template objects.

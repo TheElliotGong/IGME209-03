@@ -5,6 +5,9 @@
 
 int main()
 {
+    TemplateQueue<int> test = TemplateQueue<int>(8);
+    
+
     return 0;
 }
 
