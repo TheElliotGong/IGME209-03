@@ -70,7 +70,7 @@ template <class T> TemplateQueue<T>::TemplateQueue(const TemplateQueue& original
 	queueType = new T[size];
 	for (int i = 0; i < count; i++)
 	{
-		queueType[i] = original.queueType[i];
+		this->queueType[i] = original.queueType[i];
 	}
 }
 
@@ -82,6 +82,7 @@ template <class T> TemplateQueue<T>::TemplateQueue(const TemplateQueue& original
 /// <typeparam name="T"></typeparam>
 template <class T> TemplateQueue<T>::~TemplateQueue()
 {
+	//Deallocate the memory used to store the objects in the queue.
 	delete[] queueType;
 }
 
@@ -140,7 +141,7 @@ template <class T> void TemplateQueue<T>::IncreaseCapacity()
 		//Copy elements of original 'queue' to the larger one.
 		for (int i = 0; i < count; i++)
 		{
-			largerQueue[i] = queueType[i];
+			largerQueue[i] = this->queueType[i];
 		}
 		size *= 2;
 		delete[] queueType;
@@ -149,9 +150,13 @@ template <class T> void TemplateQueue<T>::IncreaseCapacity()
 }
 template <class T> bool TemplateQueue<T>::IsEmpty()
 {
+	//Checks if there are any elements in the queue.
 	if (count == 0)
 	{
 		return true;
 	}
-	return false;
+	else
+	{
+		return false;
+	}
 }

@@ -5,6 +5,7 @@
 
 int main()
 {
+    //Create some template queues on the stack.
 
     TemplateQueue<string> test = TemplateQueue<string>(8);
     test.Push("hey");
@@ -25,13 +26,20 @@ int main()
     TemplateQueue<string> other = copy;
     other.Push("bee");
     other.Print();
-   
+    cout << "First Queue empty?: " << boolalpha << test.IsEmpty() << endl;
+    //Create a Template Queue on the heap.
+    TemplateQueue<int>* heapQueue = new TemplateQueue<int>(5);
+    cout << "Heap Queue empty?: " << boolalpha << heapQueue->IsEmpty() << endl;
 
-    cout << "Queue empty?: " << test.IsEmpty();
-    //Call destructors.
-    test.~TemplateQueue();
-    //copy.~TemplateQueue();
-    //other.~TemplateQueue();
+    heapQueue->Push(7);
+    heapQueue->Push(10);
+    heapQueue->Push(29);
+    heapQueue->Print();
+    heapQueue->Pop();
+    heapQueue->Print();
+    
+    heapQueue->~TemplateQueue();
+
     return 0;
 }
 
