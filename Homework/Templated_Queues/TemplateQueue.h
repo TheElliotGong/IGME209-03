@@ -1,22 +1,34 @@
 #pragma once
 #include <iostream>
+#include <string>
+using namespace std;
 
 template <class T> class TemplateQueue
 {
 public:
+	//Default constructor
 	TemplateQueue();
+	//Parameterized Constructor
 	TemplateQueue(int queueSize);
+	//Copy Constructor
 	TemplateQueue(const TemplateQueue& original);
+	//Destructor
 	~TemplateQueue();
+	//Copy Assignment Operator
 	TemplateQueue<T>& operator = (TemplateQueue<T>& other)
 	{
 		//Check we're not calling this on itself.
-		if (this != other)
+		if (this != &other)
 		{
-			size = other.size;
-			count = other.count;
-			delete[] queueType;
-			this->queueType = new T[this.size];
+			//Copy the data from the original object into this one.
+			this->size = other.size;
+			this->count = other.count;
+			delete[] this->queueType;
+			this->queueType = new T[this->size];
+			for (int i = 0; i < this->count; i++)
+			{
+				this->queueType[i] = other.queueType[i];
+			}
 		}
 		return *this;
 	}
@@ -53,13 +65,12 @@ template <class T> TemplateQueue<T>::TemplateQueue(int queueSize)
 /// <param name="original">The original object that will be copied.</param>
 template <class T> TemplateQueue<T>::TemplateQueue(const TemplateQueue& original)
 {
-
-	this->size = original.size;
-	this->count = original.count;
-	this.queueType = new T[this.size];
-	for (int i = 0; i < this.count; i++)
+	size = original.size;
+	count = original.count;
+	queueType = new T[size];
+	for (int i = 0; i < count; i++)
 	{
-		this->queueType[i] = original.queueType[i];
+		queueType[i] = original.queueType[i];
 	}
 }
 
@@ -77,7 +88,7 @@ template <class T> TemplateQueue<T>::~TemplateQueue()
 template <class T> void TemplateQueue<T>::Push(T obj)
 {
 	IncreaseCapacity();
-	this->queueType[count] = obj;
+	queueType[count] = obj;
 	count++;
 }
 /// <summary>
@@ -86,27 +97,35 @@ template <class T> void TemplateQueue<T>::Push(T obj)
 /// <typeparam name="T">The data type of the removed element.</typeparam>
 template <class T> void TemplateQueue<T>::Pop()
 {
-	delete this->queueType[0];
+	//Move up all the elements up one.
 	for (int i = 0; i < count - 1; i++)
 	{
-		this->queueType[i] = this->queueType[i + 1];
+		this->queueType[i] = queueType[i + 1];
 	}
-	delete this->queueType[count];
-	this->queueType[count] = nullptr;
-	this.count--;
+	//"Delete" the last element and decrement the # of elements in the queue.
+	queueType[count - 1] = -1;
+	count--;
 }
-
+/// <summary>
+/// This prints out all the elements in the template queue.
+/// </summary>
+/// <typeparam name="T">The data type shared by the elements.</typeparam>
 template <class T> void TemplateQueue<T>::Print()
 {
 	for (int i = 0; i < GetSize(); i++)
 	{
-		std::cout << queueType[i] << std::endl;
+		std::cout << queueType[i] << ", ";
 	}
+	std::cout << "\n";
 }
-
+/// <summary>
+/// This method returns the size of the template queue.
+/// </summary>
+/// <typeparam name="T"></typeparam>
+/// <returns></returns>
 template <class T> int TemplateQueue<T>::GetSize()
 {
-	return this->count;
+	return count;
 }
 /// <summary>
 /// This method enlarges the array used to store the template objects.
@@ -119,7 +138,7 @@ template <class T> void TemplateQueue<T>::IncreaseCapacity()
 		//Create a new, larger queue that can hold more elements.
 		T* largerQueue = new T[size + 10];
 		//Copy elements of original 'queue' to the larger one.
-		for (int i = 0; i < size; i++)
+		for (int i = 0; i < count; i++)
 		{
 			largerQueue[i] = queueType[i];
 		}
@@ -130,7 +149,7 @@ template <class T> void TemplateQueue<T>::IncreaseCapacity()
 }
 template <class T> bool TemplateQueue<T>::IsEmpty()
 {
-	if (this.count <= 0)
+	if (count == 0)
 	{
 		return true;
 	}

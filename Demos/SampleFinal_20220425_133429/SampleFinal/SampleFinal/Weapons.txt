@@ -1,0 +1,10 @@
+Hammer
+Wand
+Sword
+Bow
+Lance
+Food
+Eyepatch
+Mace
+Broadsword
+Spells

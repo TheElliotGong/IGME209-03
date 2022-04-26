@@ -5,12 +5,33 @@
 
 int main()
 {
-    TemplateQueue<int> test = TemplateQueue<int>(8);
-    test.Push(13);
-    test.Push(4);
+
+    TemplateQueue<string> test = TemplateQueue<string>(8);
+    test.Push("hey");
+    test.Push("nice");
+    test.Push("myself");
+    test.Push("jam");
     std::cout << "Queue size: " << test.GetSize() << "\n";
     test.Print();
+    test.Pop();
+    test.Print();
+    std::cout << "Queue size: " << test.GetSize() << "\n";
 
+    //Call the copy assignment operator
+    TemplateQueue<string> copy;
+    copy = test;
+    copy.Print();
+    //Call the copy constructor
+    TemplateQueue<string> other = copy;
+    other.Push("bee");
+    other.Print();
+   
+
+    cout << "Queue empty?: " << test.IsEmpty();
+    //Call destructors.
+    test.~TemplateQueue();
+    //copy.~TemplateQueue();
+    //other.~TemplateQueue();
     return 0;
 }
 
