@@ -1,7 +1,14 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <type_traits>
 using namespace std;
+
+/*Author: Elliot Gong
+* Purpose: Create a Template Queue class.
+* Restrictions: Must have the defined methods and the Rule of 3.
+* Date: 4/26/2022
+*/
 
 template <class T> class TemplateQueue
 {
@@ -35,22 +42,31 @@ public:
 	//Necessary methods
 	void Push(T obj);
 	void Pop();
-	void Print();
+	 void Print();
 	void IncreaseCapacity();
 	int GetSize();
 	bool IsEmpty();
 private:
+	//Private field variables.
 	T* queueType;
 	int size;
 	int count;
 };
-
+/// <summary>
+/// This is the default Template Queue Constructor
+/// </summary>
+/// <typeparam name="T">The data type that will be used for this class.</typeparam>
 template <class T> TemplateQueue<T>::TemplateQueue()
 {
 	queueType = new T[10];
 	size = 10;
 	count = 0;
 }
+/// <summary>
+/// This is the parameterized Template Queue Constructor
+/// </summary>
+/// <typeparam name="T">The data type that will be used for this class.</typeparam>
+/// <param name="queueSize">The initial size of the queue.</param>
 template <class T> TemplateQueue<T>::TemplateQueue(int queueSize)
 {
 	queueType = new T[queueSize];
@@ -65,6 +81,7 @@ template <class T> TemplateQueue<T>::TemplateQueue(int queueSize)
 /// <param name="original">The original object that will be copied.</param>
 template <class T> TemplateQueue<T>::TemplateQueue(const TemplateQueue& original)
 {
+	//Copy over the original object's data and queue.
 	size = original.size;
 	count = original.count;
 	queueType = new T[size];
@@ -73,9 +90,6 @@ template <class T> TemplateQueue<T>::TemplateQueue(const TemplateQueue& original
 		this->queueType[i] = original.queueType[i];
 	}
 }
-
-
-
 /// <summary>
 /// This is the Template Queue destructor.
 /// </summary>
@@ -85,9 +99,15 @@ template <class T> TemplateQueue<T>::~TemplateQueue()
 	//Deallocate the memory used to store the objects in the queue.
 	delete[] queueType;
 }
-
+/// <summary>
+/// This method adds an object of type T to the end of the Queue.
+/// </summary>
+/// <typeparam name="T">The datatype used by the Queue and the object parameter.</typeparam>
+/// <param name="obj">The object to be added to the Queue.</param>
 template <class T> void TemplateQueue<T>::Push(T obj)
 {
+	//Call the increase capacity method, and add the new object to the next index
+	//and increment the count variable.
 	IncreaseCapacity();
 	queueType[count] = obj;
 	count++;
@@ -98,14 +118,18 @@ template <class T> void TemplateQueue<T>::Push(T obj)
 /// <typeparam name="T">The data type of the removed element.</typeparam>
 template <class T> void TemplateQueue<T>::Pop()
 {
-	//Move up all the elements up one.
-	for (int i = 0; i < count - 1; i++)
+	//Only pop if there are objects in the queue.
+	if (count > 0)
 	{
-		this->queueType[i] = queueType[i + 1];
+		//Shift the objects down by one index.
+		for (int i = 0; i < count - 1; i++)
+		{
+			this->queueType[i] = queueType[i + 1];
+		}
+		//"Delete" the last element and decrement the count variable.
+		queueType[count - 1] = -1;
+		count--;
 	}
-	//"Delete" the last element and decrement the # of elements in the queue.
-	queueType[count - 1] = -1;
-	count--;
 }
 /// <summary>
 /// This prints out all the elements in the template queue.
@@ -113,17 +137,31 @@ template <class T> void TemplateQueue<T>::Pop()
 /// <typeparam name="T">The data type shared by the elements.</typeparam>
 template <class T> void TemplateQueue<T>::Print()
 {
-	for (int i = 0; i < GetSize(); i++)
+	//Print out the elements in the Queue.
+	if (count > 0)
 	{
-		std::cout << queueType[i] << ", ";
+		
+			for (int i = 0; i < GetSize(); i++)
+			{
+				if (i == count - 1)
+				{
+					cout << queueType[i] << endl;
+				}
+				else
+				{
+					cout << queueType[i] << ", ";
+				}
+			}
+
+		
 	}
-	std::cout << "\n";
+	
 }
 /// <summary>
-/// This method returns the size of the template queue.
+/// This method returns the size of the Queue.
 /// </summary>
-/// <typeparam name="T"></typeparam>
-/// <returns></returns>
+/// <typeparam name="T">The datatype used by the Queue.</typeparam>
+/// <returns>Returns the # of objects in the Queue.</returns>
 template <class T> int TemplateQueue<T>::GetSize()
 {
 	return count;
@@ -134,6 +172,7 @@ template <class T> int TemplateQueue<T>::GetSize()
 /// <typeparam name="T">The template object type that array will store.</typeparam>
 template <class T> void TemplateQueue<T>::IncreaseCapacity()
 {
+	//Checks if the Queue has run out of space.
 	if (count == size)
 	{
 		//Create a new, larger queue that can hold more elements.
@@ -143,18 +182,25 @@ template <class T> void TemplateQueue<T>::IncreaseCapacity()
 		{
 			largerQueue[i] = this->queueType[i];
 		}
-		size *= 2;
+		//Increment the size by 10, delete the old queue, and set it to the new one.
+		size += 10;
 		delete[] queueType;
 		queueType = largerQueue;
 	}
 }
+/// <summary>
+/// This method checks if the Queue is empty.
+/// </summary>
+/// <typeparam name="T">The datatype used by the Queue.</typeparam>
+/// <returns>Returns a bool value checking if the Queue is empty.</returns>
 template <class T> bool TemplateQueue<T>::IsEmpty()
 {
-	//Checks if there are any elements in the queue.
+	//If there's nothing in the Queue, return true.
 	if (count == 0)
 	{
 		return true;
 	}
+	//Otherwise, return false.
 	else
 	{
 		return false;

@@ -3,21 +3,28 @@
 
 #include "TemplateQueue.h"
 
+/*Author: Elliot Gong
+* Purpose: Test out the Template Queue class by creating several objects and calling their methods.
+* Restrictions: Must test all the methods as well as the Rule of 3.
+* Date: 4/26/2022
+*/
 int main()
 {
     //Create some template queues on the stack.
-
     TemplateQueue<string> test = TemplateQueue<string>(8);
+    //Push some strings to the queue.
     test.Push("hey");
     test.Push("nice");
     test.Push("myself");
     test.Push("jam");
-    std::cout << "Queue size: " << test.GetSize() << "\n";
+    //Call the GetSize method to print out the # of objects in the Queue.
+    std::cout << "First Stack Queue size: " << test.GetSize() << "\n";
+    //Call the Print and Pop methods.
     test.Print();
     test.Pop();
     test.Print();
-    std::cout << "Queue size: " << test.GetSize() << "\n";
-
+    //Call the GetSize method on the first object again.
+    cout << "First Stack Queue size: " << test.GetSize() << "\n";
     //Call the copy assignment operator
     TemplateQueue<string> copy;
     copy = test;
@@ -26,30 +33,27 @@ int main()
     TemplateQueue<string> other = copy;
     other.Push("bee");
     other.Print();
+    //Call the IsEmpty method on the first object.
     cout << "First Queue empty?: " << boolalpha << test.IsEmpty() << endl;
-    //Create a Template Queue on the heap.
+    //Create a Template Queue on the heap using a pointer.
     TemplateQueue<int>* heapQueue = new TemplateQueue<int>(5);
+    //call the IsEmpty method on the heap/pointer object.
     cout << "Heap Queue empty?: " << boolalpha << heapQueue->IsEmpty() << endl;
-
+    //Call the Push, Pop, and Print methods on the Pointer Queue.
     heapQueue->Push(7);
-    heapQueue->Push(10);
+    heapQueue->Push(15);
     heapQueue->Push(29);
     heapQueue->Print();
     heapQueue->Pop();
     heapQueue->Print();
-    
+    //Print out the Pointer Queue's size and pop the remaining objects.
+    cout << "Heap Queue size: " << heapQueue->GetSize() << "\n";
+    heapQueue->Pop();
+    heapQueue->Pop();
+    //Check if the Pointer Queue is empty.
+    cout << "Heap Queue empty?: " << boolalpha << heapQueue->IsEmpty() << endl;
+    //Call the destructor on the Pointer Queue since it's on the heap.
     heapQueue->~TemplateQueue();
 
     return 0;
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
