@@ -54,6 +54,5 @@ int main()
     cout << "Heap Queue empty?: " << boolalpha << heapQueue->IsEmpty() << endl;
     //Call the destructor on the Pointer Queue since it's on the heap.
     heapQueue->~TemplateQueue();
-
     return 0;
 }

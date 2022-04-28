@@ -9,8 +9,15 @@ using namespace std;
 * Date: 4/26/2022
 */
 
+//Forward declared the class and the friend overload for the '<<' operator.
+//template <class T> class TemplateQueue;
+//template <class T> ostream& operator<<(ostream&, const TemplateQueue<T>&);
 
 
+/// <summary>
+/// This class will simulate a Queue that can take in a variety of data types.
+/// </summary>
+/// <typeparam name="T">The data type used by this Queue.</typeparam>
 template <class T> class TemplateQueue
 {
 public:
@@ -38,6 +45,7 @@ public:
 				this->queueType[i] = other.queueType[i];
 			}
 		}
+		//Return the edited object.
 		return *this;
 	}
 	//Necessary methods
@@ -47,7 +55,8 @@ public:
 	void IncreaseCapacity();
 	int GetSize();
 	bool IsEmpty();
-	friend ostream& operator<<(ostream& os, const TemplateQueue<T>& obj);
+	//Friend overload of the << operator(attempted)
+	//friend ostream& operator<<(ostream&, const TemplateQueue<T>&);
 private:
 	//Private field variables.
 	T* queueType;
@@ -75,7 +84,6 @@ template <class T> TemplateQueue<T>::TemplateQueue(int queueSize)
 	queueType = new T[queueSize];
 	size = queueSize;
 	count = 0;
-
 }
 /// <summary>
 /// This is the copy constructor for the custom Template Queue class.
@@ -140,34 +148,28 @@ template <class T> void TemplateQueue<T>::Pop()
 /// <typeparam name="T">The data type shared by the elements.</typeparam>
 template <class T> void TemplateQueue<T>::Print()
 {
-	//Print out the elements in the Queue.
+	//Print out the Queue's entries if there are any.
 	if (count > 0)
 	{
-		//If the data type used by the Queue is a fundamental data type,
-		//print out Queue elements as normal.
-		if (is_fundamental<T>::value == true)
+		for (int i = 0; i < GetSize(); i++)
 		{
-			for (int i = 0; i < GetSize(); i++)
+			//Once we reach the last element in the Queue, end the output line.
+			if (i == count - 1)
 			{
-				if (i == count - 1)
-				{
-					cout << queueType[i] << endl;
-				}
-				else
-				{
-					cout << queueType[i] << ", ";
-				}
+				cout << queueType[i] << endl;
+			}
+			//Otherwise, keep printing the Queue entries on the same line.
+			else
+			{
+				cout << queueType[i] << ", ";
 			}
 		}
-		else
-		{
-
-		}
-			
-
-		
 	}
-	
+	//Otherwise, return a simple notice.
+	else
+	{
+		cout << "Nothing in the queue yet.";
+	}
 }
 /// <summary>
 /// This method returns the size of the Queue.
@@ -218,3 +220,22 @@ template <class T> bool TemplateQueue<T>::IsEmpty()
 		return false;
 	}
 }
+/*/// <summary>
+/// This overrides the << operator when using our template class.
+/// </summary>
+/// <typeparam name="T">The data type used by this class</typeparam>
+/// <param name="out">The ostream class object.</param>
+/// <param name="obj">The Template Queue object.</param>
+/// <returns>Returns the overloaded outstream of the Template Queue object.</returns>
+template <class T> ostream& operator<<(ostream& out, const TemplateQueue<T>& obj)
+{
+	//Return all the Template Queue's data at once.
+	for (T thing : obj.queueType)
+	{
+		out << thing << ", ";
+	}
+	out << endl;
+	return out;
+	//That way, if we have a Template Queue Object 'X', then 'cout << X;' will work.
+}
+*/
