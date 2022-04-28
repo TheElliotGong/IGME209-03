@@ -60,8 +60,12 @@ public:
 	//friend ostream& operator<<(ostream&, const TemplateQueue<T>&);
 private:
 	//Private field variables.
+
+	//The 'Queue' that will hold the objects.
 	T* queueType;
+	//The current size of the Queue.
 	int size;
+	//How many objects are in the Queue.
 	int count;
 };
 
@@ -131,7 +135,7 @@ template <class T> void TemplateQueue<T>::Push(T obj)
 template <class T> void TemplateQueue<T>::Pop()
 {
 	//Only pop if there are objects in the queue.
-	if (count > 0)
+	if (!IsEmpty())
 	{
 		//Shift the objects down by one index.
 		for (int i = 0; i < count - 1; i++)
@@ -149,8 +153,8 @@ template <class T> void TemplateQueue<T>::Pop()
 /// <typeparam name="T">The data type shared by the elements.</typeparam>
 template <class T> void TemplateQueue<T>::Print()
 {
-	//Print out the Queue's entries if there are any.
-	if (count > 0)
+	//Print out the Queue's entries if it isn't empty.
+	if (!IsEmpty())
 	{
 		for (int i = 0; i < GetSize(); i++)
 		{
