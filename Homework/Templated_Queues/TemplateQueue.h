@@ -9,6 +9,8 @@ using namespace std;
 * Date: 4/26/2022
 */
 
+
+
 template <class T> class TemplateQueue
 {
 public:
@@ -45,12 +47,14 @@ public:
 	void IncreaseCapacity();
 	int GetSize();
 	bool IsEmpty();
+	friend ostream& operator<<(ostream& os, const TemplateQueue<T>& obj);
 private:
 	//Private field variables.
 	T* queueType;
 	int size;
 	int count;
 };
+
 /// <summary>
 /// This is the default Template Queue Constructor
 /// </summary>
@@ -214,4 +218,3 @@ template <class T> bool TemplateQueue<T>::IsEmpty()
 		return false;
 	}
 }
-
