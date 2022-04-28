@@ -1,6 +1,5 @@
 #pragma once
 #include <iostream>
-#include <string>
 #include <type_traits>
 using namespace std;
 
@@ -24,7 +23,7 @@ public:
 	//Copy Assignment Operator
 	TemplateQueue<T>& operator = (TemplateQueue<T>& other)
 	{
-		//Check we're not calling this on itself.
+		//Check we're not calling the copy assignment operator on itself.
 		if (this != &other)
 		{
 			//Copy the data from the original object into this one.
@@ -42,7 +41,7 @@ public:
 	//Necessary methods
 	void Push(T obj);
 	void Pop();
-	 void Print();
+	void Print();
 	void IncreaseCapacity();
 	int GetSize();
 	bool IsEmpty();
@@ -140,7 +139,10 @@ template <class T> void TemplateQueue<T>::Print()
 	//Print out the elements in the Queue.
 	if (count > 0)
 	{
-		
+		//If the data type used by the Queue is a fundamental data type,
+		//print out Queue elements as normal.
+		if (is_fundamental<T>::value == true)
+		{
 			for (int i = 0; i < GetSize(); i++)
 			{
 				if (i == count - 1)
@@ -152,6 +154,12 @@ template <class T> void TemplateQueue<T>::Print()
 					cout << queueType[i] << ", ";
 				}
 			}
+		}
+		else
+		{
+
+		}
+			
 
 		
 	}
@@ -206,3 +214,4 @@ template <class T> bool TemplateQueue<T>::IsEmpty()
 		return false;
 	}
 }
+
