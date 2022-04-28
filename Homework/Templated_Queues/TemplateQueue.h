@@ -49,7 +49,7 @@ public:
 		//Return the edited object.
 		return *this;
 	}
-	//Necessary methods
+	//Necessary methods, including a helper one for expanding the Queue.
 	void Push(T obj);
 	void Pop();
 	void Print();
@@ -60,7 +60,6 @@ public:
 	//friend ostream& operator<<(ostream&, const TemplateQueue<T>&);
 private:
 	//Private field variables.
-
 	//The 'Queue' that will hold the objects.
 	T* queueType;
 	//The current size of the Queue.
