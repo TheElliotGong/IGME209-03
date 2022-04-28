@@ -6,7 +6,7 @@ using namespace std;
 /*Author: Elliot Gong
 * Purpose: Create a Template Queue class.
 * Restrictions: Must have the defined methods and the Rule of 3.
-* Date: 4/26/2022
+* Date: 4/28/2022
 */
 
 //Forward declared the class and the friend overload for the '<<' operator.
@@ -15,7 +15,8 @@ using namespace std;
 
 
 /// <summary>
-/// This class will simulate a Queue that can take in a variety of data types.
+/// This class will simulate a Queue that can take in a variety of data types. It will also contain many functions
+/// that will help manage and manipulate the Queue entries.
 /// </summary>
 /// <typeparam name="T">The data type used by this Queue.</typeparam>
 template <class T> class TemplateQueue
@@ -26,7 +27,7 @@ public:
 	//Parameterized Constructor
 	TemplateQueue(int queueSize);
 	//Copy Constructor
-	TemplateQueue(const TemplateQueue& original);
+	TemplateQueue(const TemplateQueue<T>& original);
 	//Destructor
 	~TemplateQueue();
 	//Copy Assignment Operator
@@ -90,7 +91,7 @@ template <class T> TemplateQueue<T>::TemplateQueue(int queueSize)
 /// </summary>
 /// <typeparam name="T">The data type that will be used for this class.</typeparam>
 /// <param name="original">The original object that will be copied.</param>
-template <class T> TemplateQueue<T>::TemplateQueue(const TemplateQueue& original)
+template <class T> TemplateQueue<T>::TemplateQueue(const TemplateQueue<T>& original)
 {
 	//Copy over the original object's data and queue.
 	size = original.size;
@@ -98,7 +99,7 @@ template <class T> TemplateQueue<T>::TemplateQueue(const TemplateQueue& original
 	queueType = new T[size];
 	for (int i = 0; i < count; i++)
 	{
-		this->queueType[i] = original.queueType[i];
+		queueType[i] = original.queueType[i];
 	}
 }
 /// <summary>
@@ -135,7 +136,7 @@ template <class T> void TemplateQueue<T>::Pop()
 		//Shift the objects down by one index.
 		for (int i = 0; i < count - 1; i++)
 		{
-			this->queueType[i] = queueType[i + 1];
+			queueType[i] = queueType[i + 1];
 		}
 		//"Delete" the last element and decrement the count variable.
 		queueType[count - 1] = -1;
@@ -194,7 +195,7 @@ template <class T> void TemplateQueue<T>::IncreaseCapacity()
 		//Copy elements of original 'queue' to the larger one.
 		for (int i = 0; i < count; i++)
 		{
-			largerQueue[i] = this->queueType[i];
+			largerQueue[i] = queueType[i];
 		}
 		//Increment the size by 10, delete the old queue, and set it to the new one.
 		size += 10;

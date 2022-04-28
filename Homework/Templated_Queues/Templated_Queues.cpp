@@ -6,7 +6,7 @@
 /*Author: Elliot Gong
 * Purpose: Test out the Template Queue class by creating several objects and calling their methods.
 * Restrictions: Must test all the methods as well as the Rule of 3.
-* Date: 4/26/2022
+* Date: 4/28/2022
 */
 int main()
 {
@@ -31,6 +31,8 @@ int main()
     copy.Print();
     //Call the copy constructor
     TemplateQueue<string> other = copy;
+    other.Pop();
+    other.Push("hill");
     other.Push("bee");
     other.Print();
     //Call the IsEmpty method on the first object.
@@ -54,5 +56,6 @@ int main()
     cout << "Heap Queue empty?: " << boolalpha << heapQueue->IsEmpty() << endl;
     //Call the destructor on the Pointer Queue since it's on the heap.
     heapQueue->~TemplateQueue();
+
     return 0;
 }
