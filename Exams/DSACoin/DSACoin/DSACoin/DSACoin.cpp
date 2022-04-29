@@ -8,6 +8,7 @@
 #include <thread>
 #include <mutex>
 #include <chrono>
+#include <vector>
 #include "Coin.h"
 #include "Wallet.h"
 using namespace std;
@@ -30,7 +31,6 @@ ofstream walletFile("walletFile.txt");;
 string mineKey()
 {
 	string key;
-
 	// TODO DSA1
 	//Initialize the random seed.
 	srand(time(NULL));
@@ -54,14 +54,16 @@ string mineKey()
 /// reads the next crypto key from the keybank file
 /// </summary>
 /// <returns>returns new crypto to use or "" if the file was completely read</returns>
-string readNextCrypto()
+string readNextCrypto(unsigned int lineNum)
 {
+	cryptoFile.seekg(std::ios::beg);
+	for (int i = 0; i < lineNum - 1; ++i)
+	{
+		cryptoFile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	}
 	string crypto = "";
 	// TODO DSA1
-	if (cryptoFile.is_open())
-	{
-		getline(cryptoFile, crypto);
-	}
+	getline(cryptoFile, crypto);
 	return crypto;
 }
 
@@ -103,12 +105,24 @@ int main()
 	//   mine keys until you find a "good one"
 	//     "good one" contains the crypto data from the file
 	//   create a coin for the good keys and add it to your wallet
-
+	if (cryptoFile.is_open())
+	{
+		string currentCryptoKey = readNextCrypto(cnt);
+		string generatedKey = mineKey();
+		double currentValue;
+		if (generatedKey.find(currentCryptoKey) != string::npos)
+		{
+			currentValue = calculateValue();
+			Coin* currentCoin = new Coin(generatedKey, currentValue);
+			myWallet.AddCoin(currentCoin);
+		}
+	}
 	
 	cout << mineKey() << endl;
 
 	cout << "keys searched: " << cnt << endl;
 	cout << "Wallet value: " << myWallet.GetValue() << endl;
 
-
+	walletFile << mineKey();
+		walletFile.close();
 }
