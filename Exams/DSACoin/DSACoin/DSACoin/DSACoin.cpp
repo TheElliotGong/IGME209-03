@@ -10,6 +10,7 @@
 #include <chrono>
 #include <vector>
 #include "Coin.h"
+
 #include "Wallet.h"
 using namespace std;
 
@@ -33,7 +34,7 @@ string mineKey()
 	string key;
 	// TODO DSA1
 	//Initialize the random seed.
-	srand(time(NULL));
+	
 	//Create an array of digit characters.
 	char digits[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 	//These variables will help with creating the string.
@@ -54,17 +55,13 @@ string mineKey()
 /// reads the next crypto key from the keybank file
 /// </summary>
 /// <returns>returns new crypto to use or "" if the file was completely read</returns>
-string readNextCrypto(unsigned int lineNum)
+string readNextCrypto(vector<string> keys, unsigned int lineNum)
 {
-	cryptoFile.seekg(std::ios::beg);
-	for (int i = 0; i < lineNum - 1; ++i)
-	{
-		cryptoFile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-	}
-	string crypto = "";
+	
+	//Keep generating crypto keys until we find one that contains the code.
+	
 	// TODO DSA1
-	getline(cryptoFile, crypto);
-	return crypto;
+	return keys[lineNum];
 }
 
 /// <summary>
@@ -92,37 +89,76 @@ double calculateValue()
 	return coinValue;
 }
 
+void ReadCryptoKeys(vector<string>& list)
+{
+	string line;
+	list.clear();
+	if (cryptoFile.is_open())
+	{
+		while (getline(cryptoFile, line))
+		{
+			list.push_back(line);
+		}
+	}
+}
+void CreateCoin(string key, double value, Wallet& wallet)
+{
+	Coin* coin = new Coin(key, value);
+	wallet.AddCoin(coin);
+}
+
+void PrintKey(string key)
+{
+	if (walletFile.is_open())
+	{
+		walletFile << key << "\n";
+	}
+}
+
+void GetValidKey(string& cryptoKey, string& validKey, double& currentValue, int& count)
+{
+	do
+	{
+		validKey = mineKey();
+		count++;
+	} while (validKey.find(cryptoKey) == string::npos);
+	currentValue = calculateValue();
+}
 int main()
 {
 	start_time = clockTimer.now();
-	srand(2022);
+	srand(time(NULL));
 	Wallet myWallet;
 	int cnt = 0;
-
+	vector<string> cryptoKeys;
 	// TODO DSA1
 	// write the main loop
 	//   read the crypto data (a line) from the file
 	//   mine keys until you find a "good one"
 	//     "good one" contains the crypto data from the file
 	//   create a coin for the good keys and add it to your wallet
-	if (cryptoFile.is_open())
-	{
-		string currentCryptoKey = readNextCrypto(cnt);
-		string generatedKey = mineKey();
-		double currentValue;
-		if (generatedKey.find(currentCryptoKey) != string::npos)
-		{
-			currentValue = calculateValue();
-			Coin* currentCoin = new Coin(generatedKey, currentValue);
-			myWallet.AddCoin(currentCoin);
-		}
-	}
-	
-	cout << mineKey() << endl;
 
+	//Read in the cryptoFile and store the keys in a vector.
+	
+	ReadCryptoKeys(cryptoKeys);
+	double currentValue = 0.0;
+	string cryptoKey = "";
+	string validKey = "";
+
+	//thread ValidKeyThread(GetValidKey, cryptoKey)
+
+	for (int i = 0; i < cryptoKeys.size(); i++)
+	{
+		cryptoKey = readNextCrypto(cryptoKeys, i);
+		GetValidKey(cryptoKey, validKey, currentValue, cnt);
+		CreateCoin(validKey, currentValue, myWallet);
+		PrintKey(validKey);
+	}
+	walletFile.close();
 	cout << "keys searched: " << cnt << endl;
 	cout << "Wallet value: " << myWallet.GetValue() << endl;
 
-	walletFile << mineKey();
-		walletFile.close();
+
+
+	
 }
