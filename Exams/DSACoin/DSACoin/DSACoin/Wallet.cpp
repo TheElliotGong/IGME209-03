@@ -22,4 +22,8 @@ double Wallet::GetValue()
 Wallet::~Wallet()
 {
 	// TODO DSA1
+	for (Coin* coin : wallet)
+	{
+		delete coin;
+	}
 }

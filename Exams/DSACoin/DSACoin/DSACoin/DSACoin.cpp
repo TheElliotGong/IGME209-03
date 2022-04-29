@@ -56,17 +56,12 @@ string mineKey()
 /// <returns>returns new crypto to use or "" if the file was completely read</returns>
 string readNextCrypto()
 {
-	
-	
 	string crypto = "";
-
 	// TODO DSA1
-	if (getline(cryptoFile, crypto))
+	if (cryptoFile.is_open())
 	{
-
+		getline(cryptoFile, crypto);
 	}
-	
-	
 	return crypto;
 }
 
@@ -79,7 +74,19 @@ double calculateValue()
 	double coinValue = 0.0;
 
 	// TODO DSA1
-
+	//Find the duration between the current time and the start time and convert it to 
+	//a double value representing milliseconds.
+	std::chrono::high_resolution_clock::time_point current_time = clockTimer.now();
+	std::chrono::duration<double, std::milli> time = current_time - start_time;
+	//Use the provided formula to calculate the coin value, which is
+	//subtracting the duration from 3 seconds/3000 milliseconds and multiplying that by 100.
+	coinValue = (3000 - time.count()) * 100;
+	//Convert the value to 0 if it's initially negative.
+	if (coinValue < 0.0)
+	{
+		coinValue = 0.0;
+	}
+	//Return the coin value.
 	return coinValue;
 }
 
@@ -96,7 +103,9 @@ int main()
 	//   mine keys until you find a "good one"
 	//     "good one" contains the crypto data from the file
 	//   create a coin for the good keys and add it to your wallet
-	cout << mineKey();
+
+	
+	cout << mineKey() << endl;
 
 	cout << "keys searched: " << cnt << endl;
 	cout << "Wallet value: " << myWallet.GetValue() << endl;
