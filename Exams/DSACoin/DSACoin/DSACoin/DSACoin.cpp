@@ -28,13 +28,12 @@ ofstream walletFile("walletFile.txt");;
 /// "01234567890123456789012345678901234567890123456789012345678901234567890123456789"
 /// but with random numbers for each one
 /// </summary>
-/// <returns></returns>
+/// <returns>an 80 character long string with random digits.</returns>
 string mineKey()
 {
 	string key;
 	// TODO DSA1
 	//Initialize the random seed.
-	
 	//Create an array of digit characters.
 	char digits[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 	//These variables will help with creating the string.
@@ -57,9 +56,6 @@ string mineKey()
 /// <returns>returns new crypto to use or "" if the file was completely read</returns>
 string readNextCrypto(vector<string> keys, unsigned int lineNum)
 {
-	
-	//Keep generating crypto keys until we find one that contains the code.
-	
 	// TODO DSA1
 	return keys[lineNum];
 }
@@ -101,17 +97,24 @@ void ReadCryptoKeys(vector<string>& list)
 		}
 	}
 }
-void CreateCoin(string key, double value, Wallet& wallet)
+void CreateCoins(vector<string>& keys, vector<double>& values, Wallet& wallet)
 {
-	Coin* coin = new Coin(key, value);
-	wallet.AddCoin(coin);
+	for (int i = 0; i < keys.size(); i++)
+	{
+		Coin* coin = new Coin(keys[i], values[i]);
+		wallet.AddCoin(coin);
+	}
+	
 }
 
-void PrintKey(string key)
+void PrintKeys(vector<string>& keys)
 {
 	if (walletFile.is_open())
 	{
-		walletFile << key << "\n";
+		for (string key : keys)
+		{
+			walletFile << key << "\n";
+		}
 	}
 }
 
@@ -124,6 +127,9 @@ void GetValidKey(string& cryptoKey, string& validKey, double& currentValue, int&
 	} while (validKey.find(cryptoKey) == string::npos);
 	currentValue = calculateValue();
 }
+
+
+
 int main()
 {
 	start_time = clockTimer.now();
@@ -131,6 +137,15 @@ int main()
 	Wallet myWallet;
 	int cnt = 0;
 	vector<string> cryptoKeys;
+	vector<string> validKeys;
+	vector<double> coinValues;
+
+	thread ReadThread(ReadCryptoKeys, ref(cryptoKeys));
+	ReadThread.join();
+	
+	double currentValue = 0.0;
+	string cryptoKey = "";
+	string validKey = "";
 	// TODO DSA1
 	// write the main loop
 	//   read the crypto data (a line) from the file
@@ -140,20 +155,26 @@ int main()
 
 	//Read in the cryptoFile and store the keys in a vector.
 	
-	ReadCryptoKeys(cryptoKeys);
-	double currentValue = 0.0;
-	string cryptoKey = "";
-	string validKey = "";
-
-	//thread ValidKeyThread(GetValidKey, cryptoKey)
+	
 
 	for (int i = 0; i < cryptoKeys.size(); i++)
 	{
-		cryptoKey = readNextCrypto(cryptoKeys, i);
-		GetValidKey(cryptoKey, validKey, currentValue, cnt);
-		CreateCoin(validKey, currentValue, myWallet);
-		PrintKey(validKey);
+		do
+		{
+			validKey = mineKey();
+			cnt++;
+		} while (validKey.find(cryptoKeys[i]) == string::npos);
+		currentValue = calculateValue();
+		validKeys.push_back(validKey);
+		coinValues.push_back(currentValue);
 	}
+	//Create some threads to create coins and add them to the wallet in addition to printing out the valid keys.
+	thread CoinThread(CreateCoins, ref(validKeys), ref(coinValues), ref(myWallet));
+	thread PrintThread(PrintKeys, ref(validKeys));
+
+	CoinThread.join();
+	PrintThread.join();
+
 	walletFile.close();
 	cout << "keys searched: " << cnt << endl;
 	cout << "Wallet value: " << myWallet.GetValue() << endl;
