@@ -11,6 +11,7 @@
 #include <vector>
 #include "Coin.h"
 #include <cstdlib>
+#include <random>
 #include "Wallet.h"
 using namespace std;
 
@@ -31,18 +32,21 @@ ofstream walletFile("walletFile.txt");;
 /// <returns>an 80 character long string with random digits.</returns>
 string mineKey()
 {
-	string key;
+	string key = "";
 	// TODO DSA1
 	//Initialize the random seed.
 	//Create an array of digit characters.
 	char digits[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 	//These variables will help with creating the string.
-	char currentDigit;
+	char currentDigit = '0';
 	int index = 0;
+	random_device rng;
+	mt19937 generator(rng());
+	uniform_int_distribution<int> distribution(0, 9);
 	//Randomly choose a digit character from the array and add it to the string.
 	for (int i = 0; i < 80; i++)
 	{
-		index = rand() % 10;
+		index = distribution(generator);
 		currentDigit = digits[index];
 		key.push_back(currentDigit);
 	}
@@ -117,21 +121,17 @@ void PrintKeys(vector<string>& keys)
 		{
 			walletFile << key << "\n";
 		}
-		walletFile.close();
 	}
 }
 
-void GetValidKey(string cryptoKey, double& coinValue, int& count, vector<string>& validKeys, vector<double>& coinValues)
+void GetValidKey(string cryptoKey, int& count, string& validKey, double& coinValue)
 {
-	string validKey = "";
 	do
 	{
 		validKey = mineKey();
 		count++;
 	} while (validKey.find(cryptoKey) == string::npos);
 	coinValue = calculateValue();
-	validKeys.push_back(validKey);
-	coinValues.push_back(coinValue);
 }
 
 
@@ -140,7 +140,7 @@ void GetValidKey(string cryptoKey, double& coinValue, int& count, vector<string>
 int main()
 {
 	start_time = clockTimer.now();
-	srand(time(0));
+	srand(time(NULL));
 	Wallet myWallet;
 	int cnt = 0;
 	
@@ -153,25 +153,27 @@ int main()
 	//   create a coin for the good keys and add it to your wallet
 
 	//Read in the cryptoFile and store the keys in a vector.
-	double currentValue = 0.0;
 	vector<string> cryptoKeys;
-	vector<string> validKeys;
-	vector<double> coinValues;
-	vector<thread*> keyThreads;
+	
+	
 
 	thread ReadThread(ReadCryptoKeys, ref(cryptoKeys));
 	ReadThread.join();
-	string validKey = "";
+	vector<string> validKeys(cryptoKeys.size());
+	vector<double> coinValues(cryptoKeys.size());
+	vector<thread*> keyThreads;
+
+
 	for (int i = 0; i < cryptoKeys.size(); i++)
 	{
-		keyThreads.push_back(new thread(GetValidKey, cryptoKeys[i], ref(currentValue), ref(cnt), ref(validKeys), ref(coinValues)));
+		keyThreads.push_back(new thread(GetValidKey, cryptoKeys[i], ref(cnt), ref(validKeys[i]), ref(coinValues[i])));
 	}
 	//Make main thread until each thread relegated to key generation has been completed.
 	for (int i = 0; i < keyThreads.size(); i++)
 	{
 		keyThreads[i]->join();
 	}
-
+	keyThreads.clear();
 	//Create some threads to create coins and add them to the wallet in addition to printing out the valid keys.
 	thread CoinThread(CreateCoins, ref(validKeys), ref(coinValues), ref(myWallet));
 	thread PrintThread(PrintKeys, ref(validKeys));
@@ -179,7 +181,8 @@ int main()
 	//the functions within the threads.
 	CoinThread.join();
 	PrintThread.join();
-
+	walletFile.close();
+	int x = 5;
 	cout << "keys searched: " << cnt << endl;
 	cout << "Wallet value: " << myWallet.GetValue() << endl;
 
