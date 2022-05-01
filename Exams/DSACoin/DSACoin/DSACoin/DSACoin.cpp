@@ -10,7 +10,7 @@
 #include <chrono>
 #include <vector>
 #include "Coin.h"
-
+#include <cstdlib>
 #include "Wallet.h"
 using namespace std;
 
@@ -38,7 +38,7 @@ string mineKey()
 	char digits[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 	//These variables will help with creating the string.
 	char currentDigit;
-	int index;
+	int index = 0;
 	//Randomly choose a digit character from the array and add it to the string.
 	for (int i = 0; i < 80; i++)
 	{
@@ -68,7 +68,6 @@ string readNextCrypto(unsigned int lineNum)
 double calculateValue()
 {
 	double coinValue = 0.0;
-
 	// TODO DSA1
 	//Find the duration between the current time and the start time and convert it to 
 	//a double value representing milliseconds.
@@ -88,8 +87,7 @@ double calculateValue()
 
 void ReadCryptoKeys(vector<string>& list)
 {
-	string line;
-	list.clear();
+	string line = "";
 	if (cryptoFile.is_open())
 	{
 		while (getline(cryptoFile, line))
@@ -142,7 +140,7 @@ void GetValidKey(string cryptoKey, double& coinValue, int& count, vector<string>
 int main()
 {
 	start_time = clockTimer.now();
-	srand(time(NULL));
+	srand(time(0));
 	Wallet myWallet;
 	int cnt = 0;
 	
@@ -158,7 +156,6 @@ int main()
 	double currentValue = 0.0;
 	vector<string> cryptoKeys;
 	vector<string> validKeys;
-	validKeys.clear();
 	vector<double> coinValues;
 	vector<thread*> keyThreads;
 
@@ -168,14 +165,6 @@ int main()
 	for (int i = 0; i < cryptoKeys.size(); i++)
 	{
 		keyThreads.push_back(new thread(GetValidKey, cryptoKeys[i], ref(currentValue), ref(cnt), ref(validKeys), ref(coinValues)));
-		/*do
-		{
-			validKey = mineKey();
-			cnt++;
-		} while (validKey.find(cryptoKeys[i]) == string::npos);
-		currentValue = calculateValue();
-		validKeys.push_back(validKey);
-		coinValues.push_back(currentValue);*/
 	}
 	//Make main thread until each thread relegated to key generation has been completed.
 	for (int i = 0; i < keyThreads.size(); i++)
