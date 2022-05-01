@@ -54,10 +54,11 @@ string mineKey()
 /// reads the next crypto key from the keybank file
 /// </summary>
 /// <returns>returns new crypto to use or "" if the file was completely read</returns>
-string readNextCrypto(vector<string> keys, unsigned int lineNum)
+string readNextCrypto(unsigned int lineNum)
 {
 	// TODO DSA1
-	return keys[lineNum];
+	string crypto = "";
+	return crypto;
 }
 
 /// <summary>
@@ -115,18 +116,23 @@ void PrintKeys(vector<string>& keys)
 		{
 			walletFile << key << "\n";
 		}
+		walletFile.close();
 	}
 }
 
-void GetValidKey(string& cryptoKey, string& validKey, double& currentValue, int& count)
+void GetValidKey(string cryptoKey, double& coinValue, int& count, vector<string>& validKeys, vector<double>& coinValues)
 {
+	string validKey = "";
 	do
 	{
 		validKey = mineKey();
 		count++;
 	} while (validKey.find(cryptoKey) == string::npos);
-	currentValue = calculateValue();
+	coinValue = calculateValue();
+	validKeys.push_back(validKey);
+	coinValues.push_back(coinValue);
 }
+
 
 
 
@@ -136,16 +142,8 @@ int main()
 	srand(time(NULL));
 	Wallet myWallet;
 	int cnt = 0;
-	vector<string> cryptoKeys;
-	vector<string> validKeys;
-	vector<double> coinValues;
-
-	thread ReadThread(ReadCryptoKeys, ref(cryptoKeys));
-	ReadThread.join();
 	
-	double currentValue = 0.0;
-	string cryptoKey = "";
-	string validKey = "";
+	
 	// TODO DSA1
 	// write the main loop
 	//   read the crypto data (a line) from the file
@@ -154,28 +152,45 @@ int main()
 	//   create a coin for the good keys and add it to your wallet
 
 	//Read in the cryptoFile and store the keys in a vector.
-	
-	
+	double currentValue = 0.0;
+	vector<string> cryptoKeys;
+	vector<string> validKeys;
+	vector<double> coinValues;
+	vector<thread*> keyThreads;
 
+	thread ReadThread(ReadCryptoKeys, ref(cryptoKeys));
+	ReadThread.join();
+	string validKey = "";
 	for (int i = 0; i < cryptoKeys.size(); i++)
 	{
-		do
+		keyThreads.push_back(new thread(GetValidKey, cryptoKeys[i], currentValue, cnt, ref(validKeys), ref(coinValues)));
+		/*do
 		{
 			validKey = mineKey();
 			cnt++;
 		} while (validKey.find(cryptoKeys[i]) == string::npos);
 		currentValue = calculateValue();
 		validKeys.push_back(validKey);
-		coinValues.push_back(currentValue);
+		coinValues.push_back(currentValue);*/
+		if (currentValue == 0.0)
+		{
+			break;
+		}
 	}
+	//Make main thread until each thread relegated to key generation has been completed.
+	for (int i = 0; i < keyThreads.size(); i++)
+	{
+		keyThreads[i]->join();
+	}
+
 	//Create some threads to create coins and add them to the wallet in addition to printing out the valid keys.
 	thread CoinThread(CreateCoins, ref(validKeys), ref(coinValues), ref(myWallet));
 	thread PrintThread(PrintKeys, ref(validKeys));
-
+	//Call the join methods to ensure the main thread doesn't call any code that is dependent on the completion of 
+	//the functions within the threads.
 	CoinThread.join();
 	PrintThread.join();
 
-	walletFile.close();
 	cout << "keys searched: " << cnt << endl;
 	cout << "Wallet value: " << myWallet.GetValue() << endl;
 
