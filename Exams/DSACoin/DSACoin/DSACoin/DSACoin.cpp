@@ -107,7 +107,10 @@ void CreateCoins(vector<string>& keys, vector<double>& values, Wallet& wallet)
 	}
 	
 }
-
+/// <summary>
+/// This function will print out the valid crypto keys to the 
+/// </summary>
+/// <param name="keys"></param>
 void PrintKeys(vector<string>& keys)
 {
 	if (walletFile.is_open())
@@ -155,6 +158,7 @@ int main()
 	double currentValue = 0.0;
 	vector<string> cryptoKeys;
 	vector<string> validKeys;
+	validKeys.clear();
 	vector<double> coinValues;
 	vector<thread*> keyThreads;
 
@@ -163,7 +167,7 @@ int main()
 	string validKey = "";
 	for (int i = 0; i < cryptoKeys.size(); i++)
 	{
-		keyThreads.push_back(new thread(GetValidKey, cryptoKeys[i], currentValue, cnt, ref(validKeys), ref(coinValues)));
+		keyThreads.push_back(new thread(GetValidKey, cryptoKeys[i], ref(currentValue), ref(cnt), ref(validKeys), ref(coinValues)));
 		/*do
 		{
 			validKey = mineKey();
@@ -172,10 +176,6 @@ int main()
 		currentValue = calculateValue();
 		validKeys.push_back(validKey);
 		coinValues.push_back(currentValue);*/
-		if (currentValue == 0.0)
-		{
-			break;
-		}
 	}
 	//Make main thread until each thread relegated to key generation has been completed.
 	for (int i = 0; i < keyThreads.size(); i++)
