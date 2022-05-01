@@ -40,6 +40,7 @@ string mineKey()
 	//These variables will help with creating the string.
 	char currentDigit = '0';
 	int index = 0;
+	//Use the random header to properly perform random number generation, as rand() is not recommended.
 	random_device rng;
 	mt19937 generator(rng());
 	uniform_int_distribution<int> distribution(0, 9);
@@ -71,15 +72,13 @@ string readNextCrypto(unsigned int lineNum)
 /// <returns>return a dollar amount to return for the coin</returns>
 double calculateValue()
 {
-	double coinValue = 0.0;
 	// TODO DSA1
 	//Find the duration between the current time and the start time and convert it to 
 	//a double value representing milliseconds.
 	std::chrono::high_resolution_clock::time_point current_time = clockTimer.now();
-	std::chrono::duration<double, std::milli> time = current_time - start_time;
 	//Use the provided formula to calculate the coin value, which is
 	//subtracting the duration from 3 seconds/3000 milliseconds and multiplying that by 100.
-	coinValue = (3000 - time.count()) * 100;
+	double coinValue = (3000 - chrono::duration_cast<chrono::milliseconds>(current_time - start_time).count()) * 100;
 	//Convert the value to 0 if it's initially negative.
 	if (coinValue < 0.0)
 	{
@@ -124,7 +123,7 @@ void PrintKeys(vector<string>& keys)
 	}
 }
 
-void GetValidKey(string cryptoKey, int& count, string& validKey, double& coinValue)
+void GetValidKey(string cryptoKey, int& count, string& validKey, double& coinValue, vector<double>& coinValues, int index)
 {
 	do
 	{
@@ -132,6 +131,8 @@ void GetValidKey(string cryptoKey, int& count, string& validKey, double& coinVal
 		count++;
 	} while (validKey.find(cryptoKey) == string::npos);
 	coinValue = calculateValue();
+	coinValues[index] = coinValue;
+
 }
 
 
@@ -162,17 +163,24 @@ int main()
 	vector<string> validKeys(cryptoKeys.size());
 	vector<double> coinValues(cryptoKeys.size());
 	vector<thread*> keyThreads;
-
-
+	//The max value of a coin.
+	double coinValue = 300000.0;
+	//Create threads that will generate a valid key for each crypto value that was read in.
 	for (int i = 0; i < cryptoKeys.size(); i++)
 	{
-		keyThreads.push_back(new thread(GetValidKey, cryptoKeys[i], ref(cnt), ref(validKeys[i]), ref(coinValues[i])));
+		keyThreads.push_back(new thread(GetValidKey, cryptoKeys[i], ref(cnt), ref(validKeys[i]), ref(coinValue), ref(coinValues), i));
+		//If any of the coins has a value of 0, then stop mining entirely.
+		if (coinValue == 0.0)
+		{
+			return 0;
+		}
 	}
 	//Make main thread until each thread relegated to key generation has been completed.
 	for (int i = 0; i < keyThreads.size(); i++)
 	{
 		keyThreads[i]->join();
 	}
+	//Clear the vector of thread pointers.
 	keyThreads.clear();
 	//Create some threads to create coins and add them to the wallet in addition to printing out the valid keys.
 	thread CoinThread(CreateCoins, ref(validKeys), ref(coinValues), ref(myWallet));
@@ -181,12 +189,11 @@ int main()
 	//the functions within the threads.
 	CoinThread.join();
 	PrintThread.join();
+	//Close the wallet text file and print out the # of keys searched as well as the value of the wallet.
 	walletFile.close();
-	int x = 5;
 	cout << "keys searched: " << cnt << endl;
 	cout << "Wallet value: " << myWallet.GetValue() << endl;
-
-
+	return 0;
 
 	
 }
