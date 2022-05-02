@@ -37,7 +37,7 @@ int main()
     }
     //Print out the # of 'i's in the phrase.
     cout << "There are " << numberOfIs << " instances of the letter 'i' in the phrase " << word;
-    
+    return 0;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

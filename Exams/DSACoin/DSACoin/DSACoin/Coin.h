@@ -14,8 +14,11 @@ public:
 		key = k;
 		coinValue = v;
 	}
-
-	double getValue()
+	string GetKey()
+	{
+		return key;
+	}
+	double GetValue()
 	{
 		return coinValue;
 	}

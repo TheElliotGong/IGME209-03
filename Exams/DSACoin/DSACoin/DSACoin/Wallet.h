@@ -21,6 +21,11 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	double GetValue();
+
+	vector<Coin*> getWallet()
+	{
+		return wallet;
+	}
 	/// <summary>
 	/// clean up the wallet
 	/// </summary>

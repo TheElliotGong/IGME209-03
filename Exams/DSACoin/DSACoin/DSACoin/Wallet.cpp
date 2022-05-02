@@ -17,7 +17,7 @@ double Wallet::GetValue()
 	double total = 0.0;
 	for(Coin* coin : wallet)
 	{
-		total += coin->getValue();
+		total += coin->GetValue();
 	}
 	return total;
 }
