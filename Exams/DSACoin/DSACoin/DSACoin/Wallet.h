@@ -26,7 +26,7 @@ public:
 	/// <returns></returns>
 	double GetValue();
 	//Create a property that returns the vector of Coin pointers.
-	vector<Coin*> getWallet()
+	vector<Coin*> GetWallet()
 	{
 		return wallet;
 	}
