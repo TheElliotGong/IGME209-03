@@ -7,7 +7,11 @@
 #include <vector>
 #include "Coin.h"
 using namespace std;
-
+/*Elliot Gong, Section 03, Final Exam
+* Purpose: Tweak the Wallet class as necessary to handle Coins.
+* Restrictions: Must initialize necessary methods.
+* Date: 5/1/2022
+*/
 class Wallet
 {
 public:
@@ -21,7 +25,7 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	double GetValue();
-
+	//Create a property that returns the vector of Coin pointers.
 	vector<Coin*> getWallet()
 	{
 		return wallet;

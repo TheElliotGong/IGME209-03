@@ -1,5 +1,9 @@
 #include "Wallet.h"
-
+/*Elliot Gong, Section 03, Final Exam
+* Purpose: Initialize the required methods for the Wallet class.
+* Restrictions: Must write code for the AddCoin method, the GetValue method, and the destructor.
+* Date: 5/1/2022
+*/
 void Wallet::AddCoin(Coin* newCoin)
 {
 	// TODO DSA1
@@ -27,6 +31,7 @@ double Wallet::GetValue()
 Wallet::~Wallet()
 {
 	// TODO DSA1
+	//Loop through the vector and delete each Coin pointer.
 	for (Coin* coin : wallet)
 	{
 		delete coin;
