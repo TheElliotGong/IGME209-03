@@ -9,10 +9,15 @@ using namespace std;
 class Coin
 {
 public:
-	Coin(string k, double v)
+	Coin(string k, string c, double v)
 	{
+		code = c;
 		key = k;
 		coinValue = v;
+	}
+	string GetCode()
+	{
+		return code;
 	}
 	string GetKey()
 	{
@@ -23,6 +28,7 @@ public:
 		return coinValue;
 	}
 private:
+	string code;
 	string key;
 	double coinValue;
 };

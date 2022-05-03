@@ -78,9 +78,14 @@ string readNextCrypto(int lineNum)
 	string crypto = "";
 	// TODO DSA1
 	//Select the line in the crypto file to read from and read that line.
-	for (int i = 0; i < lineNum - 1; i++)
+	if (cryptoFile.is_open())
 	{
-		getline(cryptoFile, crypto);
+		
+		for (int i = 0; i <= lineNum ; i++)
+		{
+			getline(cryptoFile, crypto);
+			crypto = (i == lineNum) ? crypto : "";
+		}
 	}
 	return crypto;
 	
@@ -119,11 +124,11 @@ void ReadCryptoKeys(vector<string>& list)
 		}
 	}
 }
-void CreateCoins(vector<string>& keys, vector<double>& values, Wallet& wallet)
+void CreateCoins(vector<string>& keys, vector<string>& cryptoKeys, vector<double>& values, Wallet& wallet)
 {
 	for (int i = 0; i < keys.size(); i++)
 	{
-		Coin* coin = new Coin(keys[i], values[i]);
+		Coin* coin = new Coin(keys[i], cryptoKeys[i],values[i]);
 		wallet.AddCoin(coin);
 	}
 }
@@ -154,6 +159,16 @@ void PrintTheKeys(vector<string>& validKeys)
 	}
 	
 }
+/// <summary>
+/// This function determines the valid key for the given crypto code and saves the coin 
+/// </summary>
+/// <param name="cryptoKey"></param>
+/// <param name="count"></param>
+/// <param name="currentValue"></param>
+/// <param name="validKeys"></param>
+/// <param name="coinValues"></param>
+/// <param name="index"></param>
+/// <param name="timesUp"></param>
 void GetKey(string cryptoKey, int& count, double& currentValue, vector<string>& validKeys, vector<double>& coinValues, int index, bool& timesUp)
 {
 
@@ -210,7 +225,7 @@ void CreateCoin(Wallet& wallet, string cryptoKey, int& count, bool& timeUp)
 		string validKey = "";
 		double coinValue = 0.0;
 		GetValidKey(cryptoKey, count, validKey, coinValue, timeUp);
-		Coin* coin = new Coin(validKey, coinValue);
+		Coin* coin = new Coin(validKey, cryptoKey, coinValue);
 		wallet.AddCoin(coin);
 	}
 	mu.unlock();
@@ -219,7 +234,7 @@ void CreateCoin(Wallet& wallet, string cryptoKey, int& count, bool& timeUp)
 int main()
 {
 	start_time = clockTimer.now();
-	//srand(2022);
+	srand(2022);
 
 	Wallet myWallet;
 	int cnt = 0;
@@ -240,23 +255,25 @@ int main()
     vector<string> validKeys(cryptoKeys.size());
 	vector<double> coinValues(cryptoKeys.size());
 	vector<thread*> keyThreads;
-
+	/*
 	//Mine keys for each value in the crypto file until 3 seconds have passed or there are no more values to be read.
-	do
+	for(int i = 0; i < cryptoKeys.size(); i++)
 	{
 		//Get the 
-		currentKey = readNextCrypto(index);
-		keyThreads.push_back(new thread(CreateCoin, ref(myWallet), currentKey, ref(cnt), ref(timesUp)));
-		index++;
-	} while (!currentKey.empty() || timesUp == false);
-	if (timesUp == false)
+		keyThreads.push_back(new thread(CreateCoin, ref(myWallet), cryptoKeys[i], ref(cnt), ref(timesUp)));
+		if (timesUp == true)
+		{
+			break;
+		}
+	}
+	if (timesUp == true)
 	{
 		for (thread* thread : keyThreads)
 		{
 			thread->~thread();
 		}
-	}
-	/*
+	}*/
+	
 	//Create threads that will generate a valid key for each crypto value that was read in.
 	for (int i = 0; i < cryptoKeys.size(); i++)
 	{
@@ -276,7 +293,7 @@ int main()
 			cout << "Sorry! We couldn't generate the keys in time!";
 			return 0;
 		}
-	}*/
+	}
 	//Make main thread until each thread relegated to key generation has been completed.
 	for (int i = 0; i < keyThreads.size(); i++)
 	{
@@ -285,14 +302,14 @@ int main()
 	//Clear the vector of thread pointers.
 	keyThreads.clear();
 	//Create some threads to create coins and add them to the wallet in addition to printing out the valid keys.
-	//thread CoinThread(CreateCoins, ref(validKeys), ref(coinValues), ref(myWallet));
-	//thread PrintThread(PrintTheKeys, ref(validKeys));
-	thread PrintingThread(PrintKeys, ref(myWallet));
+	thread CoinThread(CreateCoins, ref(validKeys), ref(cryptoKeys), ref(coinValues), ref(myWallet));
+	thread PrintThread(PrintTheKeys, ref(validKeys));
+	//thread PrintingThread(PrintKeys, ref(myWallet));
 	//Call the join methods to ensure the main thread doesn't call any code that is dependent on the completion of 
 	//the functions within the threads.
-	//CoinThread.join();
-	//PrintThread.join();
-	PrintingThread.join();
+	CoinThread.join();
+	PrintThread.join();
+	//PrintingThread.join();
 	//PrintKeys(myWallet);
 	//Close the wallet text file and print out the # of keys searched as well as the value of the wallet.
 	walletFile.close();
