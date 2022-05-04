@@ -1,6 +1,7 @@
 // Templated_Queues.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 #include <string>
+#include <vector>
 #include "TemplateQueue.h"
 
 /*Author: Elliot Gong
@@ -10,6 +11,13 @@
 */
 int main()
 {
+    vector<float> beta(3);
+    //beta.push_back(3);
+    std::cin >> beta[0] >> beta[1] >> beta[2];
+    for (int i = beta.size() - 1; i >= 0; i--)
+    {
+        std::cout << beta[i] << " ";
+    }
     //Create some template queues on the stack.
     TemplateQueue<string> test = TemplateQueue<string>(8);
     //Push some strings to the queue.

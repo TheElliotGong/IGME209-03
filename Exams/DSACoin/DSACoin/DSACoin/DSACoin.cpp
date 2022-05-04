@@ -2,7 +2,7 @@
 /*Elliot Gong, Section 03, Final Exam
 * Purpose: Simulate Crypto Mining by reading in a file of crypto files, generating keys, and creating
 * 'Coins' to be saved in our 'Wallet'.
-* Restrictions: The keys must be generated within 3 seconds. To accomplish this, the process must 
+* Restrictions: Ideally, the keys would be generated within 3 seconds. To accomplish this, the process must 
 * utilize threads to optimize our mining speed.
 * 
 * The chosen approach reads the entire cryto file sequentially. Then, we generate threads that generate
@@ -73,20 +73,16 @@ string mineKey()
 /// <param name="reader">The object that opened the desired file.</param>
 /// <param name="lineNum">The line to read from.</param>
 /// <returns></returns>
-string readNextCrypto(int lineNum)
+string readNextCrypto(vector<string>& cryptoKeys)
 {
 	string crypto = "";
 	// TODO DSA1
 	//Select the line in the crypto file to read from and read that line.
 	if (cryptoFile.is_open())
 	{
-		
-		for (int i = 0; i <= lineNum ; i++)
-		{
-			getline(cryptoFile, crypto);
-			crypto = (i == lineNum) ? crypto : "";
-		}
+		getline(cryptoFile, crypto);
 	}
+	cryptoKeys.push_back(crypto);
 	return crypto;
 	
 }
@@ -219,7 +215,7 @@ void GetValidKey(string cryptoKey, int& count, string& validKey, double& coinVal
 /// <param name="timeUp"></param>
 void CreateCoin(Wallet& wallet, string cryptoKey, int& count, bool& timeUp)
 {
-	mu.lock();
+	//lock_guard<mutex> lck(mu);
 	if (timeUp == false)
 	{
 		string validKey = "";
@@ -228,8 +224,6 @@ void CreateCoin(Wallet& wallet, string cryptoKey, int& count, bool& timeUp)
 		Coin* coin = new Coin(validKey, cryptoKey, coinValue);
 		wallet.AddCoin(coin);
 	}
-	mu.unlock();
-	
 }
 int main()
 {
@@ -238,7 +232,7 @@ int main()
 
 	Wallet myWallet;
 	int cnt = 0;
-	int index = 0;
+	int lineNum = 1;
 	double coinValue = 300000.0;
 	bool timesUp = false;
 	string currentKey = "";
@@ -251,29 +245,32 @@ int main()
 
 	//Read in the cryptoFile and store the keys in a vector.
 	vector<string> cryptoKeys;
-	ReadCryptoKeys(cryptoKeys);
-    vector<string> validKeys(cryptoKeys.size());
-	vector<double> coinValues(cryptoKeys.size());
+	//ReadCryptoKeys(cryptoKeys);
+    //vector<string> validKeys(cryptoKeys.size());
+	//vector<double> coinValues(cryptoKeys.size());
 	vector<thread*> keyThreads;
-	/*
+	
+	/*Note: This approach properly utilizes the readnextcrypto method.
+	*/
+
 	//Mine keys for each value in the crypto file until 3 seconds have passed or there are no more values to be read.
-	for(int i = 0; i < cryptoKeys.size(); i++)
+	do
 	{
-		//Get the 
-		keyThreads.push_back(new thread(CreateCoin, ref(myWallet), cryptoKeys[i], ref(cnt), ref(timesUp)));
-		if (timesUp == true)
+		currentKey = readNextCrypto(cryptoKeys);
+		if (currentKey == "" || timesUp == true)
 		{
 			break;
 		}
-	}
+		keyThreads.push_back(new thread(CreateCoin, ref(myWallet), currentKey, ref(cnt), ref(timesUp)));	
+	} while (currentKey != "" || timesUp == false);
 	if (timesUp == true)
 	{
 		for (thread* thread : keyThreads)
 		{
 			thread->~thread();
 		}
-	}*/
-	
+	}
+	/*
 	//Create threads that will generate a valid key for each crypto value that was read in.
 	for (int i = 0; i < cryptoKeys.size(); i++)
 	{
@@ -293,7 +290,7 @@ int main()
 			cout << "Sorry! We couldn't generate the keys in time!";
 			return 0;
 		}
-	}
+	}*/
 	//Make main thread until each thread relegated to key generation has been completed.
 	for (int i = 0; i < keyThreads.size(); i++)
 	{
@@ -302,15 +299,15 @@ int main()
 	//Clear the vector of thread pointers.
 	keyThreads.clear();
 	//Create some threads to create coins and add them to the wallet in addition to printing out the valid keys.
-	thread CoinThread(CreateCoins, ref(validKeys), ref(cryptoKeys), ref(coinValues), ref(myWallet));
-	thread PrintThread(PrintTheKeys, ref(validKeys));
+	//thread CoinThread(CreateCoins, ref(validKeys), ref(cryptoKeys), ref(coinValues), ref(myWallet));
+	//thread PrintThread(PrintTheKeys, ref(validKeys));
 	//thread PrintingThread(PrintKeys, ref(myWallet));
 	//Call the join methods to ensure the main thread doesn't call any code that is dependent on the completion of 
 	//the functions within the threads.
-	CoinThread.join();
-	PrintThread.join();
+	//CoinThread.join();
+	//PrintThread.join();
 	//PrintingThread.join();
-	//PrintKeys(myWallet);
+	PrintKeys(myWallet);
 	//Close the wallet text file and print out the # of keys searched as well as the value of the wallet.
 	walletFile.close();
 	cout << "keys searched: " << cnt << endl;
