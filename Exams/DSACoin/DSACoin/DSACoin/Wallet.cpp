@@ -4,10 +4,15 @@
 * Restrictions: Must write code for the AddCoin method, the GetValue method, and the destructor.
 * Date: 5/1/2022
 */
+
+/// <summary>
+/// This method 'adds' a Coin to the wallet.
+/// </summary>
+/// <param name="newCoin">Takes in a coin pointer that will be part of the wallet object.</param>
 void Wallet::AddCoin(Coin* newCoin)
 {
 	// TODO DSA1
-	// add the coin to the wallet
+	// add the coin to the appropriate vector.
 	wallet.push_back(newCoin);
 }
 /// <summary>
@@ -36,4 +41,6 @@ Wallet::~Wallet()
 	{
 		delete coin;
 	}
+	//Clear the vector.
+	wallet.clear();
 }

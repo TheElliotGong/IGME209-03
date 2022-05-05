@@ -35,6 +35,7 @@ public:
 	/// </summary>
 	~Wallet();
 private:
+	//The vector containing the Coin pointers.
 	vector<Coin*> wallet;
 };
 
