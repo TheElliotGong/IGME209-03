@@ -2,9 +2,9 @@
 /*Elliot Gong, Section 03, Final Exam
 * Purpose: Simulate Crypto Mining by reading in a file of crypto files, generating keys, and creating
 * 'Coins' to be saved in our 'Wallet'.
-* Restrictions: Ideally, the keys would be generated within 3 seconds. To accomplish this, the process must 
-* utilize threads to optimize our mining speed.
-* Date: 5/1/2022
+* Restrictions: Complete the required functions and the main loop. Ideally, the keys would be generated within 3 seconds. 
+* To accomplish this, the process must utilize threads to optimize our mining speed.
+* Date: 5/3/2022
 */
 
 #include <iostream>

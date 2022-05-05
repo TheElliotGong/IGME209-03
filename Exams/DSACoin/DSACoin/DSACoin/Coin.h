@@ -7,8 +7,8 @@
 using namespace std;
 /*Elliot Gong, Section 03, Final Exam
 * Purpose: Edit the Coin class if needed.
-* Restrictions: A coin must have a valid key and a value.
-* Date: 5/1/2022
+* Restrictions: A coin must have a valid key and a value. Optimally, it will hold the crypto code that it was assigned to.
+* Date: 5/3/2022
 */
 class Coin
 {

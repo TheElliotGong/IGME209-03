@@ -2,7 +2,7 @@
 /*Elliot Gong, Section 03, Final Exam
 * Purpose: Initialize the required methods for the Wallet class.
 * Restrictions: Must write code for the AddCoin method, the GetValue method, and the destructor.
-* Date: 5/1/2022
+* Date: 5/3/2022
 */
 
 /// <summary>
