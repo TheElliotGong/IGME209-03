@@ -10,6 +10,7 @@
 #define SFML_STATIC
 #include <SFML\Window.hpp>
 #include <SFML\Graphics.hpp>
+
 int main()
 {
     //Create a window that'll show the drawn shapes.
