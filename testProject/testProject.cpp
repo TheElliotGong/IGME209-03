@@ -6,6 +6,19 @@
 int main()
 {
     std::cout << "Hello World!\n";
+    float* vertices = new float[5];
+    for (int i = 0; i < 5; i++)
+    {
+        vertices[i] = i + 1.5f;
+        std::cout << vertices[i] << "\n";
+    }
+    float x = vertices[3];
+    std::cout << "Test: " << x << "\n";
+
+    float* point = &x;
+    *point = 25.0f;
+    std::cout << "Test: " << x;
+    return 0;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

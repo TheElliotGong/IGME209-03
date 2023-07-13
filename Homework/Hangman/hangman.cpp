@@ -105,12 +105,16 @@ void ShowGallows(int limit)
 /// <param name="incorrectGuesses">The array containing all the incorrectly guessed letters.</param>
 /// <param name="guessedWord">The blank word that'll gradually be filled in with correctly guessed letters.</param>
 /// <param name="wordLength">The # of remaining letters to guess.</param>
-void ShowSolved(char incorrectGuesses[], char guessedWord[], int wordLength)
+void ShowSolved(vector<char>& incorrectGuesses, vector<char>& guessedWord, int lettersRemaining)
 {
+	cout << "Wrong Guesses: ";
 	//Print out the info using the cout call.
-	cout << "Wrong Guesses: " << incorrectGuesses << "\n"
-		<< "Word to solve: " << guessedWord << "\n"
-		<< wordLength << " letters left to guess\n";
+	for(int i = 0; i < incorrectGuesses.size(); i++)
+	{cout << incorrectGuesses[i];}
+	cout << "\nWord to solve: ";
+	for (int i = 0; i < guessedWord.size(); i++)
+	{cout << guessedWord[i];}
+	cout << "\n" << lettersRemaining << " letters left to guess\n";
 
 }
 

@@ -3,7 +3,7 @@
 
 //Include the snake header file.
 #include "snake.h"
-
+#include <iostream>
 /*Author: Elliot Gong
 *Purpose: Simulate the Snake Game in Box2D and add gravity to make the snake "fall". Display the game 
 *using SFML. Record the time taken to hit the 2 targets to score the player
@@ -158,17 +158,17 @@ int main()
 	long time = duration_cast<seconds>(endTime - startTime).count();
 	//Based on the amount of time spent on the game, print out different messages.
 	//If they complete the game within 20 seconds, give them a "3 star" grade.
-	if (time <= 45 && index + 1 == targetCount)
+	if (time <= 60 && index + 1 == targetCount)
 	{
 		cout << "Time taken to hit all targets: " << time << " seconds. Good job! You earned 3 stars!\n";
 	}
 	//If they complete the game within 40 seconds, give them a "2 star" grade.
-	else if (45 < time <= 72 && index + 1== targetCount)
+	else if (60 < time <= 90 && index + 1== targetCount)
 	{
 		cout << "Time taken to hit all targets: " << time << " seconds. Not bad! You earned 2 stars!\n";
 	}
 	//If they take longer than 40 seconds, give them a "1 star" grade.
-	else if (72 < time && index + 1 == targetCount)
+	else if (90 < time && index + 1 == targetCount)
 	{
 		cout << "Time taken to hit all targets: " << time << " seconds. So close! You earned 1 star!\n";
 	}
@@ -179,6 +179,8 @@ int main()
 	delete ceilingBody;
 	delete leftWallBody;
 	delete rightWallBody;
+	cout << "\n";
+	cin.get();
 	//End the program.
 	return 0;
 }
@@ -290,6 +292,9 @@ void SetUpTargets()
 	//Ask the user for the desired target count. Store input in a local string variable.
 	do
 	{
+		cout << "Instructions/Notes: Before the game starts, you must enter how many 'apples' the snake must eat. Once you input the number of \n"
+			<< "desired targets, you must immediatedly use the arrow keys to move the player, otherwise, the player will not move \n"
+			<< "if you initially try to expand or get a better view of the game window after typing in your answer and hitting enter.\n \n";
 		cout << "How many targets do you want? It must be at least 10: ";
 		getline(cin, input);
 		//Parse an int from the input if possible.
